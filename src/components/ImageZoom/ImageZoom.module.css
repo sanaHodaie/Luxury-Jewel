@@ -1,0 +1,89 @@
+.zoomContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.baseImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* Luxury Circular Magnifying Lens Glass */
+.magnifierLens {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid var(--accent, #d4af37);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.45),
+    0 0 0 4px rgba(212, 175, 55, 0.25),
+    inset 0 0 15px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  z-index: 15;
+  animation: lensPop 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes lensPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.lensCrosshair {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(212, 175, 55, 0.4);
+}
+
+/* Subtle "ذره‌بین جزئیات" Badge */
+.zoomHintBadge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--theme-glass-border, rgba(212, 175, 55, 0.3));
+  color: var(--accent, #d4af37);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.zoomContainer:hover .zoomHintBadge {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+@media (max-width: 768px) {
+  .zoomHintBadge {
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+}

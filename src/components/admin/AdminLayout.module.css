@@ -1,0 +1,442 @@
+/* ============================================================
+   AdminLayout — Luxury White + Violet
+   Fully Responsive | RTL | Hamburger Drawer from Right
+   ============================================================ */
+
+/* ---------- SHELL ---------- */
+.shell {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: radial-gradient(circle at 10% 10%, #eee8ff 0, transparent 28%),
+              radial-gradient(circle at 90% 90%, #f2edff 0, transparent 30%),
+              #faf9fc;
+  color: var(--text-primary, #1e1b2e);
+  direction: rtl;
+}
+
+/* ============================================================
+   SIDEBAR (دسکتاپ + Drawer موبایل — استایل مشترک)
+   ============================================================ */
+.sidebar,
+.mobileSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  width: 250px;
+  flex-shrink: 0;
+  padding: 1.4rem 1.1rem;
+  background: rgba(255, 255, 255, 0.68) !important;
+  backdrop-filter: blur(28px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
+  border-inline-start: 1px solid #e9e3f4 !important;
+  box-shadow: 0 0 45px rgba(101, 75, 160, 0.08) !important;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ============================================================
+   MOBILE SIDEBAR — Drawer از راست
+   ============================================================ */
+.mobileSidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  inset-inline-end: 0;
+  z-index: 1100;
+  width: min(300px, 85vw);
+  max-width: 320px;
+  box-shadow: -20px 0 50px rgba(101, 75, 160, 0.22);
+  padding-top: max(1.4rem, env(safe-area-inset-top));
+  padding-bottom: max(1.4rem, env(safe-area-inset-bottom));
+}
+
+/* اسکرول‌بار نازک بنفش */
+.mobileSidebar::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.mobileSidebar::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: #ded1fb;
+  border-radius: 99px;
+}
+
+/* ============================================================
+   BACKDROP
+   ============================================================ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1090;
+  background: rgba(30, 20, 60, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ============================================================
+   BRAND
+   ============================================================ */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-shrink: 0;
+}
+
+.brandIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--accent, #8d63ff) 16%, transparent);
+  color: var(--accent-dark, #5e3fa5);
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+}
+
+.brandSub {
+  font-size: 0.72rem;
+  color: var(--text-secondary, #8b8498);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.72rem 0.85rem;
+  border-radius: 13px;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: var(--text-secondary, #8b8498);
+  text-decoration: none;
+  transition: all 0.22s ease;
+  min-height: 44px;
+}
+
+.navLink:hover {
+  background: rgba(141, 99, 255, 0.06);
+  color: var(--text-primary, #1e1b2e);
+}
+
+.navLinkActive {
+  background: linear-gradient(135deg, #f0eaff, #fff) !important;
+  color: #5e3fa5 !important;
+  border: 1px solid #ded1fb;
+  box-shadow: inset 3px 0 #8d63ff, 0 8px 25px rgba(141, 99, 255, 0.07) !important;
+}
+
+.navLinkActive svg {
+  color: #8d63ff;
+}
+
+.countPill {
+  margin-inline-start: auto;
+  min-width: 26px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: #f4efff;
+  color: #7352a9;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SIDEBAR FOOTER
+   ============================================================ */
+.sidebarFooter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.ghostBtn,
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.68rem 0.85rem;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #e9e3f4;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-secondary, #8b8498);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.ghostBtn:hover {
+  border-color: #8d63ff;
+  color: #5e3fa5;
+  background: rgba(141, 99, 255, 0.05);
+}
+
+.logoutBtn:hover {
+  border-color: #e05a5a;
+  color: #e05a5a;
+  background: rgba(224, 90, 90, 0.05);
+}
+
+/* ============================================================
+   MAIN AREA
+   ============================================================ */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem 1.3rem;
+  padding-top: max(0.85rem, env(safe-area-inset-top));
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-bottom: 1px solid #e9e3f4 !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid #e9e3f4;
+  background: #fff;
+  color: #5e3fa5;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.menuBtn:hover {
+  border-color: #8d63ff;
+  background: rgba(141, 99, 255, 0.06);
+}
+
+.menuBtn:active {
+  transform: scale(0.95);
+}
+
+.topbarTitle {
+  font-size: clamp(0.78rem, 0.74rem + 0.2vw, 0.88rem);
+  font-weight: 600;
+  color: #3c3745 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.topbarTitle small {
+  color: #3eb778;
+  font-size: 9px;
+  margin-inline-start: 8px;
+  white-space: nowrap;
+}
+
+.topbarSiteLink {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  min-height: 38px;
+  border-radius: 999px;
+  border: 1px solid #e9e3f4;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary, #8b8498);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.topbarSiteLink:hover {
+  border-color: #8d63ff;
+  color: #5e3fa5;
+  background: rgba(141, 99, 255, 0.05);
+}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.content {
+  flex: 1;
+  padding: 1.5rem 1.4rem 3rem;
+  max-width: 1450px;
+  width: 100%;
+  margin-inline: auto;
+  min-width: 0;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* ---------- دسکتاپ بزرگ: 1280+ ---------- */
+@media (min-width: 1280px) {
+  .sidebar {
+    width: 260px;
+    padding: 1.6rem 1.2rem;
+  }
+}
+
+/* ---------- تبلت افقی / دسکتاپ کوچک: تا 1023 ---------- */
+@media (max-width: 1023px) {
+  .sidebar {
+    display: none;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+  }
+}
+
+/* ---------- تبلت عمودی: 640 تا 1023 ---------- */
+@media (max-width: 1023px) and (min-width: 641px) {
+  .content {
+    padding: 1.3rem 1.2rem 2.8rem;
+  }
+
+  .topbar {
+    padding: 0.85rem 1.1rem;
+  }
+}
+
+/* ---------- موبایل: 640 و کمتر ---------- */
+@media (max-width: 640px) {
+  .content {
+    padding: 1rem 0.85rem 2.5rem;
+  }
+
+  .topbar {
+    padding: 0.7rem 0.85rem;
+    gap: 0.6rem;
+  }
+
+  .topbarTitle {
+    font-size: 0.8rem;
+  }
+
+  /* فقط «سایت» رو نشون بده — در موبایل فقط آیکون */
+  .topbarSiteLink span {
+    display: none;
+  }
+
+  .topbarSiteLink {
+    padding: 0.45rem 0.6rem;
+    min-width: 38px;
+    justify-content: center;
+  }
+}
+
+/* ---------- موبایل خیلی کوچک: 380 و کمتر ---------- */
+@media (max-width: 380px) {
+  .mobileSidebar {
+    width: 88vw;
+  }
+
+  .navLink {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.83rem;
+  }
+
+  .brandName {
+    font-size: 0.95rem;
+  }
+
+  .brandIcon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ---------- موبایل افقی (کم‌ارتفاع) ---------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobileSidebar {
+    width: min(320px, 60vw);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .nav {
+    gap: 0.2rem;
+  }
+
+  .navLink {
+    padding: 0.55rem 0.8rem;
+    min-height: 38px;
+  }
+
+  .sidebarFooter {
+    padding-top: 0.3rem;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .ghostBtn,
+  .logoutBtn,
+  .menuBtn,
+  .topbarSiteLink {
+    transition: none !important;
+  }
+}
+
+
+@media (min-width: 1600px) {
+  .content {
+    padding: 2rem 2rem 4rem;
+  }
+}

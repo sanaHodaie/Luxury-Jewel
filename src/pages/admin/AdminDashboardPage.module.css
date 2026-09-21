@@ -1,0 +1,668 @@
+/* ============================================================
+   Luxury White + Violet — Admin Dashboard
+   Fully Responsive | RTL | Mobile-first
+   ============================================================ */
+
+:global(body) {
+  background: #faf9fd;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 4px 2px 0;
+}
+
+.title {
+  font-size: clamp(1.35rem, 1.1rem + 1.4vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  color: var(--text-primary, #1e1b2e);
+}
+
+.subtitle {
+  font-size: clamp(0.78rem, 0.74rem + 0.25vw, 0.88rem);
+  color: #8b8498;
+  margin-top: 4px;
+  line-height: 1.7;
+  max-width: 60ch;
+}
+
+/* ============================================================
+   STATS GRID — کارت‌های آماری
+   ============================================================ */
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr;                 /* موبایل: تک‌ستونه */
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 560px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+}
+
+/* ============================================================
+   CARD — کارت پایه
+   ============================================================ */
+.card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 243, 255, 0.82));
+  border: 1px solid #e9e2f4;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 45px rgba(94, 62, 150, 0.07), inset 0 1px 0 #fff;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  margin-bottom: 20px;
+  min-width: 0;                                /* جلوگیری از overflow در grid */
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  box-shadow: 0 20px 50px rgba(94, 62, 150, 0.1), inset 0 1px 0 #fff;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 22px;
+    border-radius: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card {
+    padding: 24px;
+  }
+}
+
+/* کارت‌های داخل grid — margin-bottom حذف */
+.overviewCard,
+.donutCard,
+.tableCard,
+.activityCard {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+.cardHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-size: clamp(0.95rem, 0.9rem + 0.35vw, 1.05rem);
+  font-weight: 700;
+  color: var(--text-primary, #1e1b2e);
+  margin: 0 0 2px;
+}
+
+.cardHint {
+  font-size: clamp(0.72rem, 0.7rem + 0.15vw, 0.8rem);
+  color: var(--text-secondary, #8b8498);
+  margin: 2px 0 0;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   MAIN ROW — نمودار + دونات
+   ============================================================ */
+.mainRow {
+  display: grid;
+  grid-template-columns: 1fr;                  /* موبایل: تک‌ستونه */
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1024px) {
+  .mainRow {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ============================================================
+   TAB SWITCH
+   ============================================================ */
+.tabSwitch {
+  display: flex;
+  background: #f1ecfa;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tab,
+.tabActive {
+  border: none;
+  background: transparent;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: clamp(0.7rem, 0.68rem + 0.15vw, 0.76rem);
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-secondary, #8b8498);
+  white-space: nowrap;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.tabActive {
+  background: #fff;
+  color: #7b4ee0;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.tab:hover:not(.tabActive) {
+  color: #7b4ee0;
+}
+
+/* موبایل کوچک: تب‌ها تمام عرض */
+@media (max-width: 480px) {
+  .cardHeaderRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tabSwitch {
+    width: 100%;
+  }
+  .tab,
+  .tabActive {
+    flex: 1;
+    text-align: center;
+    padding: 9px 8px;
+  }
+}
+
+/* ============================================================
+   CHART
+   ============================================================ */
+.chartWrap {
+  margin-top: 4px;
+  width: 100%;
+  overflow: hidden;
+  direction: ltr;                              /* چارت LTR */
+}
+
+.chartTooltip {
+  background: #fff;
+  border: 1px solid #e5daf7;
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 15px 35px rgba(82, 54, 135, 0.12);
+  font-size: 0.75rem;
+  direction: rtl;
+}
+
+.tooltipLabel {
+  color: var(--text-secondary, #8b8498);
+  margin-bottom: 2px;
+}
+
+.tooltipValue {
+  color: var(--text-primary, #1e1b2e);
+  font-weight: 700;
+}
+
+/* ============================================================
+   DONUT
+   ============================================================ */
+.donutCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.donutWrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 6px auto 4px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.donutCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.donutTotal {
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.2rem);
+  font-weight: 800;
+  color: var(--text-primary, #1e1b2e);
+  line-height: 1.1;
+}
+
+.donutLabel {
+  font-size: 0.68rem;
+  color: var(--text-secondary, #8b8498);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(0.74rem, 0.72rem + 0.15vw, 0.82rem);
+}
+
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendName {
+  flex: 1;
+  color: var(--text-primary, #1e1b2e);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legendValue {
+  color: var(--text-secondary, #8b8498);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   GOALS — سلامت کاتالوگ
+   ============================================================ */
+.goals {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+  .goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+
+.goalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.goalTop {
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(0.78rem, 0.75rem + 0.2vw, 0.86rem);
+  gap: 8px;
+}
+
+.goalLabel {
+  color: var(--text-primary, #1e1b2e);
+  font-weight: 600;
+}
+
+.goalPercent {
+  color: #7b4ee0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.goalTrack {
+  height: 8px;
+  border-radius: 20px;
+  background: #eee9f6;
+  overflow: hidden;
+}
+
+.goalFill {
+  height: 100%;
+  border-radius: 20px;
+}
+
+.goalValueText {
+  font-size: 0.72rem;
+  color: var(--text-secondary, #8b8498);
+}
+
+/* ============================================================
+   BOTTOM ROW — محصولات اخیر + فعالیت
+   ============================================================ */
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1024px) {
+  .bottomRow {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+.emptyHint {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #8b8498);
+  padding: 20px 0;
+  text-align: center;
+  margin: 0;
+}
+
+/* ============================================================
+   RECENT PRODUCTS LIST
+   ============================================================ */
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recentRow {
+  display: grid;
+  grid-template-columns: 38px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  transition: background 0.18s ease;
+}
+
+.recentRow:hover {
+  background: var(--bg-secondary, #f5f1fc);
+}
+
+.recentThumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-secondary, #f5f1fc);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #8b8498);
+}
+
+.recentThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recentInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.recentName {
+  font-size: clamp(0.8rem, 0.78rem + 0.2vw, 0.86rem);
+  font-weight: 600;
+  color: var(--text-primary, #1e1b2e);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentMeta {
+  font-size: 0.72rem;
+  color: var(--text-secondary, #8b8498);
+}
+
+.statusChip {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.chipOn {
+  background: rgba(59, 163, 90, 0.14);
+  color: #3ba35a;
+}
+
+.chipOff {
+  background: rgba(120, 120, 120, 0.14);
+  color: var(--text-secondary, #8b8498);
+}
+
+.recentPrice {
+  font-size: clamp(0.74rem, 0.72rem + 0.2vw, 0.82rem);
+  font-weight: 700;
+  color: var(--text-primary, #1e1b2e);
+  flex-shrink: 0;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* تبلت: قیمت مین‌ویدث */
+@media (min-width: 641px) {
+  .recentPrice {
+    min-width: 110px;
+  }
+}
+
+/* موبایل: چیدمان فشرده دو سطری */
+@media (max-width: 640px) {
+  .recentRow {
+    grid-template-columns: 38px 1fr auto;
+    grid-template-areas:
+      "thumb info chip"
+      "thumb info price";
+    row-gap: 3px;
+    column-gap: 10px;
+    padding: 10px 4px;
+  }
+  .recentThumb { grid-area: thumb; }
+  .recentInfo  { grid-area: info; }
+  .statusChip  { grid-area: chip; justify-self: end; align-self: end; }
+  .recentPrice { grid-area: price; justify-self: end; align-self: start; }
+}
+
+/* ============================================================
+   ACTIVITY LIST
+   ============================================================ */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activityRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 6px;
+  border-radius: 12px;
+  transition: background 0.18s ease;
+}
+
+.activityRow:hover {
+  background: var(--bg-secondary, #f5f1fc);
+}
+
+.activityIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activityText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.activityMain {
+  font-size: clamp(0.76rem, 0.74rem + 0.2vw, 0.82rem);
+  color: var(--text-primary, #1e1b2e);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.activityTime {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #8b8498);
+  margin-top: 1px;
+}
+
+/* ============================================================
+   ACTIONS ROW — پشتیبان‌گیری
+   ============================================================ */
+.actionsRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  min-height: 44px;                            /* لمس‌پذیری */
+  border-radius: 10px;
+  border: 1px solid var(--glass-border, #e9e2f4);
+  background: var(--bg-secondary, #f5f1fc);
+  color: var(--text-primary, #1e1b2e);
+  font-size: clamp(0.78rem, 0.76rem + 0.2vw, 0.86rem);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex: 1 1 auto;
+  white-space: nowrap;
+}
+
+.actionBtn:hover {
+  border-color: #7b4ee0;
+  color: #7b4ee0;
+  background: rgba(123, 78, 224, 0.06);
+}
+
+.actionBtn:active {
+  transform: scale(0.98);
+}
+
+.dangerBtn:hover {
+  border-color: #e05a5a;
+  color: #e05a5a;
+  background: rgba(224, 90, 90, 0.06);
+}
+
+/* موبایل: دکمه‌ها تمام عرض */
+@media (max-width: 640px) {
+  .actionsRow {
+    flex-direction: column;
+  }
+  .actionBtn {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}
+
+/* تبلت: دو تا در هر ردیف */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .actionBtn {
+    flex: 1 1 calc(50% - 5px);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .actionBtn,
+  .recentRow,
+  .activityRow,
+  .tab,
+  .tabActive {
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   DARK MODE (اختیاری — برای آینده)
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  .goalTrack {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .recentRow:hover,
+  .activityRow:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* ============================================================
+   ULTRA-WIDE
+   ============================================================ */
+@media (min-width: 1600px) {
+  .statsGrid {
+    gap: 22px;
+  }
+  .mainRow,
+  .bottomRow {
+    gap: 24px;
+  }
+  .card {
+    padding: 28px;
+  }
+}

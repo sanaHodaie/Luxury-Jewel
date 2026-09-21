@@ -1,0 +1,175 @@
+// src/components/admin/AdminLayout.jsx
+import React, { useState, useEffect } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Gem,
+  LayoutDashboard,
+  Package,
+  Store,
+  LogOut,
+  Menu,
+  X,
+  Settings2,
+} from 'lucide-react';
+import { useProducts } from '../../contexts/ProductsContext';
+import styles from './AdminLayout.module.css';
+
+const NAV_ITEMS = [
+  { to: '/admin/dashboard', label: 'داشبورد', icon: LayoutDashboard },
+  { to: '/admin/products', label: 'محصولات', icon: Package },
+  { to: '/admin/settings', label: 'تنظیمات سایت', icon: Settings2 },
+];
+
+export default function AdminLayout() {
+  const { logoutAdmin, products } = useProducts();
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // ---------- قفل اسکرول body وقتی Drawer بازه ----------
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [mobileOpen]);
+
+  // ---------- بستن Drawer با کلید Escape ----------
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileOpen]);
+
+  // ---------- بستن Drawer با تغییر مسیر ----------
+  const closeMobile = () => setMobileOpen(false);
+
+  const handleLogout = () => {
+    closeMobile();
+    logoutAdmin();
+    navigate('/admin/login', { replace: true });
+  };
+
+  const sidebarContent = (
+    <>
+      <div className={styles.brand}>
+        <span className={styles.brandIcon}>
+          <Gem size={20} />
+        </span>
+        <div>
+          <p className={styles.brandName}>Luxury Jewel</p>
+          <p className={styles.brandSub}>پنل مدیریت</p>
+        </div>
+      </div>
+
+      <nav className={styles.nav}>
+        {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
+            }
+            onClick={closeMobile}
+          >
+            <Icon size={18} />
+            <span>{label}</span>
+            {to === '/admin/products' && (
+              <span className={styles.countPill}>{products.length}</span>
+            )}
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className={styles.sidebarFooter}>
+        <NavLink to="/" className={styles.ghostBtn} onClick={closeMobile}>
+          <Store size={17} />
+          <span>مشاهده سایت</span>
+        </NavLink>
+        <button
+          type="button"
+          className={styles.logoutBtn}
+          onClick={handleLogout}
+        >
+          <LogOut size={17} />
+          <span>خروج از پنل</span>
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <div className={styles.shell}>
+      {/* ---------- سایدبار دسکتاپ (sticky) ---------- */}
+      <aside className={styles.sidebar}>{sidebarContent}</aside>
+
+      {/* ---------- Drawer موبایل ---------- */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              className={styles.backdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              onClick={closeMobile}
+            />
+            <motion.aside
+              id="admin-mobile-sidebar"
+              role="dialog"
+              aria-modal="true"
+              aria-label="منوی پنل مدیریت"
+              className={styles.mobileSidebar}
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{
+                type: 'tween',
+                duration: 0.28,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {sidebarContent}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ---------- محتوای اصلی ---------- */}
+      <div className={styles.main}>
+        <header className={styles.topbar}>
+          <button
+            type="button"
+            className={styles.menuBtn}
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label={mobileOpen ? 'بستن منو' : 'باز کردن منو'}
+            aria-expanded={mobileOpen}
+            aria-controls="admin-mobile-sidebar"
+          >
+            {mobileOpen ? <X size={19} /> : <Menu size={19} />}
+          </button>
+
+          <div className={styles.topbarTitle}>
+            مرکز مدیریت Luxury Jewel <small>● آنلاین</small>
+          </div>
+
+          <NavLink to="/" className={styles.topbarSiteLink}>
+            <Store size={16} />
+            <span>سایت</span>
+          </NavLink>
+        </header>
+
+        <main className={styles.content}>
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

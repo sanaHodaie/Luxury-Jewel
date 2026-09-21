@@ -1,0 +1,6 @@
+{
+  "name": "Luxury Jewel",
+  "description": "High-end luxury jewelry brand landing page featuring interactive 3D gemstones, custom vibrant themes, and Persian typography.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

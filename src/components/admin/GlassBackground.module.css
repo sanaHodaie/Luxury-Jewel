@@ -1,0 +1,53 @@
+.wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%),
+    linear-gradient(160deg, var(--bg-primary), var(--bg-secondary));
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+}
+
+.blobOne {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  right: -60px;
+  background: var(--accent);
+}
+
+.blobTwo {
+  width: 340px;
+  height: 340px;
+  bottom: -90px;
+  left: -50px;
+  background: var(--gold-accent);
+  opacity: 0.4;
+}
+
+.blobThree {
+  width: 260px;
+  height: 260px;
+  top: 45%;
+  left: 55%;
+  background: var(--accent-light);
+  opacity: 0.35;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--glass-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.35;
+  mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
+}

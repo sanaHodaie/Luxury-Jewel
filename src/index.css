@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shabnam:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IRANSansX:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+:root, [data-theme="rose-gold"] {
+  --theme-bg-primary: #faf6f0;
+  --theme-bg-secondary: #f5ede4;
+  --theme-bg-card: #ffffff;
+  --theme-text-primary: #2d1b0e;
+  --theme-text-secondary: #6b4f3a;
+  --theme-accent: #e8a87c;
+  --theme-accent-light: #f0c4a8;
+  --theme-accent-dark: #d4916e;
+  --theme-gold-accent: #d4af37;
+  --theme-shadow: 0 10px 40px rgba(232, 168, 124, 0.2);
+  --theme-glass-bg: rgba(255, 255, 255, 0.75);
+  --theme-glass-border: rgba(232, 168, 124, 0.25);
+  --theme-gem-color: #e8a87c;
+}
+
+[data-theme="lavender"] {
+  --theme-bg-primary: #f5f0fa;
+  --theme-bg-secondary: #ede6f5;
+  --theme-bg-card: #ffffff;
+  --theme-text-primary: #1a1025;
+  --theme-text-secondary: #5a4a6b;
+  --theme-accent: #b8a0d4;
+  --theme-accent-light: #d4c0e8;
+  --theme-accent-dark: #9a82b8;
+  --theme-gold-accent: #e0b034;
+  --theme-shadow: 0 10px 40px rgba(184, 160, 212, 0.25);
+  --theme-glass-bg: rgba(255, 255, 255, 0.75);
+  --theme-glass-border: rgba(184, 160, 212, 0.25);
+  --theme-gem-color: #b8a0d4;
+}
+
+[data-theme="mint"] {
+  --theme-bg-primary: #f4faf7;
+  --theme-bg-secondary: #e8f5ee;
+  --theme-bg-card: #ffffff;
+  --theme-text-primary: #0a1f15;
+  --theme-text-secondary: #3a5a4a;
+  --theme-accent: #7bc4a8;
+  --theme-accent-light: #a8dcc8;
+  --theme-accent-dark: #5a9a82;
+  --theme-gold-accent: #d4af37;
+  --theme-shadow: 0 10px 40px rgba(123, 196, 168, 0.2);
+  --theme-glass-bg: rgba(255, 255, 255, 0.75);
+  --theme-glass-border: rgba(123, 196, 168, 0.25);
+  --theme-gem-color: #7bc4a8;
+}
+
+[data-theme="sunset"] {
+  --theme-bg-primary: #fff5f5;
+  --theme-bg-secondary: #ffe8e8;
+  --theme-bg-card: #ffffff;
+  --theme-text-primary: #2a0a0a;
+  --theme-text-secondary: #6b3a3a;
+  --theme-accent: #ff7b89;
+  --theme-accent-light: #ffa8b2;
+  --theme-accent-dark: #e05a6a;
+  --theme-gold-accent: #f0b034;
+  --theme-shadow: 0 10px 40px rgba(255, 123, 137, 0.25);
+  --theme-glass-bg: rgba(255, 255, 255, 0.75);
+  --theme-glass-border: rgba(255, 123, 137, 0.25);
+  --theme-gem-color: #ff7b89;
+}
+
+:root {
+  --bg-primary: var(--theme-bg-primary);
+  --bg-secondary: var(--theme-bg-secondary);
+  --bg-card: var(--theme-bg-card);
+  --text-primary: var(--theme-text-primary);
+  --text-secondary: var(--theme-text-secondary);
+  --accent: var(--theme-accent);
+  --accent-light: var(--theme-accent-light);
+  --accent-dark: var(--theme-accent-dark);
+  --gold-accent: var(--theme-gold-accent);
+  --shadow: var(--theme-shadow);
+  --glass-bg: var(--theme-glass-bg);
+  --glass-border: var(--theme-glass-border);
+  --transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+  font-family: 'IRANSansX', 'Vazirmatn', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition);
+  overflow-x: hidden;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Persian Font Hierarchy */
+h1, h2, h3, .font-heading {
+  font-family: 'Vazirmatn', sans-serif !important;
+  font-weight: 700;
+}
+
+.badge, .subtitle, .stat-label, .font-subheading {
+  font-family: 'Shabnam', 'Vazirmatn', sans-serif !important;
+  font-weight: 500;
+}
+
+p, .description, .testimonial-text, .font-body {
+  font-family: 'IRANSansX', 'Vazirmatn', sans-serif !important;
+  font-weight: 400;
+}
+
+button, .nav-link, .btn, .font-button {
+  font-family: 'Vazirmatn', sans-serif !important;
+  font-weight: 500;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
+}
+
+.font-serif {
+  font-family: 'Vazirmatn', 'Playfair Display', serif;
+}
