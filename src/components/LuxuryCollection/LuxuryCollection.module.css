@@ -49,6 +49,7 @@
   font-size: 1rem;
   color: var(--text-secondary);
   line-height: 1.8;
+  margin-bottom: 24px;
 }
 
 /* Controls Bar (Filter Pills + Search & Sort) */
@@ -80,7 +81,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: 20px;
   background: var(--bg-card);
   border: 1px solid var(--theme-glass-border);
@@ -91,6 +92,7 @@
   white-space: nowrap;
   transition: all 0.25s ease;
   min-height: 42px;
+  user-select: none;
 }
 
 .filterBtn:hover {
@@ -560,6 +562,22 @@
   direction: rtl;
   box-sizing: border-box;
   overflow: hidden;
+}
+
+/* Drag Handle for Mobile App Feel */
+.dragHandle {
+  display: none;
+  width: 42px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  margin: 10px auto 4px auto;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dragHandle:active {
+  background: var(--accent);
 }
 
 .modalContent {
@@ -1047,7 +1065,7 @@
   }
 }
 
-/* Mobile Screens (max-width: 768px) */
+/* Mobile Screens - Bottom Sheet Application Experience (max-width: 768px) */
 @media (max-width: 768px) {
   .section {
     padding: 50px 0;
@@ -1082,33 +1100,53 @@
     gap: 20px;
   }
 
-  .modalGrid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .modalImageWrapper {
-    height: 240px;
-  }
-
+  /* Bottom Sheet Overlay & Modal Animation in Mobile */
   .modalOverlay {
-    padding: 10px;
+    padding: 0;
+    align-items: flex-end; /* چسبیدن مدال به انتهای صفحه در موبایل */
+  }
+
+  .dragHandle {
+    display: block; /* نمایش نوار لمسی اپلیکیشن بالای مدال */
   }
 
   .modalContent,
   .compareModalContent {
     width: 100%;
     max-width: 100%;
-    border-radius: 20px;
+    max-height: 85vh;
+    border-radius: 28px 28px 0 0; /* گرد شدن فقط گوشه‌های بالایی به سبک اندروید */
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .modalGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .modalImageWrapper {
+    height: 220px;
   }
 
   .modalHeader {
-    padding: 16px 16px 12px 16px;
+    padding: 12px 20px;
   }
 
   .modalScrollBody,
   .compareModalScrollBody {
-    padding: 16px 16px 20px 16px;
+    padding: 16px 20px 28px 20px;
   }
 
   .vipFormFields {
@@ -1123,14 +1161,21 @@
   }
 
   .tabsNav {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     gap: 4px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .tabsNav::-webkit-scrollbar {
+    display: none;
   }
 
   .tabBtn {
     flex: 1;
     text-align: center;
-    padding: 8px 4px;
+    padding: 8px 6px;
     font-size: 0.8rem;
     white-space: nowrap;
   }
@@ -1146,6 +1191,7 @@
     left: 12px;
     bottom: 16px;
     padding: 10px 14px;
+    border-radius: 18px;
   }
 
   .compareBarContent {

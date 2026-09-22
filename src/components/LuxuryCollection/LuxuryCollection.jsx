@@ -9,8 +9,6 @@ import {
   CheckCircle,
   Crown,
   Gem,
-  SlidersHorizontal,
-  Search,
   Scale,
   Award,
   ShieldCheck,
@@ -19,8 +17,8 @@ import {
   PhoneCall,
   Check,
   Copy,
-  Info,
-  ChevronLeft
+  Search,
+  ArrowUpDown
 } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useWishlist } from '../../contexts/WishlistContext';
@@ -28,31 +26,20 @@ import { useProducts } from '../../contexts/ProductsContext';
 import { ImageZoom } from '../ImageZoom/ImageZoom';
 import styles from './LuxuryCollection.module.css';
 
-import emeraldRingImg from '../../assets/images/Gemini_Generated_Image_6st6lo6st6lo6st6.webp';
-import pearlNecklaceImg from '../../assets/images/Gemini_Generated_Image_8l1lsb8l1lsb8l1l.webp';
-import rubyPendantImg from '../../assets/images/Gemini_Generated_Image_s9f1urs9f1urs9f1.webp';
-import sapphireRingImg from '../../assets/images/Gemini_Generated_Image_x3k14xx3k14xx3k1.webp';
-import diamondRingImg from '../../assets/images/Gemini_Generated_Image_wmr479wmr479wmr4.webp';
-import amethystNecklaceImg from '../../assets/images/Gemini_Generated_Image_xdapdjxdapdjxdap.webp';
-import yellowemeraldRingImg from '../../assets/images/yellowemeraldRingImg.webp';
-import roseemeraldRingImg from '../../assets/images/roseemeraldRingImg.webp';
-import rosepearlNecklaceImg from '../../assets/images/rosepearlNecklaceImg.webp';
-import whitepearlNecklaceImg from '../../assets/images/whitepearlNecklaceImg.webp';
-import yellowrubyPendantImg from '../../assets/images/yellowrubyPendantImg.webp';
-import roserubyyPendantImg from '../../assets/images/roserubyyPendantImg.webp';
-import rosesapphireRingImg from '../../assets/images/rosesapphireRingImg.webp';
-import yellowsapphireRingImg from '../../assets/images/yellowsapphireRingImg.webp';
-import whitediamondRingImg from '../../assets/images/whitediamondRingImg.webp';
-import rosediamondRingImg from '../../assets/images/rosediamondRingImg.webp';
-import whiteamethystNecklaceImg from '../../assets/images/whiteamethystNecklaceImg.webp';
-import roseamethystNecklaceImg from '../../assets/images/roseamethystNecklaceImg.webp';
+const CATEGORIES = [
+  { id: 'all', label: 'همه قطعات' },
+  { id: 'ring', label: 'انگشتر' },
+  { id: 'necklace', label: 'گردنبند' },
+  { id: 'earring', label: 'گوشواره' },
+  { id: 'bracelet', label: 'دستبند' }
+];
 
 export const LuxuryCollection = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [toastMessage, setToastMessage] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [toastMessage, setToastMessage] = useState(null);
   const [compareItems, setCompareItems] = useState([]);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [modalTab, setModalTab] = useState('specs');
@@ -62,34 +49,11 @@ export const LuxuryCollection = () => {
 
   const { addToCart } = useCart();
   const { wishlist, toggleWishlist, isInWishlist } = useWishlist();
-  const { luxuryProducts, categoryLabels } = useProducts();
-
-  // ===== تعریف categories =====
-  const categories = useMemo(() => {
-    const baseCategories = [
-      { id: 'all', label: 'همه قطعات' }
-    ];
-    
-    if (categoryLabels && typeof categoryLabels === 'object') {
-      const categoryItems = Object.entries(categoryLabels).map(([id, label]) => ({
-        id,
-        label
-      }));
-      return [...baseCategories, ...categoryItems];
-    }
-    
-    // اگر categoryLabels وجود نداشت، از این لیست پیش‌فرض استفاده کن
-    return [
-      { id: 'all', label: 'همه قطعات' },
-      { id: 'ring', label: 'انگشتر و حلقه' },
-      { id: 'earring', label: 'گوشواره' },
-      { id: 'necklace', label: 'گردنبند' },
-      { id: 'bracelet', label: 'دستبند' },
-    ];
-  }, [categoryLabels]);
+  const { luxuryProducts } = useProducts();
 
   const handleOpenProductModal = (product) => {
     setSelectedMetal('yellow');
+    setModalTab('specs');
     setSelectedProduct(product);
   };
 
@@ -106,24 +70,44 @@ export const LuxuryCollection = () => {
     return String(num).replace(/\d/g, (d) => farsiDigits[parseInt(d, 10)]);
   };
 
-  const filteredProducts = useMemo(() => {
-    let result = luxuryProducts.filter((item) => {
-      const matchesCat = activeCategory === 'all' || item.category === activeCategory;
-      const matchesSearch =
-        item.name?.includes(searchQuery) ||
-        item.description?.includes(searchQuery) ||
-        item.purity?.includes(searchQuery);
-      return matchesCat && matchesSearch;
+  // ✅ فیلتر، جستجو و مرتب‌سازی محصولات
+  const displayedProducts = useMemo(() => {
+    if (!Array.isArray(luxuryProducts)) return [];
+
+    let filtered = luxuryProducts.filter((product) => {
+      // فیلتر دسته‌بندی
+      if (selectedCategory !== 'all') {
+        const cat = product.category ? product.category.toLowerCase() : '';
+        const catFull = product.categoryFull ? product.categoryFull.toLowerCase() : '';
+        const name = product.name ? product.name.toLowerCase() : '';
+
+        if (selectedCategory === 'ring' && !cat.includes('ring') && !catFull.includes('انگشتر') && !name.includes('انگشتر')) return false;
+        if (selectedCategory === 'necklace' && !cat.includes('necklace') && !catFull.includes('گردنبند') && !name.includes('گردنبند')) return false;
+        if (selectedCategory === 'earring' && !cat.includes('earring') && !catFull.includes('گوشواره') && !name.includes('گوشواره')) return false;
+        if (selectedCategory === 'bracelet' && !cat.includes('bracelet') && !catFull.includes('دستبند') && !name.includes('دستبند')) return false;
+      }
+
+      // فیلتر جستجو
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const matchName = product.name?.toLowerCase().includes(query);
+        const matchDesc = product.description?.toLowerCase().includes(query);
+        const matchGem = product.gemType?.toLowerCase().includes(query);
+        if (!matchName && !matchDesc && !matchGem) return false;
+      }
+
+      return true;
     });
 
-    if (sortBy === 'price-asc') {
-      result.sort((a, b) => (a.priceNum || 0) - (b.priceNum || 0));
-    } else if (sortBy === 'price-desc') {
-      result.sort((a, b) => (b.priceNum || 0) - (a.priceNum || 0));
+    // مرتب‌سازی
+    if (sortBy === 'price-low') {
+      filtered.sort((a, b) => parseFloat(a.price.replace(/,/g, '')) - parseFloat(b.price.replace(/,/g, '')));
+    } else if (sortBy === 'price-high') {
+      filtered.sort((a, b) => parseFloat(b.price.replace(/,/g, '')) - parseFloat(a.price.replace(/,/g, '')));
     }
 
-    return result;
-  }, [luxuryProducts, activeCategory, searchQuery, sortBy]);
+    return filtered;
+  }, [luxuryProducts, selectedCategory, searchQuery, sortBy]);
 
   const handleAddToCart = (product, e) => {
     if (e) e.stopPropagation();
@@ -168,6 +152,26 @@ export const LuxuryCollection = () => {
     }, 1500);
   };
 
+  const modalVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: window.innerWidth <= 768 ? '100%' : 20,
+      scale: window.innerWidth <= 768 ? 1 : 0.95 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: { type: 'spring', damping: 25, stiffness: 280 }
+    },
+    exit: { 
+      opacity: 0, 
+      y: window.innerWidth <= 768 ? '100%' : 20,
+      scale: window.innerWidth <= 768 ? 1 : 0.95,
+      transition: { duration: 0.25 }
+    }
+  };
+
   return (
     <section id="luxury-collection" className={styles.section}>
       <div className={styles.container}>
@@ -189,18 +193,17 @@ export const LuxuryCollection = () => {
           </p>
         </motion.div>
 
-        {/* Filter & Search Bar */}
+        {/* 🏷️ Controls Bar (دسته‌بندی، سرچ و سورت) */}
         <div className={styles.controlsBar}>
           <div className={styles.categoriesScroll}>
-            {categories.map((cat) => (
+            {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
-                className={`${styles.filterBtn} ${activeCategory === cat.id ? styles.filterActive : ''}`}
-                onClick={() => setActiveCategory(cat.id)}
+                className={`${styles.filterBtn} ${selectedCategory === cat.id ? styles.filterActive : ''}`}
+                onClick={() => setSelectedCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                {cat.id === 'all' && <span className={styles.badgeCount}>{luxuryProducts.length}</span>}
               </button>
             ))}
           </div>
@@ -210,7 +213,7 @@ export const LuxuryCollection = () => {
               <Search size={16} className={styles.searchIcon} />
               <input
                 type="text"
-                placeholder="جستجوی گوهر یا کد..."
+                placeholder="جستجوی قطعه یا سنگ..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
@@ -225,12 +228,25 @@ export const LuxuryCollection = () => {
                 </button>
               )}
             </div>
+
+            <div className={styles.sortBox}>
+              <ArrowUpDown size={15} />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className={styles.sortSelect}
+              >
+                <option value="default">پیش‌فرض</option>
+                <option value="price-low">ارزان‌ترین</option>
+                <option value="price-high">گران‌ترین</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Products Grid */}
         <div className={styles.grid}>
-          {filteredProducts.map((product, index) => {
+          {displayedProducts.map((product, index) => {
             const inWishlist = isWishlisted(product.id);
             const inCompare = compareItems.some((i) => i.id === product.id);
 
@@ -252,7 +268,7 @@ export const LuxuryCollection = () => {
                   <Gem size={14} />
                 </div>
 
-                {/* Image Container with Zoom & Floating Actions */}
+                {/* Image Container */}
                 <div className={styles.imageWrapper} onClick={() => handleOpenProductModal(product)}>
                   <ImageZoom
                     src={product.image}
@@ -261,7 +277,6 @@ export const LuxuryCollection = () => {
                     showHint={false}
                   />
 
-                  {/* Floating Actions on Card */}
                   <div className={styles.floatingActions}>
                     <button
                       type="button"
@@ -337,19 +352,19 @@ export const LuxuryCollection = () => {
           })}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {displayedProducts.length === 0 && (
           <div className={styles.emptySearchState}>
             <Gem size={40} style={{ opacity: 0.4 }} />
-            <p>هیچ جواهراتی با مشخصات درخواستی یافت نشد.</p>
+            <p>هیچ قطعه‌ای مطابق با جستجو یا دسته‌بندی انتخابی یافت نشد.</p>
             <button
               type="button"
               className={styles.resetSearchBtn}
               onClick={() => {
-                setActiveCategory('all');
+                setSelectedCategory('all');
                 setSearchQuery('');
               }}
             >
-              نمایش همه جواهرات
+              نمایش همه قطعات
             </button>
           </div>
         )}
@@ -454,10 +469,13 @@ export const LuxuryCollection = () => {
             <motion.div
               className={styles.compareModalContent}
               onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
+              <div className={styles.dragHandle} onClick={() => setIsCompareOpen(false)} />
+
               <div className={styles.modalHeader}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Scale size={22} style={{ color: 'var(--accent)' }} />
@@ -555,10 +573,13 @@ export const LuxuryCollection = () => {
             <motion.div
               className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.92, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 15 }}
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
+              <div className={styles.dragHandle} onClick={() => setSelectedProduct(null)} />
+
               <div className={styles.modalHeader}>
                 <div className={styles.modalCategoryBadge}>
                   <Gem size={16} style={{ color: 'var(--accent)' }} />
@@ -575,7 +596,6 @@ export const LuxuryCollection = () => {
               </div>
 
               <div className={styles.modalScrollBody}>
-                {/* Modal Body Grid */}
                 <div className={styles.modalGrid}>
                   {/* Image Section */}
                   <div className={styles.modalImageWrapper}>
@@ -586,7 +606,6 @@ export const LuxuryCollection = () => {
                       showHint={false}
                     />
 
-                    {/* Metal Finish Simulator */}
                     <div className={styles.metalSelectorBox}>
                       <span className={styles.metalLabel}>
                         پایه طلا: {selectedMetal === 'yellow' ? 'طلای زرد' : selectedMetal === 'white' ? 'طلای سفید' : 'رزگلد'}
@@ -622,7 +641,6 @@ export const LuxuryCollection = () => {
                     <h3 className={styles.modalTitle}>{selectedProduct.name}</h3>
                     <div className={styles.modalPrice}>{selectedProduct.price} تومان</div>
 
-                    {/* Certificate Serial Banner */}
                     <div className={styles.certBanner}>
                       <Award size={18} style={{ color: 'var(--accent)' }} />
                       <div className={styles.certCodeInfo}>
@@ -639,7 +657,6 @@ export const LuxuryCollection = () => {
                       </button>
                     </div>
 
-                    {/* Tabs Nav */}
                     <div className={styles.tabsNav}>
                       <button
                         type="button"
@@ -664,7 +681,6 @@ export const LuxuryCollection = () => {
                       </button>
                     </div>
 
-                    {/* Tab Contents */}
                     <div className={styles.tabContentArea}>
                       {modalTab === 'specs' && (
                         <div className={styles.specsList}>
@@ -731,7 +747,6 @@ export const LuxuryCollection = () => {
                       )}
                     </div>
 
-                    {/* Modal Actions */}
                     <div className={styles.modalFooterActions}>
                       <button
                         type="button"
