@@ -198,6 +198,5 @@ export const DEFAULT_BRAND_STORY = {
     primaryLabel: 'مشاهده کالکشن‌های جواهرات',
     primaryLink: '/',
     secondaryLabel: 'بازدید از گالری فرشته',
-    secondaryLink: '#newsletter',
   },
 };

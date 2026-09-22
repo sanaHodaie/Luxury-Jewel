@@ -12,7 +12,6 @@ import Hero from './components/Hero/Hero';
 import FeaturedProducts from './components/FeaturedProducts/FeaturedProducts';
 import LuxuryCollection from './components/LuxuryCollection/LuxuryCollection';
 import SpecialDiscounts from './components/SpecialDiscounts/SpecialDiscounts';
-import Newsletter from './components/Newsletter/Newsletter';
 import Footer from './components/Footer/Footer';
 
 import BrandStoryPage from './pages/BrandStoryPage';
@@ -20,6 +19,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
 import CollectionsPage from './pages/CollectionsPage';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import { TestimonialsProvider } from './contexts/TestimonialsContext';
 
 // پنل مدیریت
 import AdminLayout from './components/admin/AdminLayout';
@@ -27,9 +27,9 @@ import RequireAdmin from './components/admin/RequireAdmin';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminTestimonialsPage from './pages/admin/AdminTestimonialsPage';
 import AdminBrandStoryPage from './pages/admin/AdminBrandStoryPage';
-
+import AdminContactPage from './pages/admin/AdminContactPage';
 import styles from './App.module.css';
 
 // لایوت فروشگاه
@@ -51,16 +51,16 @@ const HomePage = () => (
     <FeaturedProducts />
     <LuxuryCollection />
     <SpecialDiscounts />
-    <Newsletter />
   </>
 );
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <ProductsProvider>
-        <SiteSettingsProvider>
-          <WishlistProvider>
+<ThemeProvider>
+  <ProductsProvider>
+    <SiteSettingsProvider>
+      <TestimonialsProvider>
+        <WishlistProvider>
           <CartProvider>
             <BrowserRouter>
               <ScrollToTop />
@@ -88,21 +88,23 @@ export default function App() {
                     <Route path="dashboard" element={<AdminDashboardPage />} />
                     <Route path="products" element={<AdminProductsPage />} />
                       <Route path="brand-story" element={<AdminBrandStoryPage />} />
-    
-    
- 
-                    <Route path="settings" element={<AdminSettingsPage />} />
+                      <Route path="contact" element={<AdminContactPage />} />
+                      <Route
+                    path="testimonials"
+                    element={<AdminTestimonialsPage />}
+                  />
                   </Route>
                 </Route>
 
                 {/* هر مسیر ناموجود به صفحه اصلی هدایت میشه */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
-            </BrowserRouter>
+             </BrowserRouter>
           </CartProvider>
-          </WishlistProvider>
-        </SiteSettingsProvider>
-      </ProductsProvider>
-    </ThemeProvider>
+        </WishlistProvider>
+      </TestimonialsProvider>
+    </SiteSettingsProvider>
+  </ProductsProvider>
+</ThemeProvider>
   );
 }

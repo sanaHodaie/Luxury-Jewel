@@ -10,8 +10,9 @@ import {
   LogOut,
   Menu,
   X,
-  Settings2,
   BookOpen,
+  Phone,
+  MessageSquare,
 } from 'lucide-react';
 import { useProducts } from '../../contexts/ProductsContext';
 import styles from './AdminLayout.module.css';
@@ -33,9 +34,14 @@ const NAV_ITEMS = [
     icon: BookOpen,
   },
   {
-    to: '/admin/settings',
-    label: 'تنظیمات سایت',
-    icon: Settings2,
+    to: '/admin/contact',
+    label: 'تماس با ما',
+    icon: Phone,
+  },
+  {
+    to: '/admin/testimonials',
+    label: 'نظرات مشتریان',
+    icon: MessageSquare,
   },
 ];
 
@@ -49,6 +55,7 @@ export default function AdminLayout() {
     if (mobileOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+
       return () => {
         document.body.style.overflow = prev;
       };
@@ -58,11 +65,18 @@ export default function AdminLayout() {
   // ---------- بستن Drawer با کلید Escape ----------
   useEffect(() => {
     if (!mobileOpen) return;
+
     const onKey = (e) => {
-      if (e.key === 'Escape') setMobileOpen(false);
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+      }
     };
+
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+    };
   }, [mobileOpen]);
 
   // ---------- بستن Drawer با تغییر مسیر ----------
@@ -80,6 +94,7 @@ export default function AdminLayout() {
         <span className={styles.brandIcon}>
           <Gem size={20} />
         </span>
+
         <div>
           <p className={styles.brandName}>Luxury Jewel</p>
           <p className={styles.brandSub}>پنل مدیریت</p>
@@ -92,24 +107,35 @@ export default function AdminLayout() {
             key={to}
             to={to}
             className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
+              `${styles.navLink} ${
+                isActive ? styles.navLinkActive : ''
+              }`
             }
             onClick={closeMobile}
           >
             <Icon size={18} />
+
             <span>{label}</span>
+
             {to === '/admin/products' && (
-              <span className={styles.countPill}>{products.length}</span>
+              <span className={styles.countPill}>
+                {products.length}
+              </span>
             )}
           </NavLink>
         ))}
       </nav>
 
       <div className={styles.sidebarFooter}>
-        <NavLink to="/" className={styles.ghostBtn} onClick={closeMobile}>
+        <NavLink
+          to="/"
+          className={styles.ghostBtn}
+          onClick={closeMobile}
+        >
           <Store size={17} />
           <span>مشاهده سایت</span>
         </NavLink>
+
         <button
           type="button"
           className={styles.logoutBtn}
@@ -125,7 +151,9 @@ export default function AdminLayout() {
   return (
     <div className={styles.shell}>
       {/* ---------- سایدبار دسکتاپ (sticky) ---------- */}
-      <aside className={styles.sidebar}>{sidebarContent}</aside>
+      <aside className={styles.sidebar}>
+        {sidebarContent}
+      </aside>
 
       {/* ---------- Drawer موبایل ---------- */}
       <AnimatePresence>
@@ -139,6 +167,7 @@ export default function AdminLayout() {
               transition={{ duration: 0.22 }}
               onClick={closeMobile}
             />
+
             <motion.aside
               id="admin-mobile-sidebar"
               role="dialog"
@@ -167,7 +196,9 @@ export default function AdminLayout() {
             type="button"
             className={styles.menuBtn}
             onClick={() => setMobileOpen((o) => !o)}
-            aria-label={mobileOpen ? 'بستن منو' : 'باز کردن منو'}
+            aria-label={
+              mobileOpen ? 'بستن منو' : 'باز کردن منو'
+            }
             aria-expanded={mobileOpen}
             aria-controls="admin-mobile-sidebar"
           >
@@ -178,7 +209,10 @@ export default function AdminLayout() {
             مرکز مدیریت Luxury Jewel <small>● آنلاین</small>
           </div>
 
-          <NavLink to="/" className={styles.topbarSiteLink}>
+          <NavLink
+            to="/"
+            className={styles.topbarSiteLink}
+          >
             <Store size={16} />
             <span>سایت</span>
           </NavLink>

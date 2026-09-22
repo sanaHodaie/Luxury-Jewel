@@ -204,16 +204,330 @@ export const DEFAULT_BRAND_STORY = {
 };
 
 /* =========================================================
+   DEFAULT CONTACT PAGE
+========================================================= */
+
+export const DEFAULT_CONTACT_PAGE = {
+  hero: {
+    badge: 'ارتباط با گالری لوکس ژوئل • پاسخگویی ۲۴ ساعته',
+    title: 'ارتباط با کارشناسان Luxury Jewel',
+    subtitle:
+      'برای دریافت مشاوره تخصصی، استعلام قیمت، سفارش ساخت اختصاصی یا رزرو وقت VIP، با کارشناسان ما در ارتباط باشید.',
+    primaryButtonText: 'رزرو وقت VIP',
+    secondaryButtonText: 'مشاهده موقعیت گالری',
+    phoneButtonText: 'تماس مستقیم',
+  },
+
+  gallery: {
+    badge: 'گالری ژوئل',
+    title: 'تجربه‌ای متفاوت از خرید جواهرات',
+    description:
+      'در فضایی خصوصی و لوکس، مجموعه‌ای از فاخرترین طلا و جواهرات را مشاهده کنید.',
+  },
+
+  quickCards: {
+    address: {
+      tagText: 'موقعیت گالری',
+      title: 'آدرس گالری',
+      detail: '',
+      subText: 'گالری مرکزی Luxury Jewel',
+      actionText: 'مسیریابی روی نقشه',
+    },
+
+    hours: {
+      liveText: 'اکنون باز است',
+      title: 'ساعات کاری',
+      description:
+        'برای مشاوره اختصاصی و بازدید از کالکشن‌ها در ساعات زیر منتظر شما هستیم.',
+      rows: [
+        {
+          label: 'شنبه تا چهارشنبه',
+          value: '۱۰:۰۰ تا ۲۰:۰۰',
+        },
+        {
+          label: 'پنجشنبه',
+          value: '۱۰:۰۰ تا ۱۸:۰۰',
+        },
+        {
+          label: 'جمعه',
+          value: 'با هماهنگی قبلی',
+        },
+      ],
+      noteText: 'پنجشنبه‌ها تا ۲۰:۰۰ و جمعه‌ها با وقت قبلی',
+    },
+
+    phone: {
+      responseText: 'پاسخگویی سریع',
+      title: 'تماس تلفنی',
+      description:
+        'کارشناسان ما آماده پاسخگویی و مشاوره تخصصی جواهرات هستند.',
+      officeLabel: 'دفتر مرکزی',
+      vipLabel: 'مشاوره VIP',
+      trustText: 'تماس امن و محرمانه',
+    },
+
+    whatsapp: {
+      liveText: 'آنلاین ۲۴/۷',
+      title: 'واتساپ',
+      description: 'پاسخگویی سریع کارشناسان',
+      previewText: 'سلام، در خدمت شما هستیم 💎',
+      buttonText: 'شروع گفتگو',
+    },
+  },
+
+  mainForm: {
+    badge: 'در تماس باشید',
+    title: 'چطور می‌توانیم کمکتان کنیم؟',
+    subtitle:
+      'فرم زیر را تکمیل کنید تا کارشناسان ما در کوتاه‌ترین زمان با شما تماس بگیرند.',
+
+    fields: {
+      fullNameLabel: 'نام و نام خانوادگی',
+      fullNamePlaceholder: 'نام خود را وارد کنید',
+
+      phoneLabel: 'شماره تماس',
+      phonePlaceholder: '۰۹۱۲۱۲۳۴۵۶۷',
+
+      emailLabel: 'ایمیل',
+      emailPlaceholder: 'example@email.com',
+
+      subjectLabel: 'موضوع درخواست',
+
+      preferredChannelLabel: 'روش ترجیحی ارتباط',
+
+      messageLabel: 'پیام شما',
+      messagePlaceholder:
+        'توضیحات یا درخواست خود را برای ما بنویسید...',
+
+      submitButtonText: 'ارسال درخواست',
+    },
+
+    subjects: [
+      {
+        value: 'consultation',
+        label: 'مشاوره تخصصی طلا و برلیان',
+      },
+      {
+        value: 'custom_order',
+        label: 'سفارش ساخت طرح اختصاصی',
+      },
+      {
+        value: 'order_tracking',
+        label: 'پیگیری سفارش و فاکتور',
+      },
+      {
+        value: 'vip_appointment',
+        label: 'رزرو وقت مشاوره حضوری',
+      },
+      {
+        value: 'feedback',
+        label: 'پیشنهادات و انتقادات',
+      },
+    ],
+
+    channels: [
+      {
+        value: 'phone',
+        label: 'تماس تلفنی',
+      },
+      {
+        value: 'whatsapp',
+        label: 'واتساپ',
+      },
+      {
+        value: 'email',
+        label: 'ایمیل',
+      },
+    ],
+
+    messages: {
+      successTitle: 'پیام شما با موفقیت دریافت شد!',
+      successDescription:
+        'از ارتباط شما با گالری ژوئل سپاسگزاریم. کارشناسان ما به زودی جهت پاسخگویی و مشاوره تخصصی با شما تماس می‌گیرند.',
+      validationError:
+        'لطفاً تمامی فیلدهای ضروری (نام، شماره تماس و متن پیام) را تکمیل نمایید.',
+    },
+  },
+
+  vip: {
+    badge: 'مشاوره اختصاصی VIP',
+
+    title: 'وقت اختصاصی خود را رزرو کنید',
+
+    subtitle:
+      'برای مشاهده مجموعه‌های خاص، مشاوره تخصصی یا طراحی سفارش اختصاصی، زمان مناسب خود را انتخاب کنید.',
+
+    fields: {
+      nameLabel: 'نام و نام خانوادگی',
+      namePlaceholder: 'نام شما',
+
+      phoneLabel: 'شماره تماس',
+      phonePlaceholder: 'شماره موبایل',
+
+      dateLabel: 'تاریخ مراجعه',
+
+      timeLabel: 'ساعت مراجعه',
+
+      interestLabel: 'زمینه مورد علاقه',
+
+      submitButtonText: 'رزرو وقت VIP',
+    },
+
+    defaultDate: '۲۹ اردیبهشت ۱۴۰۶',
+
+    timeSlots: [
+      {
+        value: '10-12',
+        label: '۱۰ تا ۱۲',
+      },
+      {
+        value: '12-14',
+        label: '۱۲ تا ۱۴',
+      },
+      {
+        value: '14-16',
+        label: '۱۴ تا ۱۶',
+      },
+      {
+        value: '16-18',
+        label: '۱۶ تا ۱۸',
+      },
+      {
+        value: '18-20',
+        label: '۱۸ تا ۲۰',
+      },
+    ],
+
+    interests: [
+      {
+        value: 'bridal',
+        label: 'سرویس عروس و جواهرات برلیان',
+      },
+      {
+        value: 'engagement',
+        label: 'حلقه نامزدی و تک‌نگین',
+      },
+      {
+        value: 'custom',
+        label: 'سفارشات دست‌ساز اختصاصی',
+      },
+      {
+        value: 'daily_gold',
+        label: 'طلا و زیورآلات مدرن روزمره',
+      },
+    ],
+
+    successMessage: {
+      title: 'درخواست وقت VIP شما ثبت شد!',
+      description:
+        'تیم تشریفات گالری ژوئل جهت تایید نهایی وقت ملاقات با شما تماس خواهند گرفت.',
+    },
+
+    trustNote:
+      'اطلاعات شما کاملاً محرمانه خواهد بود و صرفاً برای هماهنگی مشاوره استفاده می‌شود.',
+  },
+
+  location: {
+    tag: 'موقعیت گالری',
+
+    title: 'درخشش را از نزدیک تجربه کنید',
+
+    description:
+      'در گالری ژوئل می‌توانید مجموعه‌های منتخب ما را از نزدیک مشاهده کرده و با کارشناسان جواهرات مشاوره اختصاصی داشته باشید.',
+
+    showroomBadge: 'نمایشگاه و گالری مرکزی',
+
+    accessFeatures: [
+      'پارکینگ اختصاصی',
+      'ورود و امنیت کنترل‌شده',
+      'مشاوره تخصصی گوهرشناسی',
+    ],
+
+    mapTitle: 'گالری Luxury Jewel',
+
+    mapAddress: '',
+
+    mapButtonText: 'مسیریابی در Google Maps',
+
+    mapsUrl: '',
+  },
+
+  social: {
+    badge: 'همراه ما باشید',
+
+    title: 'دنیای ژوئل را دنبال کنید',
+
+    description:
+      'برای مشاهده جدیدترین کالکشن‌ها، پشت صحنه طراحی و اخبار گالری با ما همراه باشید.',
+
+    benefits: [
+      'معرفی جدیدترین کالکشن‌ها',
+      'پشت صحنه طراحی و ساخت',
+      'اعلام رویدادها و پیشنهادهای ویژه',
+    ],
+
+    instagramLabel: 'اینستاگرام ژوئل',
+
+    instagramUrl: '',
+
+    whatsappLabel: 'واتساپ ژوئل',
+
+    whatsappUrl: '',
+
+    liveBadge: 'پاسخگویی آنلاین',
+  },
+
+  faq: {
+    tag: 'سؤالات متداول',
+
+    title: 'پاسخ پرسش‌های شما',
+
+    description:
+      'اگر سؤال شما در این بخش نیست، می‌توانید مستقیماً با کارشناسان ما تماس بگیرید.',
+
+    items: [
+      {
+        question: 'آیا امکان رزرو وقت مشاوره حضوری وجود دارد؟',
+        answer:
+          'بله، می‌توانید از طریق بخش رزرو وقت VIP زمان مورد نظر خود را انتخاب کنید.',
+      },
+
+      {
+        question:
+          'آیا امکان سفارش ساخت جواهرات اختصاصی وجود دارد؟',
+        answer:
+          'بله، طراحی و ساخت سفارشی یکی از خدمات گالری ژوئل است و پس از مشاوره اولیه مراحل طراحی آغاز می‌شود.',
+      },
+
+      {
+        question: 'چطور می‌توانم سفارش خود را پیگیری کنم؟',
+        answer:
+          'برای پیگیری سفارش می‌توانید از طریق تماس تلفنی یا واتساپ با کارشناسان گالری در ارتباط باشید.',
+      },
+
+      {
+        question:
+          'آیا ارسال سفارش به شهرهای دیگر انجام می‌شود؟',
+        answer:
+          'بله، سفارش‌ها با بسته‌بندی و شرایط امنیتی مناسب به شهرهای مختلف ارسال می‌شوند.',
+      },
+    ],
+  },
+};
+
+/* =========================================================
    DEFAULT SITE SETTINGS
 ========================================================= */
 
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Luxury Jewel',
   brandTagline: 'زیبایی جاودانه',
+
   footerText:
     'گالری ژوئل؛ تلفیقی از هنر اصیل، طراحی مدرن و جواهرات فاخر.',
 
   aboutTitle: 'درباره ما',
+
   aboutDescription:
     'گالری ژوئل با تکیه بر هنر اصیل جواهرسازی و طراحی مدرن فعالیت می‌کند.',
 
@@ -225,6 +539,8 @@ export const DEFAULT_SITE_SETTINGS = {
   instagram: '',
 
   brandStory: DEFAULT_BRAND_STORY,
+
+  contactPage: DEFAULT_CONTACT_PAGE,
 };
 
 /* =========================================================
@@ -239,6 +555,10 @@ function mergeSettings(saved) {
   return {
     ...DEFAULT_SITE_SETTINGS,
     ...saved,
+
+    /* =====================================================
+       BRAND STORY
+    ===================================================== */
 
     brandStory: {
       ...DEFAULT_BRAND_STORY,
@@ -289,6 +609,121 @@ function mergeSettings(saved) {
       craftSteps: Array.isArray(saved.brandStory?.craftSteps)
         ? saved.brandStory.craftSteps
         : DEFAULT_BRAND_STORY.craftSteps,
+    },
+
+    /* =====================================================
+       CONTACT PAGE
+    ===================================================== */
+
+    contactPage: {
+      ...DEFAULT_CONTACT_PAGE,
+      ...(saved.contactPage || {}),
+
+      hero: {
+        ...DEFAULT_CONTACT_PAGE.hero,
+        ...(saved.contactPage?.hero || {}),
+      },
+
+      gallery: {
+        ...DEFAULT_CONTACT_PAGE.gallery,
+        ...(saved.contactPage?.gallery || {}),
+      },
+
+      quickCards: {
+        ...DEFAULT_CONTACT_PAGE.quickCards,
+        ...(saved.contactPage?.quickCards || {}),
+
+        address: {
+          ...DEFAULT_CONTACT_PAGE.quickCards.address,
+          ...(saved.contactPage?.quickCards?.address || {}),
+        },
+
+        hours: {
+          ...DEFAULT_CONTACT_PAGE.quickCards.hours,
+          ...(saved.contactPage?.quickCards?.hours || {}),
+
+          rows: Array.isArray(
+            saved.contactPage?.quickCards?.hours?.rows
+          )
+            ? saved.contactPage.quickCards.hours.rows
+            : DEFAULT_CONTACT_PAGE.quickCards.hours.rows,
+        },
+
+        phone: {
+          ...DEFAULT_CONTACT_PAGE.quickCards.phone,
+          ...(saved.contactPage?.quickCards?.phone || {}),
+        },
+
+        whatsapp: {
+          ...DEFAULT_CONTACT_PAGE.quickCards.whatsapp,
+          ...(saved.contactPage?.quickCards?.whatsapp || {}),
+        },
+      },
+
+      mainForm: {
+        ...DEFAULT_CONTACT_PAGE.mainForm,
+        ...(saved.contactPage?.mainForm || {}),
+
+        fields: {
+          ...DEFAULT_CONTACT_PAGE.mainForm.fields,
+          ...(saved.contactPage?.mainForm?.fields || {}),
+        },
+
+        subjects: Array.isArray(saved.contactPage?.mainForm?.subjects)
+          ? saved.contactPage.mainForm.subjects
+          : DEFAULT_CONTACT_PAGE.mainForm.subjects,
+
+        channels: Array.isArray(saved.contactPage?.mainForm?.channels)
+          ? saved.contactPage.mainForm.channels
+          : DEFAULT_CONTACT_PAGE.mainForm.channels,
+      },
+
+      vip: {
+        ...DEFAULT_CONTACT_PAGE.vip,
+        ...(saved.contactPage?.vip || {}),
+
+        fields: {
+          ...DEFAULT_CONTACT_PAGE.vip.fields,
+          ...(saved.contactPage?.vip?.fields || {}),
+        },
+
+        timeSlots: Array.isArray(saved.contactPage?.vip?.timeSlots)
+          ? saved.contactPage.vip.timeSlots
+          : DEFAULT_CONTACT_PAGE.vip.timeSlots,
+
+        interests: Array.isArray(saved.contactPage?.vip?.interests)
+          ? saved.contactPage.vip.interests
+          : DEFAULT_CONTACT_PAGE.vip.interests,
+      },
+
+      location: {
+        ...DEFAULT_CONTACT_PAGE.location,
+        ...(saved.contactPage?.location || {}),
+
+        accessFeatures: Array.isArray(
+          saved.contactPage?.location?.accessFeatures
+        )
+          ? saved.contactPage.location.accessFeatures
+          : DEFAULT_CONTACT_PAGE.location.accessFeatures,
+      },
+
+      social: {
+        ...DEFAULT_CONTACT_PAGE.social,
+        ...(saved.contactPage?.social || {}),
+
+        benefits: Array.isArray(saved.contactPage?.social?.benefits)
+          ? saved.contactPage.social.benefits
+          : DEFAULT_CONTACT_PAGE.social.benefits,
+      },
+
+      faq: {
+        ...DEFAULT_CONTACT_PAGE.faq,
+        ...(saved.contactPage?.faq || {}),
+
+        items: Array.isArray(saved.contactPage?.faq?.items)
+          ? saved.contactPage.faq.items
+          : DEFAULT_CONTACT_PAGE.faq.items,
+      },
     },
   };
 }
