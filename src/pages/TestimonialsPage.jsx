@@ -135,9 +135,14 @@ export const TestimonialsPage = () => {
     }, 1800);
   };
 
-  // Filter logic
+  // =====================================================
+  // ✅ Filter logic — فقط نظرات تأییدشده نمایش داده می‌شن
+  // =====================================================
   const filteredReviews = reviews
     .filter((rev) => {
+      // ✅ فقط نظرات تأییدشده
+      if (!rev.verified) return false;
+
       if (
         selectedCategory === 'online' &&
         rev.category !== 'online'
@@ -210,10 +215,15 @@ export const TestimonialsPage = () => {
       return b.id - a.id;
     });
 
+  // تعداد نظرات تأییدشده برای نمایش در تب "همه نظرات"
+  const verifiedReviewsCount = reviews.filter(
+    (r) => r.verified
+  ).length;
+
   const categories = [
     {
       id: 'all',
-      label: `همه نظرات (${reviews.length})`,
+      label: `همه نظرات (${verifiedReviewsCount})`,
     },
     {
       id: 'photo',
@@ -925,7 +935,7 @@ export const TestimonialsPage = () => {
 
           <div className={styles.photoGrid}>
             {reviews
-              .filter((r) => r.hasPhoto)
+              .filter((r) => r.hasPhoto && r.verified)
               .map((r) => (
                 <div
                   key={r.id}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare,
@@ -18,6 +18,10 @@ import {
   MessageCircle,
   Heart,
   UserCheck,
+  Sparkles,
+  AlertCircle,
+  Layers,
+  Award,
 } from 'lucide-react';
 
 import {
@@ -49,6 +53,118 @@ const CATEGORY_LABELS = {
   custom: 'سفارش سفارشی',
 };
 
+/* ============ Toast (Center Screen) ============ */
+function Toast({ toast, onClose }) {
+  const [leaving, setLeaving] = useState(false);
+
+  useEffect(() => {
+    if (!toast) {
+      setLeaving(false);
+      return;
+    }
+
+    setLeaving(false);
+
+    const fadeTimer = setTimeout(() => setLeaving(true), 2500);
+    const removeTimer = setTimeout(onClose, 3000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
+  }, [toast, onClose]);
+
+  if (!toast) return null;
+  const isError = toast.type === 'error';
+
+  return (
+    <div className={styles.toastOverlay}>
+      <div
+        className={`${styles.toast} ${
+          isError ? styles.toastError : styles.toastSuccess
+        } ${leaving ? styles.toastLeaving : ''}`}
+      >
+        {isError ? <AlertCircle size={20} /> : <CheckCircle2 size={20} />}
+        <span>{toast.message}</span>
+        <button type="button" onClick={onClose} className={styles.toastClose}>
+          <X size={14} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ============ Section Card ============ */
+function SectionCard({
+  icon: Icon,
+  iconTone = 'indigo',
+  title,
+  description,
+  count,
+  action,
+  children,
+}) {
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeaderLeft}>
+          <div
+            className={`${styles.sectionIcon} ${styles[`iconTone_${iconTone}`]}`}
+          >
+            <Icon size={20} />
+          </div>
+          <div className={styles.sectionHeaderContent}>
+            <div className={styles.sectionTitleRow}>
+              <h2 className={styles.sectionTitle}>{title}</h2>
+              {typeof count === 'number' && (
+                <span className={styles.sectionCount}>
+                  {count.toLocaleString('fa-IR')}
+                </span>
+              )}
+            </div>
+            {description && (
+              <p className={styles.sectionDescription}>{description}</p>
+            )}
+          </div>
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+/* ============ Confirm Delete Button ============ */
+function DeleteButton({ onConfirm, title = 'حذف' }) {
+  const [confirming, setConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!confirming) return;
+    const t = setTimeout(() => setConfirming(false), 3000);
+    return () => clearTimeout(t);
+  }, [confirming]);
+
+  return (
+    <button
+      type="button"
+      className={`${styles.deleteButton} ${
+        confirming ? styles.deleteButtonConfirm : ''
+      }`}
+      onClick={() => {
+        if (confirming) {
+          onConfirm();
+          setConfirming(false);
+        } else {
+          setConfirming(true);
+        }
+      }}
+      title={confirming ? 'برای تأیید دوباره کلیک کنید' : title}
+    >
+      {confirming ? <CheckCircle2 size={16} /> : <Trash2 size={16} />}
+    </button>
+  );
+}
+
 export default function AdminTestimonialsPage() {
   const {
     reviews,
@@ -60,19 +176,18 @@ export default function AdminTestimonialsPage() {
   } = useTestimonials();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] =
-    useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  const [formData, setFormData] =
-    useState(EMPTY_FORM);
+  const [formData, setFormData] = useState(EMPTY_FORM);
 
   const [deleteId, setDeleteId] = useState(null);
 
-  const [showResetConfirm, setShowResetConfirm] =
-    useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const [toast, setToast] = useState(null);
 
   const filteredReviews = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -94,11 +209,25 @@ export default function AdminTestimonialsPage() {
         review.text?.toLowerCase().includes(query)
       );
     });
-  }, [
-    reviews,
-    searchQuery,
-    selectedCategory,
-  ]);
+  }, [reviews, searchQuery, selectedCategory]);
+
+  const stats = useMemo(() => {
+    const total = reviews.length;
+    const verified = reviews.filter((r) => r.verified).length;
+    const avgRating = total
+      ? (
+          reviews.reduce(
+            (sum, r) => sum + Number(r.rating || 0),
+            0
+          ) / total
+        ).toFixed(1)
+      : '۰';
+    const totalLikes = reviews.reduce(
+      (sum, r) => sum + Number(r.likes || 0),
+      0
+    );
+    return { total, verified, avgRating, totalLikes };
+  }, [reviews]);
 
   const openAddModal = () => {
     setEditingId(null);
@@ -124,13 +253,11 @@ export default function AdminTestimonialsPage() {
       title: review.title || '',
       text: review.text || '',
       brandReply: review.brandReply || '',
-      avatarEmoji:
-        review.avatarEmoji || '🌟',
+      avatarEmoji: review.avatarEmoji || '🌟',
       hasPhoto: Boolean(review.hasPhoto),
       photoUrl: review.photoUrl || null,
       verified: Boolean(review.verified),
-      category:
-        review.category || 'online',
+      category: review.category || 'online',
     });
 
     setIsModalOpen(true);
@@ -152,10 +279,7 @@ export default function AdminTestimonialsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name.trim() ||
-      !formData.text.trim()
-    ) {
+    if (!formData.name.trim() || !formData.text.trim()) {
       return;
     }
 
@@ -166,22 +290,28 @@ export default function AdminTestimonialsPage() {
       product: formData.product.trim(),
       title: formData.title.trim(),
       text: formData.text.trim(),
-      brandReply:
-        formData.brandReply.trim(),
+      brandReply: formData.brandReply.trim(),
       rating: Number(formData.rating),
       likes: Number(formData.likes),
       verified: Boolean(formData.verified),
       hasPhoto: Boolean(formData.hasPhoto),
-      photoUrl:
-        formData.photoUrl || null,
+      photoUrl: formData.photoUrl || null,
     };
 
     if (editingId !== null) {
       updateReview(editingId, reviewData);
+      setToast({
+        type: 'success',
+        message: 'نظر مشتری با موفقیت ویرایش شد.',
+      });
     } else {
       addReview({
         ...reviewData,
         id: Date.now(),
+      });
+      setToast({
+        type: 'success',
+        message: 'نظر مشتری با موفقیت افزوده شد.',
       });
     }
 
@@ -193,27 +323,65 @@ export default function AdminTestimonialsPage() {
 
     deleteReview(deleteId);
     setDeleteId(null);
+    setToast({
+      type: 'success',
+      message: 'نظر مشتری با موفقیت حذف شد.',
+    });
   };
 
   const handleReset = () => {
     resetReviews();
     setShowResetConfirm(false);
+    setToast({
+      type: 'success',
+      message: 'نظرات به لیست اولیه بازگشت.',
+    });
   };
 
-  return (
-    <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <div className={styles.headerIcon}>
-            <MessageSquare size={22} />
-          </div>
+  const handleToastClose = useCallback(() => setToast(null), []);
 
-          <div>
-            <h1>نظرات مشتریان</h1>
-            <p>
-              مدیریت نظرات و تجربیات ثبت‌شده مشتریان
-            </p>
+  return (
+    <div dir="rtl" className={styles.page}>
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.headerBadge}>
+            <Sparkles size={14} />
+            <span>پنل مدیریت محتوا</span>
+          </div>
+          <h1 className={styles.headerTitle}>نظرات مشتریان</h1>
+          <p className={styles.headerDescription}>
+            مدیریت نظرات و تجربیات ثبت‌شده مشتریان. تغییرات به‌صورت
+            زنده در لیست اعمال می‌شوند.
+          </p>
+
+          <div className={styles.progressWrap}>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{
+                  width: `${
+                    reviews.length
+                      ? Math.min(
+                          100,
+                          Math.round(
+                            (stats.verified / stats.total) * 100
+                          )
+                        )
+                      : 0
+                  }%`,
+                }}
+              />
+            </div>
+            <span className={styles.progressLabel}>
+              {reviews.length
+                ? Math.round((stats.verified / stats.total) * 100)
+                : 0}
+              ٪ تأییدشده
+            </span>
           </div>
         </div>
 
@@ -221,17 +389,15 @@ export default function AdminTestimonialsPage() {
           <button
             type="button"
             className={styles.resetButton}
-            onClick={() =>
-              setShowResetConfirm(true)
-            }
+            onClick={() => setShowResetConfirm(true)}
           >
-            <RotateCcw size={16} />
-            <span>بازگردانی اولیه</span>
+            <RotateCcw size={17} />
+            <span>بازگردانی</span>
           </button>
 
           <button
             type="button"
-            className={styles.addButton}
+            className={styles.primaryButton}
             onClick={openAddModal}
           >
             <Plus size={18} />
@@ -240,94 +406,68 @@ export default function AdminTestimonialsPage() {
         </div>
       </div>
 
-      {/* Statistics */}
+      {/* =====================================================
+          STATISTICS
+      ===================================================== */}
+
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <MessageSquare size={19} />
+          <div className={`${styles.statIcon} ${styles.iconTone_indigo}`}>
+            <MessageSquare size={20} />
           </div>
-
-          <div>
-            <span className={styles.statLabel}>
-              مجموع نظرات
-            </span>
+          <div className={styles.statContent}>
+            <span className={styles.statLabel}>مجموع نظرات</span>
             <strong className={styles.statValue}>
-              {reviews.length}
+              {stats.total.toLocaleString('fa-IR')}
             </strong>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <UserCheck size={19} />
+          <div className={`${styles.statIcon} ${styles.iconTone_emerald}`}>
+            <UserCheck size={20} />
           </div>
-
-          <div>
-            <span className={styles.statLabel}>
-              خریداران تأییدشده
-            </span>
-
+          <div className={styles.statContent}>
+            <span className={styles.statLabel}>تأییدشده</span>
             <strong className={styles.statValue}>
-              {
-                reviews.filter(
-                  (review) => review.verified
-                ).length
-              }
+              {stats.verified.toLocaleString('fa-IR')}
             </strong>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <Star size={19} />
+          <div className={`${styles.statIcon} ${styles.iconTone_amber}`}>
+            <Star size={20} />
           </div>
-
-          <div>
-            <span className={styles.statLabel}>
-              میانگین امتیاز
-            </span>
-
-            <strong className={styles.statValue}>
-              {reviews.length
-                ? (
-                    reviews.reduce(
-                      (sum, review) =>
-                        sum +
-                        Number(
-                          review.rating || 0
-                        ),
-                      0
-                    ) / reviews.length
-                  ).toFixed(1)
-                : '۰'}
-            </strong>
+          <div className={styles.statContent}>
+            <span className={styles.statLabel}>میانگین امتیاز</span>
+            <strong className={styles.statValue}>{stats.avgRating}</strong>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <Heart size={19} />
+          <div className={`${styles.statIcon} ${styles.iconTone_rose}`}>
+            <Heart size={20} />
           </div>
-
-          <div>
-            <span className={styles.statLabel}>
-              مجموع لایک‌ها
-            </span>
-
+          <div className={styles.statContent}>
+            <span className={styles.statLabel}>مجموع لایک‌ها</span>
             <strong className={styles.statValue}>
-              {reviews.reduce(
-                (sum, review) =>
-                  sum +
-                  Number(review.likes || 0),
-                0
-              )}
+              {stats.totalLikes.toLocaleString('fa-IR')}
             </strong>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className={styles.filtersCard}>
+      {/* =====================================================
+          FILTERS
+      ===================================================== */}
+
+      <SectionCard
+        icon={Layers}
+        iconTone="sky"
+        title="جستجو و فیلتر"
+        description="نظرات را بر اساس دسته‌بندی یا عبارت جستجو پیدا کنید."
+      >
         <div className={styles.searchBox}>
           <Search size={17} />
 
@@ -335,17 +475,13 @@ export default function AdminTestimonialsPage() {
             type="text"
             placeholder="جستجو در نام، محصول، عنوان یا متن نظر..."
             value={searchQuery}
-            onChange={(e) =>
-              setSearchQuery(e.target.value)
-            }
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
 
           {searchQuery && (
             <button
               type="button"
-              onClick={() =>
-                setSearchQuery('')
-              }
+              onClick={() => setSearchQuery('')}
               className={styles.clearSearch}
             >
               <X size={15} />
@@ -356,14 +492,8 @@ export default function AdminTestimonialsPage() {
         <div className={styles.categoryFilters}>
           <button
             type="button"
-            className={
-              selectedCategory === 'all'
-                ? styles.filterActive
-                : ''
-            }
-            onClick={() =>
-              setSelectedCategory('all')
-            }
+            className={selectedCategory === 'all' ? styles.filterActive : ''}
+            onClick={() => setSelectedCategory('all')}
           >
             همه ({reviews.length})
           </button>
@@ -371,13 +501,9 @@ export default function AdminTestimonialsPage() {
           <button
             type="button"
             className={
-              selectedCategory === 'online'
-                ? styles.filterActive
-                : ''
+              selectedCategory === 'online' ? styles.filterActive : ''
             }
-            onClick={() =>
-              setSelectedCategory('online')
-            }
+            onClick={() => setSelectedCategory('online')}
           >
             خرید آنلاین
           </button>
@@ -385,13 +511,9 @@ export default function AdminTestimonialsPage() {
           <button
             type="button"
             className={
-              selectedCategory === 'inperson'
-                ? styles.filterActive
-                : ''
+              selectedCategory === 'inperson' ? styles.filterActive : ''
             }
-            onClick={() =>
-              setSelectedCategory('inperson')
-            }
+            onClick={() => setSelectedCategory('inperson')}
           >
             گالری
           </button>
@@ -399,211 +521,121 @@ export default function AdminTestimonialsPage() {
           <button
             type="button"
             className={
-              selectedCategory === 'custom'
-                ? styles.filterActive
-                : ''
+              selectedCategory === 'custom' ? styles.filterActive : ''
             }
-            onClick={() =>
-              setSelectedCategory('custom')
-            }
+            onClick={() => setSelectedCategory('custom')}
           >
             سفارشی
           </button>
         </div>
-      </div>
+      </SectionCard>
 
-      {/* Reviews */}
-      <div className={styles.reviewsSection}>
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2>لیست نظرات</h2>
-            <span>
-              {filteredReviews.length} مورد نمایش داده
-              می‌شود
-            </span>
-          </div>
-        </div>
+      {/* =====================================================
+          REVIEWS LIST
+      ===================================================== */}
 
+      <SectionCard
+        icon={MessageSquare}
+        iconTone="violet"
+        title="لیست نظرات"
+        description={`${filteredReviews.length} مورد نمایش داده می‌شود`}
+        count={filteredReviews.length}
+      >
         {filteredReviews.length > 0 ? (
           <div className={styles.reviewsList}>
             {filteredReviews.map((review) => (
               <motion.div
                 key={review.id}
                 layout
-                initial={{
-                  opacity: 0,
-                  y: 10,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 className={styles.reviewItem}
               >
                 <div className={styles.reviewMain}>
                   {/* User */}
                   <div className={styles.userColumn}>
                     <div className={styles.avatar}>
-                      {review.avatarEmoji ||
-                        '🌟'}
+                      {review.avatarEmoji || '🌟'}
                     </div>
 
                     <div>
-                      <div
-                        className={
-                          styles.userName
-                        }
-                      >
-                        {review.name}
-                      </div>
-
-                      <div
-                        className={
-                          styles.userLocation
-                        }
-                      >
+                      <div className={styles.userName}>{review.name}</div>
+                      <div className={styles.userLocation}>
                         <MapPin size={12} />
-                        {review.city ||
-                          'بدون شهر'}
+                        {review.city || 'بدون شهر'}
                       </div>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div
-                    className={
-                      styles.reviewContent
-                    }
-                  >
-                    <div
-                      className={
-                        styles.reviewTop
-                      }
-                    >
-                      <div
-                        className={
-                          styles.reviewTitleGroup
-                        }
-                      >
-                        <h3>
-                          {review.title ||
-                            'بدون عنوان'}
-                        </h3>
+                  <div className={styles.reviewContent}>
+                    <div className={styles.reviewTop}>
+                      <div className={styles.reviewTitleGroup}>
+                        <h3>{review.title || 'بدون عنوان'}</h3>
 
                         {review.verified ? (
-                          <span
-                            className={
-                              styles.verified
-                            }
-                          >
-                            <CheckCircle2
-                              size={13}
-                            />
+                          <span className={styles.verified}>
+                            <CheckCircle2 size={13} />
                             تأییدشده
                           </span>
                         ) : (
-                          <span
-                            className={
-                              styles.notVerified
-                            }
-                          >
-                            <XCircle
-                              size={13}
-                            />
+                          <span className={styles.notVerified}>
+                            <XCircle size={13} />
                             تأییدنشده
                           </span>
                         )}
                       </div>
 
-                      <div
-                        className={
-                          styles.rating
-                        }
-                      >
-                        {[1, 2, 3, 4, 5].map(
-                          (star) => (
-                            <Star
-                              key={star}
-                              size={14}
-                              fill={
-                                star <=
-                                review.rating
-                                  ? 'var(--accent)'
-                                  : 'none'
-                              }
-                              stroke={
-                                star <=
-                                review.rating
-                                  ? 'var(--accent)'
-                                  : 'var(--text-secondary)'
-                              }
-                            />
-                          )
-                        )}
+                      <div className={styles.rating}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={14}
+                            fill={
+                              star <= review.rating
+                                ? 'var(--accent)'
+                                : 'none'
+                            }
+                            stroke={
+                              star <= review.rating
+                                ? 'var(--accent)'
+                                : 'var(--text-secondary)'
+                            }
+                          />
+                        ))}
                       </div>
                     </div>
 
-                    <p
-                      className={
-                        styles.reviewText
-                      }
-                    >
-                      {review.text}
-                    </p>
+                    <p className={styles.reviewText}>{review.text}</p>
 
-                    <div
-                      className={
-                        styles.reviewMeta
-                      }
-                    >
+                    <div className={styles.reviewMeta}>
                       <span>
                         <Package size={13} />
-                        {review.product ||
-                          'بدون محصول'}
+                        {review.product || 'بدون محصول'}
                       </span>
 
                       <span>
                         <Calendar size={13} />
-                        {review.date ||
-                          'بدون تاریخ'}
+                        {review.date || 'بدون تاریخ'}
                       </span>
 
                       <span>
                         <Heart size={13} />
-                        {review.likes || 0}{' '}
-                        لایک
+                        {review.likes || 0} لایک
                       </span>
 
-                      <span
-                        className={
-                          styles.categoryBadge
-                        }
-                      >
-                        {CATEGORY_LABELS[
-                          review.category
-                        ] ||
-                          'سایر'}
+                      <span className={styles.categoryBadge}>
+                        {CATEGORY_LABELS[review.category] || 'سایر'}
                       </span>
                     </div>
 
                     {review.brandReply && (
-                      <div
-                        className={
-                          styles.brandReply
-                        }
-                      >
-                        <MessageCircle
-                          size={14}
-                        />
+                      <div className={styles.brandReply}>
+                        <MessageCircle size={14} />
 
                         <div>
-                          <strong>
-                            پاسخ مدیر
-                          </strong>
-
-                          <p>
-                            {review.brandReply}
-                          </p>
+                          <strong>پاسخ مدیر</strong>
+                          <p>{review.brandReply}</p>
                         </div>
                       </div>
                     )}
@@ -619,15 +651,9 @@ export default function AdminTestimonialsPage() {
                         ? styles.verifyButtonActive
                         : styles.verifyButton
                     }
-                    onClick={() =>
-                      toggleVerified(
-                        review.id
-                      )
-                    }
+                    onClick={() => toggleVerified(review.id)}
                     title={
-                      review.verified
-                        ? 'لغو تأیید'
-                        : 'تأیید خریدار'
+                      review.verified ? 'لغو تأیید' : 'تأیید خریدار'
                     }
                   >
                     {review.verified ? (
@@ -639,12 +665,8 @@ export default function AdminTestimonialsPage() {
 
                   <button
                     type="button"
-                    className={
-                      styles.editButton
-                    }
-                    onClick={() =>
-                      openEditModal(review)
-                    }
+                    className={styles.editButton}
+                    onClick={() => openEditModal(review)}
                     title="ویرایش"
                   >
                     <Edit3 size={16} />
@@ -652,12 +674,8 @@ export default function AdminTestimonialsPage() {
 
                   <button
                     type="button"
-                    className={
-                      styles.deleteButton
-                    }
-                    onClick={() =>
-                      setDeleteId(review.id)
-                    }
+                    className={styles.deleteButton}
+                    onClick={() => setDeleteId(review.id)}
                     title="حذف"
                   >
                     <Trash2 size={16} />
@@ -669,20 +687,16 @@ export default function AdminTestimonialsPage() {
         ) : (
           <div className={styles.emptyState}>
             <MessageSquare size={42} />
-
-            <h3>
-              نظری پیدا نشد
-            </h3>
-
-            <p>
-              با تغییر عبارت جستجو یا فیلترها دوباره
-              تلاش کنید.
-            </p>
+            <h3>نظری پیدا نشد</h3>
+            <p>با تغییر عبارت جستجو یا فیلترها دوباره تلاش کنید.</p>
           </div>
         )}
-      </div>
+      </SectionCard>
 
-      {/* Add / Edit Modal */}
+      {/* =====================================================
+          ADD / EDIT MODAL
+      ===================================================== */}
+
       <AnimatePresence>
         {isModalOpen && (
           <div
@@ -690,45 +704,30 @@ export default function AdminTestimonialsPage() {
             onClick={closeModal}
           >
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-                scale: 0.97,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                y: 20,
-                scale: 0.97,
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
               className={styles.modal}
-              onClick={(e) =>
-                e.stopPropagation()
-              }
+              onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>
-                <div>
-                  <h2>
-                    {editingId !== null
-                      ? 'ویرایش نظر مشتری'
-                      : 'افزودن نظر مشتری'}
-                  </h2>
-
-                  <p>
-                    اطلاعات نظر را وارد یا ویرایش
-                    کنید.
-                  </p>
+                <div className={styles.modalHeaderContent}>
+                  <div className={styles.modalHeaderIcon}>
+                    <MessageSquare size={18} />
+                  </div>
+                  <div>
+                    <h2>
+                      {editingId !== null
+                        ? 'ویرایش نظر مشتری'
+                        : 'افزودن نظر مشتری'}
+                    </h2>
+                    <p>اطلاعات نظر را وارد یا ویرایش کنید.</p>
+                  </div>
                 </div>
 
                 <button
                   type="button"
-                  className={
-                    styles.modalClose
-                  }
+                  className={styles.modalClose}
                   onClick={closeModal}
                 >
                   <X size={19} />
@@ -739,369 +738,195 @@ export default function AdminTestimonialsPage() {
                 onSubmit={handleSubmit}
                 className={styles.form}
               >
-                <div
-                  className={
-                    styles.formGrid
-                  }
-                >
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      نام مشتری *
-                    </label>
-
+                <div className={styles.formGrid}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>نام مشتری *</label>
                     <input
                       type="text"
+                      className={styles.input}
                       value={formData.name}
                       onChange={(e) =>
-                        handleChange(
-                          'name',
-                          e.target.value
-                        )
+                        handleChange('name', e.target.value)
                       }
                       required
                     />
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      شهر
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>شهر</label>
                     <input
                       type="text"
+                      className={styles.input}
                       value={formData.city}
                       onChange={(e) =>
-                        handleChange(
-                          'city',
-                          e.target.value
-                        )
+                        handleChange('city', e.target.value)
                       }
                     />
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      محصول
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>محصول</label>
                     <input
                       type="text"
+                      className={styles.input}
                       value={formData.product}
                       onChange={(e) =>
-                        handleChange(
-                          'product',
-                          e.target.value
-                        )
+                        handleChange('product', e.target.value)
                       }
                     />
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      تاریخ
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>تاریخ</label>
                     <input
                       type="text"
+                      className={styles.input}
                       value={formData.date}
                       onChange={(e) =>
-                        handleChange(
-                          'date',
-                          e.target.value
-                        )
+                        handleChange('date', e.target.value)
                       }
                     />
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      دسته‌بندی
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>دسته‌بندی</label>
                     <select
+                      className={styles.select}
                       value={formData.category}
                       onChange={(e) =>
-                        handleChange(
-                          'category',
-                          e.target.value
-                        )
+                        handleChange('category', e.target.value)
                       }
                     >
-                      <option value="online">
-                        خرید آنلاین
-                      </option>
-
-                      <option value="inperson">
-                        گالری فرشته
-                      </option>
-
-                      <option value="custom">
-                        سفارش سفارشی
-                      </option>
+                      <option value="online">خرید آنلاین</option>
+                      <option value="inperson">گالری فرشته</option>
+                      <option value="custom">سفارش سفارشی</option>
                     </select>
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      امتیاز
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>امتیاز</label>
                     <select
+                      className={styles.select}
                       value={formData.rating}
                       onChange={(e) =>
-                        handleChange(
-                          'rating',
-                          Number(
-                            e.target.value
-                          )
-                        )
+                        handleChange('rating', Number(e.target.value))
                       }
                     >
-                      <option value={5}>
-                        ۵ ستاره
-                      </option>
-                      <option value={4}>
-                        ۴ ستاره
-                      </option>
-                      <option value={3}>
-                        ۳ ستاره
-                      </option>
-                      <option value={2}>
-                        ۲ ستاره
-                      </option>
-                      <option value={1}>
-                        ۱ ستاره
-                      </option>
+                      <option value={5}>۵ ستاره</option>
+                      <option value={4}>۴ ستاره</option>
+                      <option value={3}>۳ ستاره</option>
+                      <option value={2}>۲ ستاره</option>
+                      <option value={1}>۱ ستاره</option>
                     </select>
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      تعداد لایک
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>تعداد لایک</label>
                     <input
                       type="number"
+                      className={styles.input}
                       min="0"
                       value={formData.likes}
                       onChange={(e) =>
-                        handleChange(
-                          'likes',
-                          Number(
-                            e.target.value
-                          )
-                        )
+                        handleChange('likes', Number(e.target.value))
                       }
                     />
                   </div>
 
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      ایموجی پروفایل
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>ایموجی پروفایل</label>
                     <input
                       type="text"
-                      value={
-                        formData.avatarEmoji
-                      }
+                      className={styles.input}
+                      value={formData.avatarEmoji}
                       onChange={(e) =>
-                        handleChange(
-                          'avatarEmoji',
-                          e.target.value
-                        )
+                        handleChange('avatarEmoji', e.target.value)
                       }
                       maxLength={4}
                     />
                   </div>
                 </div>
 
-                <div
-                  className={
-                    styles.formField
-                  }
-                >
-                  <label>
-                    عنوان نظر
-                  </label>
-
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>عنوان نظر</label>
                   <input
                     type="text"
+                    className={styles.input}
                     value={formData.title}
                     onChange={(e) =>
-                      handleChange(
-                        'title',
-                        e.target.value
-                      )
+                      handleChange('title', e.target.value)
                     }
                   />
                 </div>
 
-                <div
-                  className={
-                    styles.formField
-                  }
-                >
-                  <label>
-                    متن نظر *
-                  </label>
-
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>متن نظر *</label>
                   <textarea
+                    className={styles.textarea}
                     rows={5}
                     value={formData.text}
                     onChange={(e) =>
-                      handleChange(
-                        'text',
-                        e.target.value
-                      )
+                      handleChange('text', e.target.value)
                     }
                     required
                   />
                 </div>
 
-                <div
-                  className={
-                    styles.formField
-                  }
-                >
-                  <label>
-                    پاسخ مدیر گالری
-                  </label>
-
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>پاسخ مدیر گالری</label>
                   <textarea
+                    className={styles.textarea}
                     rows={3}
-                    value={
-                      formData.brandReply
-                    }
+                    value={formData.brandReply}
                     onChange={(e) =>
-                      handleChange(
-                        'brandReply',
-                        e.target.value
-                      )
+                      handleChange('brandReply', e.target.value)
                     }
                   />
                 </div>
 
-                <div
-                  className={
-                    styles.switches
-                  }
-                >
-                  <label
-                    className={
-                      styles.checkboxLabel
-                    }
-                  >
+                <div className={styles.switches}>
+                  <label className={styles.checkboxLabel}>
                     <input
                       type="checkbox"
-                      checked={
-                        formData.verified
-                      }
+                      checked={formData.verified}
                       onChange={(e) =>
-                        handleChange(
-                          'verified',
-                          e.target.checked
-                        )
+                        handleChange('verified', e.target.checked)
                       }
                     />
-
-                    <span>
-                      خریدار تأییدشده
-                    </span>
+                    <span>خریدار تأییدشده</span>
                   </label>
 
-                  <label
-                    className={
-                      styles.checkboxLabel
-                    }
-                  >
+                  <label className={styles.checkboxLabel}>
                     <input
                       type="checkbox"
-                      checked={
-                        formData.hasPhoto
-                      }
+                      checked={formData.hasPhoto}
                       onChange={(e) =>
-                        handleChange(
-                          'hasPhoto',
-                          e.target.checked
-                        )
+                        handleChange('hasPhoto', e.target.checked)
                       }
                     />
-
-                    <span>
-                      دارای تصویر
-                    </span>
+                    <span>دارای تصویر</span>
                   </label>
                 </div>
 
                 {formData.hasPhoto && (
-                  <div
-                    className={
-                      styles.formField
-                    }
-                  >
-                    <label>
-                      آدرس تصویر
-                    </label>
-
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>آدرس تصویر</label>
                     <input
                       type="text"
-                      value={
-                        formData.photoUrl || ''
-                      }
+                      className={styles.input}
+                      value={formData.photoUrl || ''}
                       onChange={(e) =>
-                        handleChange(
-                          'photoUrl',
-                          e.target.value
-                        )
+                        handleChange('photoUrl', e.target.value)
                       }
                       placeholder="آدرس تصویر را وارد کنید"
                     />
                   </div>
                 )}
 
-                <div
-                  className={
-                    styles.modalFooter
-                  }
-                >
+                <div className={styles.modalFooter}>
                   <button
                     type="button"
-                    className={
-                      styles.cancelButton
-                    }
+                    className={styles.cancelButton}
                     onClick={closeModal}
                   >
                     انصراف
@@ -1109,12 +934,9 @@ export default function AdminTestimonialsPage() {
 
                   <button
                     type="submit"
-                    className={
-                      styles.saveButton
-                    }
+                    className={styles.primaryButton}
                   >
                     <Save size={16} />
-
                     <span>
                       {editingId !== null
                         ? 'ذخیره تغییرات'
@@ -1128,72 +950,45 @@ export default function AdminTestimonialsPage() {
         )}
       </AnimatePresence>
 
-      {/* Delete Confirmation */}
+      {/* =====================================================
+          DELETE CONFIRMATION
+      ===================================================== */}
+
       <AnimatePresence>
         {deleteId !== null && (
           <div
-            className={
-              styles.confirmBackdrop
-            }
-            onClick={() =>
-              setDeleteId(null)
-            }
+            className={styles.confirmBackdrop}
+            onClick={() => setDeleteId(null)}
           >
             <motion.div
-              initial={{
-                opacity: 0,
-                scale: 0.95,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-              className={
-                styles.confirmBox
-              }
-              onClick={(e) =>
-                e.stopPropagation()
-              }
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className={styles.confirmBox}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div
-                className={
-                  styles.confirmIcon
-                }
-              >
+              <div className={styles.confirmIcon}>
                 <Trash2 size={22} />
               </div>
 
-              <h3>
-                حذف نظر مشتری؟
-              </h3>
+              <h3>حذف نظر مشتری؟</h3>
 
               <p>
-                این نظر از لیست نظرات حذف خواهد شد و
-                این عملیات قابل بازگشت نیست.
+                این نظر از لیست نظرات حذف خواهد شد و این عملیات
+                قابل بازگشت نیست.
               </p>
 
-              <div
-                className={
-                  styles.confirmActions
-                }
-              >
+              <div className={styles.confirmActions}>
                 <button
                   type="button"
-                  className={
-                    styles.cancelButton
-                  }
-                  onClick={() =>
-                    setDeleteId(null)
-                  }
+                  className={styles.cancelButton}
+                  onClick={() => setDeleteId(null)}
                 >
                   انصراف
                 </button>
 
                 <button
                   type="button"
-                  className={
-                    styles.confirmDelete
-                  }
+                  className={styles.confirmDelete}
                   onClick={handleDelete}
                 >
                   <Trash2 size={15} />
@@ -1205,72 +1000,45 @@ export default function AdminTestimonialsPage() {
         )}
       </AnimatePresence>
 
-      {/* Reset Confirmation */}
+      {/* =====================================================
+          RESET CONFIRMATION
+      ===================================================== */}
+
       <AnimatePresence>
         {showResetConfirm && (
           <div
-            className={
-              styles.confirmBackdrop
-            }
-            onClick={() =>
-              setShowResetConfirm(false)
-            }
+            className={styles.confirmBackdrop}
+            onClick={() => setShowResetConfirm(false)}
           >
             <motion.div
-              initial={{
-                opacity: 0,
-                scale: 0.95,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-              className={
-                styles.confirmBox
-              }
-              onClick={(e) =>
-                e.stopPropagation()
-              }
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className={styles.confirmBox}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div
-                className={
-                  styles.confirmIcon
-                }
-              >
+              <div className={styles.confirmIcon}>
                 <RotateCcw size={22} />
               </div>
 
-              <h3>
-                بازگردانی نظرات؟
-              </h3>
+              <h3>بازگردانی نظرات؟</h3>
 
               <p>
-                تمام تغییرات فعلی نظرات حذف می‌شود و
-                لیست به نظرات اولیه بازمی‌گردد.
+                تمام تغییرات فعلی نظرات حذف می‌شود و لیست به نظرات
+                اولیه بازمی‌گردد.
               </p>
 
-              <div
-                className={
-                  styles.confirmActions
-                }
-              >
+              <div className={styles.confirmActions}>
                 <button
                   type="button"
-                  className={
-                    styles.cancelButton
-                  }
-                  onClick={() =>
-                    setShowResetConfirm(false)
-                  }
+                  className={styles.cancelButton}
+                  onClick={() => setShowResetConfirm(false)}
                 >
                   انصراف
                 </button>
 
                 <button
                   type="button"
-                  className={
-                    styles.confirmDelete
-                  }
+                  className={styles.confirmDelete}
                   onClick={handleReset}
                 >
                   <RotateCcw size={15} />
@@ -1281,6 +1049,9 @@ export default function AdminTestimonialsPage() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* TOAST */}
+      <Toast toast={toast} onClose={handleToastClose} />
     </div>
   );
 }
