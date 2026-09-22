@@ -24,18 +24,21 @@ import {
   Send,
   MapPin,
   Calendar,
-  SlidersHorizontal
+  SlidersHorizontal,
 } from 'lucide-react';
+
+import { useTestimonials } from '../contexts/TestimonialsContext';
+
 import styles from './TestimonialsPage.module.css';
 
-import backlet from "../assets/images/Gemini_Generated_Image_lqhb72lqhb72lqhb.webp";
-import coupleRing from "../assets/images/Gemini_Generated_Image_nfe8d8nfe8d8nfe8.webp";
-import watchandbaclet from "../assets/images/Gemini_Generated_Image_tp7custp7custp7c.webp";
-import Ring from "../assets/images/Gemini_Generated_Image_meyj5dmeyj5dmeyj.webp";
-import coupleSet from "../assets/images/Gemini_Generated_Image_kezxe9kezxe9kezx.webp";
-import amitisitneckles from "../assets/images/Gemini_Generated_Image_3f1r173f1r173f1r.webp";
-
 export const TestimonialsPage = () => {
+  // اتصال به نظرات مشترک سایت و پنل مدیریت
+  const {
+    reviews,
+    addReview,
+    updateLikes,
+  } = useTestimonials();
+
   // State for search and filter
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +48,7 @@ export const TestimonialsPage = () => {
   // Modal states
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [selectedImageModal, setSelectedImageModal] = useState(null);
-  
+
   // New review form state
   const [newReview, setNewReview] = useState({
     name: '',
@@ -56,146 +59,39 @@ export const TestimonialsPage = () => {
     text: '',
     city: 'تهران',
   });
-  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
-  // Initial rich list of reviews
-  const [reviews, setReviews] = useState([
-    {
-      id: 3,
-      name: 'مریم حسینی',
-      city: 'شیراز',
-      date: '۱ هفته پیش',
-      verified: true,
-      category: 'online',
-      product: 'گردنبند آمیتیست و طلا ۱۸ عیار',
-      rating: 5,
-      likes: 42,
-      title: 'ظرافت خیره‌کننده و ارسال سریع بیمه‌شده',
-      text: 'هر بار که این گردنبند رو در مهمانی‌ها می‌پوشم، همه ازم می‌پرسن از کجا خریدم! رنگ سنگ آمیتیست بسیار اصیل و ارغوانی روشنه. ارسال هم با پیک اختصاصی و بیمه باربری انجام شد.',
-      avatarEmoji: '👩‍🎨',
-      hasPhoto: true,
-      photoUrl: amitisitneckles,
-      brandReply: 'مبارکتون باشه در شادی ها استفاده بکنید.',
-    },
-    {
-      id: 2,
-      name: 'مهندس احمد رضایی',
-      city: 'اصفهان',
-      date: '۵ روز پیش',
-      verified: true,
-      category: 'custom',
-      product: 'حلقه نامزدی سفارشی با تراش زمرد',
-      rating: 5,
-      likes: 29,
-      title: 'دقت میکرونی در ساخت سفارش سفارشی',
-      text: 'من طرح خاصی مد نظرم بود که طبق عکس‌های ارسالی برام شبیه‌سازی ۳بعدی کردن. نتیجه کار فراتر از انتظارم شد. وزن دقیق طلا با ترازو دیجیتال پیش خودم وزن شد و اصالت سنگ ۱۰۰٪ تایید گردید.',
-      avatarEmoji: '👨‍💼',
-      hasPhoto: true,
-      photoUrl: Ring,
-      brandReply: 'جناب مهندس رضایی گرامی، اعتماد شما افتخار ماست. پیوندتان فرخنده و پایدار باد!',
-    },
-    {
-      id: 4,
-      name: 'دکتر علیرضا کاظمی',
-      city: 'تهران، فرشته',
-      date: '۲ هفته پیش',
-      verified: true,
-      category: 'inperson',
-      product: 'ساعت و بنگل طلا',
-      rating: 5,
-      likes: 19,
-      title: 'میزبانی باشکوه در گالری فرشته',
-      text: 'بازدید حضوری از گالری و مشاوره با استادکاران در محیط خصوصی VIP بسیار لذت‌بخش بود. کیفیت ساخت و پرداخت زرگری کاملاً متمایز از سایر گالری‌هاست.',
-      avatarEmoji: '👨‍⚕️',
-      hasPhoto: true,
-      photoUrl: watchandbaclet,
-      brandReply: 'جناب دکتر کاظمی، قدم بر چشم ما گذاشتید. همواره منتظر دیدار مجدد شما در گالری هستیم.',
-    },
-    {
-      id: 5,
-      name: 'نیلوفر و بهزاد',
-      city: 'مشهد',
-      date: '۳ هفته پیش',
-      verified: true,
-      category: 'custom',
-      product: 'ست ستاره شب (حلقه ازدواج جفت)',
-      rating: 5,
-      likes: 54,
-      title: 'بهترین یادگاری برای مهم‌ترین روز زندگی‌مون',
-      text: 'ما برای ست حلقه ازدواج خیلی وسواس داشتیم. تیم ژوئل با صبوری تمام ۵ طرح مختلف رو برامون رندر گرفتن تا بالاخره طرح دلخواهمون ساخته شد. حکاکی تاریخ ازدواجمون هم رایگان و بسیار ظریف انجام شد.',
-      avatarEmoji: '👩‍❤️‍👨',
-      hasPhoto: true,
-      photoUrl: coupleRing,
-      brandReply: 'عزیزان دلم، خوشبختی شما آرزوی قلبی تمام مجموعه ژوئل است.',
-    },
-    {
-      id: 6,
-      name: 'پریناز اکبری',
-      city: 'تبریز',
-      date: '۱ ماه پیش',
-      verified: true,
-      category: 'online',
-      product: 'دستبند زنجیری طلا طرح سولاریوم',
-      rating: 5,
-      likes: 15,
-      title: 'وزن سبک با نمای فوق‌العاده درخشان',
-      text: 'دنبال دستبندی بودم که هم قیمتش مناسب باشه و هم نما داشته باشه. این مدل فوق‌العاده‌ست! قفل بسیار محکمی داره و اصلاً به لباس گیر نمیکنه.',
-      avatarEmoji: '👩‍💻',
-      hasPhoto: true,
-      photoUrl: backlet,
-      brandReply: 'خیلی ممنون از شما خانم اکبری که رضایتتون رو با سایر مشتری های ما در میان گذاشتید.',
-    },
-    {
-      id: 7,
-      name: 'امیرحسین شایسته',
-      city: 'کرج',
-      date: '۱ ماه پیش',
-      verified: true,
-      category: 'inperson',
-      product: 'نیم‌ست کارتیر زوجی',
-      rating: 5,
-      likes: 31,
-      title: 'اصالت زمرد و شناسنامه معتبر',
-      text: 'یکی از بهترین نیمست های طلای عمرم هست که تونستم برای خانمم و خودم تهیه کنم و خوشحالش کنم',
-      avatarEmoji: '👨‍💼',
-      hasPhoto: true,
-      photoUrl: coupleSet,
-      brandReply: 'جناب شایسته عزیز، مبارکتون باشه. نگهداری و درخشش ست کارتیر شما همواره تحت ضمانت ماست.',
-    },
-  ]);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   // State for tracking which reviews are liked by the current user
   const [likedReviews, setLikedReviews] = useState({});
 
-  // Handle like button toggle - FIXED VERSION
+  // Handle like button toggle
   const handleLikeToggle = (id) => {
-    // Check if the current review is already liked
     const isCurrentlyLiked = likedReviews[id];
-    
-    // Update the liked state
-    setLikedReviews(prev => ({
+
+    setLikedReviews((prev) => ({
       ...prev,
-      [id]: !isCurrentlyLiked
+      [id]: !isCurrentlyLiked,
     }));
 
-    // Update the likes count in reviews
-    setReviews(currentReviews =>
-      currentReviews.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            // If currently liked, decrement; otherwise increment
-            likes: isCurrentlyLiked ? item.likes - 1 : item.likes + 1
-          };
-        }
-        return item;
-      })
+    const currentReview = reviews.find(
+      (item) => item.id === id
+    );
+
+    if (!currentReview) return;
+
+    updateLikes(
+      id,
+      isCurrentlyLiked
+        ? Math.max(0, currentReview.likes - 1)
+        : currentReview.likes + 1
     );
   };
 
   // Handle new review submission
   const handleReviewSubmit = (e) => {
     e.preventDefault();
+
     if (!newReview.name || !newReview.text) return;
 
     const createdReview = {
@@ -213,14 +109,20 @@ export const TestimonialsPage = () => {
       avatarEmoji: '🌟',
       hasPhoto: false,
       photoUrl: null,
-      brandReply: 'با تشکر از ثبت دیدگاه ارزشمندتان! نظر شما پس از بررسی به اشتراک گذاشته شد.',
+      brandReply:
+        'با تشکر از ثبت دیدگاه ارزشمندتان! نظر شما پس از بررسی به اشتراک گذاشته شد.',
     };
 
-    setReviews([createdReview, ...reviews]);
+    // ذخیره در TestimonialsContext
+    // و در نتیجه localStorage
+    addReview(createdReview);
+
     setReviewSubmitted(true);
+
     setTimeout(() => {
       setReviewSubmitted(false);
       setIsSubmitModalOpen(false);
+
       setNewReview({
         name: '',
         role: '',
@@ -236,35 +138,99 @@ export const TestimonialsPage = () => {
   // Filter logic
   const filteredReviews = reviews
     .filter((rev) => {
-      if (selectedCategory === 'online' && rev.category !== 'online') return false;
-      if (selectedCategory === 'inperson' && rev.category !== 'inperson') return false;
-      if (selectedCategory === 'custom' && rev.category !== 'custom') return false;
-      if (selectedCategory === 'photo' && !rev.hasPhoto) return false;
-      if (onlyWithPhotos && !rev.hasPhoto) return false;
+      if (
+        selectedCategory === 'online' &&
+        rev.category !== 'online'
+      ) {
+        return false;
+      }
+
+      if (
+        selectedCategory === 'inperson' &&
+        rev.category !== 'inperson'
+      ) {
+        return false;
+      }
+
+      if (
+        selectedCategory === 'custom' &&
+        rev.category !== 'custom'
+      ) {
+        return false;
+      }
+
+      if (
+        selectedCategory === 'photo' &&
+        !rev.hasPhoto
+      ) {
+        return false;
+      }
+
+      if (
+        onlyWithPhotos &&
+        !rev.hasPhoto
+      ) {
+        return false;
+      }
 
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase();
-        const matchesName = rev.name.toLowerCase().includes(query);
-        const matchesText = rev.text.toLowerCase().includes(query);
-        const matchesProduct = rev.product.toLowerCase().includes(query);
-        const matchesTitle = rev.title.toLowerCase().includes(query);
-        return matchesName || matchesText || matchesProduct || matchesTitle;
+
+        const matchesName =
+          rev.name?.toLowerCase().includes(query);
+
+        const matchesText =
+          rev.text?.toLowerCase().includes(query);
+
+        const matchesProduct =
+          rev.product?.toLowerCase().includes(query);
+
+        const matchesTitle =
+          rev.title?.toLowerCase().includes(query);
+
+        return (
+          matchesName ||
+          matchesText ||
+          matchesProduct ||
+          matchesTitle
+        );
       }
 
       return true;
     })
     .sort((a, b) => {
-      if (sortBy === 'highest') return b.rating - a.rating;
-      if (sortBy === 'popular') return b.likes - a.likes;
+      if (sortBy === 'highest') {
+        return b.rating - a.rating;
+      }
+
+      if (sortBy === 'popular') {
+        return b.likes - a.likes;
+      }
+
       return b.id - a.id;
     });
 
   const categories = [
-    { id: 'all', label: `همه نظرات (${reviews.length})` },
-    { id: 'photo', label: 'عکس‌دار 🖼️' },
-    { id: 'online', label: 'خرید آنلاین 🛒' },
-    { id: 'inperson', label: 'گالری فرشته 🏢' },
-    { id: 'custom', label: 'سفارش سفارشی 💎' },
+    {
+      id: 'all',
+      label: `همه نظرات (${reviews.length})`,
+    },
+    {
+      id: 'photo',
+      label: 'عکس‌دار 🖼️',
+    },
+    {
+      id: 'online',
+      label: 'خرید آنلاین 🛒',
+    },
+    {
+      id: 'inperson',
+      label: 'گالری فرشته 🏢',
+    },
+    {
+      id: 'custom',
+      label: 'سفارش سفارشی 💎',
+    },
   ];
 
   return (
@@ -275,42 +241,79 @@ export const TestimonialsPage = () => {
 
         <div className={styles.container}>
           {/* Breadcrumb Navigation */}
-          <nav className={styles.breadcrumb} aria-label="مسیریابی">
-            <Link to="/" className={styles.breadcrumbLink}>
+          <nav
+            className={styles.breadcrumb}
+            aria-label="مسیریابی"
+          >
+            <Link
+              to="/"
+              className={styles.breadcrumbLink}
+            >
               خانه
             </Link>
-            <ChevronLeft size={14} className={styles.breadcrumbSeparator} />
-            <span className={styles.breadcrumbActive}>نظرات و تجربیات مشتریان</span>
+
+            <ChevronLeft
+              size={14}
+              className={styles.breadcrumbSeparator}
+            />
+
+            <span className={styles.breadcrumbActive}>
+              نظرات و تجربیات مشتریان
+            </span>
           </nav>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.6,
+            }}
             className={styles.heroContent}
           >
             <div className={styles.badgeGroup}>
-              <Sparkles size={16} className={styles.sparkleIcon} />
-              <span>صدای همراهان وفادار • رضایت ۹۹.۴٪</span>
+              <Sparkles
+                size={16}
+                className={styles.sparkleIcon}
+              />
+
+              <span>
+                صدای همراهان وفادار • رضایت ۹۹.۴٪
+              </span>
             </div>
 
             <h1 className={styles.heroTitle}>
-              تجربه درخشان خریداران <span className={styles.goldGlowText}>Luxury Jewel</span>
+              تجربه درخشان خریداران{' '}
+              <span className={styles.goldGlowText}>
+                Luxury Jewel
+              </span>
             </h1>
 
             <p className={styles.heroSubtitle}>
-              مجموعه کامل نظرات، تجربیات واقعی و تصاویر ارسالی خریداران محترم جواهرات فاخر ما.
-              اعتماد و درخشش رضایت شما، ارزشمندترین سرمایه ۳۵ سال فعالیت هنری ماست.
+              مجموعه کامل نظرات، تجربیات واقعی و تصاویر
+              ارسالی خریداران محترم جواهرات فاخر ما.
+              اعتماد و درخشش رضایت شما، ارزشمندترین سرمایه
+              ۳۵ سال فعالیت هنری ماست.
             </p>
 
-            {/* Quick Action Button to Open Submit Review Modal */}
+            {/* Quick Action Button */}
             <button
               type="button"
               className={styles.heroSubmitBtn}
-              onClick={() => setIsSubmitModalOpen(true)}
+              onClick={() =>
+                setIsSubmitModalOpen(true)
+              }
             >
               <PlusCircle size={18} />
-              <span>ثبت تجربه و نظر شما</span>
+
+              <span>
+                ثبت تجربه و نظر شما
+              </span>
             </button>
           </motion.div>
         </div>
@@ -322,16 +325,31 @@ export const TestimonialsPage = () => {
           <div className={styles.summaryCard}>
             {/* Overall Rating Score Box */}
             <div className={styles.ratingScoreBox}>
-              <div className={styles.scoreBig}>۴.۹</div>
+              <div className={styles.scoreBig}>
+                ۴.۹
+              </div>
+
               <div className={styles.starsRow}>
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={22} fill="var(--accent)" stroke="none" />
+                  <Star
+                    key={i}
+                    size={22}
+                    fill="var(--accent)"
+                    stroke="none"
+                  />
                 ))}
               </div>
-              <div className={styles.scoreText}>از مجموع ۱,۴۸۰+ نظر ثبت‌شده</div>
+
+              <div className={styles.scoreText}>
+                از مجموع ۱,۴۸۰+ نظر ثبت‌شده
+              </div>
+
               <div className={styles.recommendBadge}>
                 <CheckCheck size={16} />
-                <span>۹۸٪ پیشنهاد به دوستان</span>
+
+                <span>
+                  ۹۸٪ پیشنهاد به دوستان
+                </span>
               </div>
             </div>
 
@@ -340,32 +358,71 @@ export const TestimonialsPage = () => {
             {/* Star Distribution Progress Bars */}
             <div className={styles.barsContainer}>
               <div className={styles.barItem}>
-                <span className={styles.barLabel}>۵ ستاره</span>
+                <span className={styles.barLabel}>
+                  ۵ ستاره
+                </span>
+
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressFill} style={{ width: '94%' }} />
+                  <div
+                    className={styles.progressFill}
+                    style={{ width: '94%' }}
+                  />
                 </div>
-                <span className={styles.barPercent}>۹۴٪</span>
+
+                <span className={styles.barPercent}>
+                  ۹۴٪
+                </span>
               </div>
+
               <div className={styles.barItem}>
-                <span className={styles.barLabel}>۴ ستاره</span>
+                <span className={styles.barLabel}>
+                  ۴ ستاره
+                </span>
+
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressFill} style={{ width: '5%' }} />
+                  <div
+                    className={styles.progressFill}
+                    style={{ width: '5%' }}
+                  />
                 </div>
-                <span className={styles.barPercent}>۵٪</span>
+
+                <span className={styles.barPercent}>
+                  ۵٪
+                </span>
               </div>
+
               <div className={styles.barItem}>
-                <span className={styles.barLabel}>۳ ستاره</span>
+                <span className={styles.barLabel}>
+                  ۳ ستاره
+                </span>
+
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressFill} style={{ width: '1%' }} />
+                  <div
+                    className={styles.progressFill}
+                    style={{ width: '1%' }}
+                  />
                 </div>
-                <span className={styles.barPercent}>۱٪</span>
+
+                <span className={styles.barPercent}>
+                  ۱٪
+                </span>
               </div>
+
               <div className={styles.barItem}>
-                <span className={styles.barLabel}>۲ و ۱ ستاره</span>
+                <span className={styles.barLabel}>
+                  ۲ و ۱ ستاره
+                </span>
+
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressFill} style={{ width: '0%' }} />
+                  <div
+                    className={styles.progressFill}
+                    style={{ width: '0%' }}
+                  />
                 </div>
-                <span className={styles.barPercent}>۰٪</span>
+
+                <span className={styles.barPercent}>
+                  ۰٪
+                </span>
               </div>
             </div>
 
@@ -374,24 +431,53 @@ export const TestimonialsPage = () => {
             {/* Key Trust Guarantees */}
             <div className={styles.trustGroup}>
               <div className={styles.trustItem}>
-                <UserCheck size={20} className={styles.trustIcon} />
+                <UserCheck
+                  size={20}
+                  className={styles.trustIcon}
+                />
+
                 <div>
-                  <strong>۱۰۰٪ خریدار واقعی</strong>
-                  <p>تایید هویت از روی فاکتور رسمی</p>
+                  <strong>
+                    ۱۰۰٪ خریدار واقعی
+                  </strong>
+
+                  <p>
+                    تایید هویت از روی فاکتور رسمی
+                  </p>
                 </div>
               </div>
+
               <div className={styles.trustItem}>
-                <ShieldCheck size={20} className={styles.trustIcon} />
+                <ShieldCheck
+                  size={20}
+                  className={styles.trustIcon}
+                />
+
                 <div>
-                  <strong>ضمانت اصالت GIA</strong>
-                  <p>شناسنامه دیجیتال و معتبر</p>
+                  <strong>
+                    ضمانت اصالت GIA
+                  </strong>
+
+                  <p>
+                    شناسنامه دیجیتال و معتبر
+                  </p>
                 </div>
               </div>
+
               <div className={styles.trustItem}>
-                <Award size={20} className={styles.trustIcon} />
+                <Award
+                  size={20}
+                  className={styles.trustIcon}
+                />
+
                 <div>
-                  <strong>پشتیبانی VIP</strong>
-                  <p>پاسخگویی سریع کمتر از ۲ ساعت</p>
+                  <strong>
+                    پشتیبانی VIP
+                  </strong>
+
+                  <p>
+                    پاسخگویی سریع کمتر از ۲ ساعت
+                  </p>
                 </div>
               </div>
             </div>
@@ -410,8 +496,14 @@ export const TestimonialsPage = () => {
                 <button
                   key={cat.id}
                   type="button"
-                  className={`${styles.catTabBtn} ${selectedCategory === cat.id ? styles.catTabActive : ''}`}
-                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`${styles.catTabBtn} ${
+                    selectedCategory === cat.id
+                      ? styles.catTabActive
+                      : ''
+                  }`}
+                  onClick={() =>
+                    setSelectedCategory(cat.id)
+                  }
                 >
                   {cat.label}
                 </button>
@@ -422,19 +514,28 @@ export const TestimonialsPage = () => {
             <div className={styles.filterActionsRow}>
               {/* Search Box */}
               <div className={styles.searchBox}>
-                <Search size={16} className={styles.searchIcon} />
+                <Search
+                  size={16}
+                  className={styles.searchIcon}
+                />
+
                 <input
                   type="text"
                   placeholder="جستجو در متن یا اسم خریدار..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) =>
+                    setSearchQuery(e.target.value)
+                  }
                   className={styles.searchInput}
                 />
+
                 {searchQuery && (
                   <button
                     type="button"
                     className={styles.clearSearchBtn}
-                    onClick={() => setSearchQuery('')}
+                    onClick={() =>
+                      setSearchQuery('')
+                    }
                   >
                     <X size={14} />
                   </button>
@@ -443,15 +544,29 @@ export const TestimonialsPage = () => {
 
               {/* Sort Dropdown */}
               <div className={styles.sortBox}>
-                <SlidersHorizontal size={15} className={styles.sortIcon} />
+                <SlidersHorizontal
+                  size={15}
+                  className={styles.sortIcon}
+                />
+
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                  onChange={(e) =>
+                    setSortBy(e.target.value)
+                  }
                   className={styles.sortSelect}
                 >
-                  <option value="newest">جدیدترین نظرات</option>
-                  <option value="popular">محبوب‌ترین (بیشترین لایک)</option>
-                  <option value="highest">بیشترین امتیاز (۵ ستاره)</option>
+                  <option value="newest">
+                    جدیدترین نظرات
+                  </option>
+
+                  <option value="popular">
+                    محبوب‌ترین (بیشترین لایک)
+                  </option>
+
+                  <option value="highest">
+                    بیشترین امتیاز (۵ ستاره)
+                  </option>
                 </select>
               </div>
             </div>
@@ -460,15 +575,25 @@ export const TestimonialsPage = () => {
           {/* Results Count & Active Filters Summary */}
           <div className={styles.resultsInfoRow}>
             <span>
-              نمایش <strong>{filteredReviews.length}</strong> نظر تاییدشده
+              نمایش{' '}
+              <strong>
+                {filteredReviews.length}
+              </strong>{' '}
+              نظر تاییدشده
             </span>
+
             <button
               type="button"
               className={styles.addReviewTriggerBtn}
-              onClick={() => setIsSubmitModalOpen(true)}
+              onClick={() =>
+                setIsSubmitModalOpen(true)
+              }
             >
               <PlusCircle size={15} />
-              <span>افزودن دیدگاه شما</span>
+
+              <span>
+                افزودن دیدگاه شما
+              </span>
             </button>
           </div>
 
@@ -480,108 +605,256 @@ export const TestimonialsPage = () => {
                   <motion.div
                     key={item.id}
                     layout
-                    initial={{ opacity: 0, scale: 0.96, y: 15 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.94, y: -15 }}
-                    transition={{ duration: 0.35 }}
+                    initial={{
+                      opacity: 0,
+                      scale: 0.96,
+                      y: 15,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.94,
+                      y: -15,
+                    }}
+                    transition={{
+                      duration: 0.35,
+                    }}
                     className={styles.reviewCard}
                   >
                     {/* Header Row */}
                     <div className={styles.cardTopHeader}>
                       <div className={styles.userInfoGroup}>
-                        <div className={styles.avatarCircle}>
-                          <span>{item.avatarEmoji}</span>
+                        <div
+                          className={styles.avatarCircle}
+                        >
+                          <span>
+                            {item.avatarEmoji}
+                          </span>
                         </div>
+
                         <div className={styles.userMeta}>
-                          <div className={styles.userNameRow}>
-                            <span className={styles.userName}>{item.name}</span>
+                          <div
+                            className={
+                              styles.userNameRow
+                            }
+                          >
+                            <span
+                              className={
+                                styles.userName
+                              }
+                            >
+                              {item.name}
+                            </span>
+
                             {item.verified && (
-                              <span className={styles.verifiedBadge} title="خریدار تایید شده">
+                              <span
+                                className={
+                                  styles.verifiedBadge
+                                }
+                                title="خریدار تایید شده"
+                              >
                                 <CheckCircle2 size={13} />
-                                <span>خریدار تاییدشده</span>
+
+                                <span>
+                                  خریدار تاییدشده
+                                </span>
                               </span>
                             )}
                           </div>
-                          <div className={styles.userSubDetails}>
-                            <span><MapPin size={11} /> {item.city}</span>
+
+                          <div
+                            className={
+                              styles.userSubDetails
+                            }
+                          >
+                            <span>
+                              <MapPin size={11} />
+                              {item.city}
+                            </span>
+
                             <span>•</span>
-                            <span><Calendar size={11} /> {item.date}</span>
+
+                            <span>
+                              <Calendar size={11} />
+                              {item.date}
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       {/* Stars Rating */}
                       <div className={styles.cardStars}>
-                        {[...Array(item.rating)].map((_, idx) => (
-                          <Star key={idx} size={16} fill="var(--accent)" stroke="none" />
-                        ))}
+                        {[...Array(item.rating)].map(
+                          (_, idx) => (
+                            <Star
+                              key={idx}
+                              size={16}
+                              fill="var(--accent)"
+                              stroke="none"
+                            />
+                          )
+                        )}
                       </div>
                     </div>
 
                     {/* Product Name Badge */}
-                    <div className={styles.productBadgeRow}>
-                      <span className={styles.productTag}>
-                        <Sparkles size={12} className={styles.productTagIcon} />
+                    <div
+                      className={
+                        styles.productBadgeRow
+                      }
+                    >
+                      <span
+                        className={
+                          styles.productTag
+                        }
+                      >
+                        <Sparkles
+                          size={12}
+                          className={
+                            styles.productTagIcon
+                          }
+                        />
+
                         خرید: {item.product}
                       </span>
                     </div>
 
                     {/* Review Title & Text */}
-                    <h3 className={styles.reviewTitle}>{item.title}</h3>
-                    <p className={styles.reviewText}>{item.text}</p>
+                    <h3
+                      className={styles.reviewTitle}
+                    >
+                      {item.title}
+                    </h3>
 
-                    {/* Customer Photo Attachment (if present) */}
-                    {item.hasPhoto && item.photoUrl && (
-                      <div
-                        className={styles.photoContainer}
-                        onClick={() => setSelectedImageModal(item.photoUrl)}
-                      >
-                        <img
-                          src={item.photoUrl}
-                          alt={item.product}
-                          className={styles.photoImg}
-                        />
-                        <div className={styles.photoOverlay}>
-                          <Camera size={18} />
-                          <span>مشاهده تصویر بزرگ‌تر</span>
+                    <p
+                      className={styles.reviewText}
+                    >
+                      {item.text}
+                    </p>
+
+                    {/* Customer Photo Attachment */}
+                    {item.hasPhoto &&
+                      item.photoUrl && (
+                        <div
+                          className={
+                            styles.photoContainer
+                          }
+                          onClick={() =>
+                            setSelectedImageModal(
+                              item.photoUrl
+                            )
+                          }
+                        >
+                          <img
+                            src={item.photoUrl}
+                            alt={item.product}
+                            className={
+                              styles.photoImg
+                            }
+                          />
+
+                          <div
+                            className={
+                              styles.photoOverlay
+                            }
+                          >
+                            <Camera size={18} />
+
+                            <span>
+                              مشاهده تصویر بزرگ‌تر
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {/* Official Brand Reply (if present) */}
+                    {/* Official Brand Reply */}
                     {item.brandReply && (
-                      <div className={styles.brandReplyBox}>
-                        <div className={styles.replyHeader}>
-                          <MessageCircle size={14} className={styles.replyIcon} />
-                          <span>پاسخ مدیر گالری ژوئل</span>
+                      <div
+                        className={
+                          styles.brandReplyBox
+                        }
+                      >
+                        <div
+                          className={
+                            styles.replyHeader
+                          }
+                        >
+                          <MessageCircle
+                            size={14}
+                            className={
+                              styles.replyIcon
+                            }
+                          />
+
+                          <span>
+                            پاسخ مدیر گالری ژوئل
+                          </span>
                         </div>
-                        <p className={styles.replyText}>{item.brandReply}</p>
+
+                        <p
+                          className={
+                            styles.replyText
+                          }
+                        >
+                          {item.brandReply}
+                        </p>
                       </div>
                     )}
 
                     {/* Card Footer Interaction Row */}
-                    <div className={styles.cardFooter}>
+                    <div
+                      className={styles.cardFooter}
+                    >
                       <button
                         type="button"
-                        className={`${styles.likeBtn} ${likedReviews[item.id] ? styles.likedActive : ''}`}
-                        onClick={() => handleLikeToggle(item.id)}
+                        className={`${
+                          styles.likeBtn
+                        } ${
+                          likedReviews[item.id]
+                            ? styles.likedActive
+                            : ''
+                        }`}
+                        onClick={() =>
+                          handleLikeToggle(item.id)
+                        }
                       >
                         <ThumbsUp size={15} />
-                        <span>مفید بود ({item.likes})</span>
+
+                        <span>
+                          مفید بود ({item.likes})
+                        </span>
                       </button>
 
-                      <div className={styles.footerShareGroup}>
+                      <div
+                        className={
+                          styles.footerShareGroup
+                        }
+                      >
                         <button
                           type="button"
-                          className={styles.iconActionBtn}
+                          className={
+                            styles.iconActionBtn
+                          }
                           title="اشتراک‌گذاری"
                           onClick={() => {
-                            if (navigator.share) {
-                              navigator.share({
-                                title: item.title,
-                                text: item.text,
-                                url: window.location.href,
-                              }).catch(() => {});
+                            if (
+                              navigator.share
+                            ) {
+                              navigator
+                                .share({
+                                  title:
+                                    item.title,
+                                  text:
+                                    item.text,
+                                  url:
+                                    window.location
+                                      .href,
+                                })
+                                .catch(() => {});
                             }
                           }}
                         >
@@ -593,12 +866,25 @@ export const TestimonialsPage = () => {
                 ))
               ) : (
                 <div className={styles.emptyState}>
-                  <Search size={40} className={styles.emptyIcon} />
-                  <h3>هیچ نظری با این مشخصات یافت نشد</h3>
-                  <p>لطفاً کلمه کلیدی دیگری را جستجو کنید یا فیلترها را تغییر دهید.</p>
+                  <Search
+                    size={40}
+                    className={styles.emptyIcon}
+                  />
+
+                  <h3>
+                    هیچ نظری با این مشخصات یافت نشد
+                  </h3>
+
+                  <p>
+                    لطفاً کلمه کلیدی دیگری را جستجو
+                    کنید یا فیلترها را تغییر دهید.
+                  </p>
+
                   <button
                     type="button"
-                    className={styles.resetFilterBtn}
+                    className={
+                      styles.resetFilterBtn
+                    }
                     onClick={() => {
                       setSelectedCategory('all');
                       setSearchQuery('');
@@ -615,31 +901,66 @@ export const TestimonialsPage = () => {
       </section>
 
       {/* Customer Gallery Photo Showcase */}
-      <section className={styles.galleryShowcaseSection}>
+      <section
+        className={styles.galleryShowcaseSection}
+      >
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <span className={styles.subTag}>گالری عکس‌های مشتریان</span>
+            <span className={styles.subTag}>
+              گالری عکس‌های مشتریان
+            </span>
+
             <h2 className={styles.sectionTitle}>
-              درخشش واقعی جواهرات <span className={styles.goldText}>در دستان شما</span>
+              درخشش واقعی جواهرات{' '}
+              <span className={styles.goldText}>
+                در دستان شما
+              </span>
             </h2>
+
             <p className={styles.sectionDesc}>
-              تصاویری که همراهان باذوق ژوئل پس از تحویل سفارش برای ما ارسال کرده‌اند.
+              تصاویری که همراهان باذوق ژوئل پس از
+              تحویل سفارش برای ما ارسال کرده‌اند.
             </p>
           </div>
 
           <div className={styles.photoGrid}>
             {reviews
               .filter((r) => r.hasPhoto)
-              .map((r, i) => (
+              .map((r) => (
                 <div
-                  key={i}
+                  key={r.id}
                   className={styles.galleryCard}
-                  onClick={() => setSelectedImageModal(r.photoUrl)}
+                  onClick={() =>
+                    setSelectedImageModal(
+                      r.photoUrl
+                    )
+                  }
                 >
-                  <img src={r.photoUrl} alt={r.product} />
-                  <div className={styles.galleryMetaOverlay}>
-                    <span className={styles.galleryUser}>{r.name}</span>
-                    <span className={styles.galleryProd}>{r.product}</span>
+                  <img
+                    src={r.photoUrl}
+                    alt={r.product}
+                  />
+
+                  <div
+                    className={
+                      styles.galleryMetaOverlay
+                    }
+                  >
+                    <span
+                      className={
+                        styles.galleryUser
+                      }
+                    >
+                      {r.name}
+                    </span>
+
+                    <span
+                      className={
+                        styles.galleryProd
+                      }
+                    >
+                      {r.product}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -650,118 +971,277 @@ export const TestimonialsPage = () => {
       {/* Submit Review Modal */}
       <AnimatePresence>
         {isSubmitModalOpen && (
-          <div className={styles.modalBackdrop} onClick={() => setIsSubmitModalOpen(false)}>
+          <div
+            className={styles.modalBackdrop}
+            onClick={() =>
+              setIsSubmitModalOpen(false)
+            }
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{
+                opacity: 0,
+                scale: 0.9,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.9,
+                y: 20,
+              }}
               className={styles.modalCard}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
               <button
                 type="button"
                 className={styles.modalCloseBtn}
-                onClick={() => setIsSubmitModalOpen(false)}
+                onClick={() =>
+                  setIsSubmitModalOpen(false)
+                }
               >
                 <X size={18} />
               </button>
 
               <div className={styles.modalHeader}>
-                <div className={styles.modalBadge}>
+                <div
+                  className={styles.modalBadge}
+                >
                   <Sparkles size={14} />
-                  <span>ثبت تجربیات ارزشمند</span>
+
+                  <span>
+                    ثبت تجربیات ارزشمند
+                  </span>
                 </div>
-                <h2>ثبت نظر و تجربه خرید شما</h2>
-                <p>بازخورد شما چراغ راه ما برای ارتقای خدمات گالری ژوئل است.</p>
+
+                <h2>
+                  ثبت نظر و تجربه خرید شما
+                </h2>
+
+                <p>
+                  بازخورد شما چراغ راه ما برای ارتقای
+                  خدمات گالری ژوئل است.
+                </p>
               </div>
 
               <div className={styles.modalBody}>
                 {reviewSubmitted ? (
-                  <div className={styles.successMessage}>
-                    <CheckCircle2 size={50} className={styles.successIcon} />
-                    <h3>دیدگاه شما با موفقیت ثبت شد!</h3>
-                    <p>از این که تجربه خود را با سایر همراهان ژوئل به اشتراک گذاشتید بسیار سپاسگزاریم.</p>
+                  <div
+                    className={
+                      styles.successMessage
+                    }
+                  >
+                    <CheckCircle2
+                      size={50}
+                      className={
+                        styles.successIcon
+                      }
+                    />
+
+                    <h3>
+                      دیدگاه شما با موفقیت ثبت شد!
+                    </h3>
+
+                    <p>
+                      از این که تجربه خود را با
+                      سایر همراهان ژوئل به اشتراک
+                      گذاشتید بسیار سپاسگزاریم.
+                    </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleReviewSubmit} className={styles.reviewForm}>
-                    <div className={styles.formGroupRow}>
-                      <div className={styles.formField}>
-                        <label>نام و نام خانوادگی *</label>
+                  <form
+                    onSubmit={handleReviewSubmit}
+                    className={
+                      styles.reviewForm
+                    }
+                  >
+                    <div
+                      className={
+                        styles.formGroupRow
+                      }
+                    >
+                      <div
+                        className={
+                          styles.formField
+                        }
+                      >
+                        <label>
+                          نام و نام خانوادگی *
+                        </label>
+
                         <input
                           type="text"
                           required
                           placeholder="مثلاً: مریم احمدی"
                           value={newReview.name}
-                          onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+                          onChange={(e) =>
+                            setNewReview({
+                              ...newReview,
+                              name: e.target.value,
+                            })
+                          }
                         />
                       </div>
-                      <div className={styles.formField}>
-                        <label>شهر محل سکونت</label>
+
+                      <div
+                        className={
+                          styles.formField
+                        }
+                      >
+                        <label>
+                          شهر محل سکونت
+                        </label>
+
                         <input
                           type="text"
                           placeholder="مثلاً: تهران"
                           value={newReview.city}
-                          onChange={(e) => setNewReview({ ...newReview, city: e.target.value })}
+                          onChange={(e) =>
+                            setNewReview({
+                              ...newReview,
+                              city: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
 
-                    <div className={styles.formField}>
-                      <label>نام محصول خریداری‌شده</label>
+                    <div
+                      className={styles.formField}
+                    >
+                      <label>
+                        نام محصول خریداری‌شده
+                      </label>
+
                       <input
                         type="text"
                         placeholder="مثلاً: انگشتر برلیان طرح فلورانس"
                         value={newReview.product}
-                        onChange={(e) => setNewReview({ ...newReview, product: e.target.value })}
+                        onChange={(e) =>
+                          setNewReview({
+                            ...newReview,
+                            product:
+                              e.target.value,
+                          })
+                        }
                       />
                     </div>
 
                     {/* Rating Selector */}
-                    <div className={styles.formField}>
-                      <label>امتیاز شما به خرید</label>
-                      <div className={styles.starPickerRow}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            type="button"
-                            className={styles.starPickerBtn}
-                            onClick={() => setNewReview({ ...newReview, rating: star })}
-                          >
-                            <Star
-                              size={24}
-                              fill={star <= newReview.rating ? 'var(--accent)' : 'none'}
-                              stroke={star <= newReview.rating ? 'var(--accent)' : 'var(--text-secondary)'}
-                            />
-                          </button>
-                        ))}
-                        <span className={styles.starRatingLabel}>{newReview.rating} از ۵ ستاره</span>
+                    <div
+                      className={styles.formField}
+                    >
+                      <label>
+                        امتیاز شما به خرید
+                      </label>
+
+                      <div
+                        className={
+                          styles.starPickerRow
+                        }
+                      >
+                        {[1, 2, 3, 4, 5].map(
+                          (star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              className={
+                                styles.starPickerBtn
+                              }
+                              onClick={() =>
+                                setNewReview({
+                                  ...newReview,
+                                  rating: star,
+                                })
+                              }
+                            >
+                              <Star
+                                size={24}
+                                fill={
+                                  star <=
+                                  newReview.rating
+                                    ? 'var(--accent)'
+                                    : 'none'
+                                }
+                                stroke={
+                                  star <=
+                                  newReview.rating
+                                    ? 'var(--accent)'
+                                    : 'var(--text-secondary)'
+                                }
+                              />
+                            </button>
+                          )
+                        )}
+
+                        <span
+                          className={
+                            styles.starRatingLabel
+                          }
+                        >
+                          {newReview.rating} از ۵
+                          ستاره
+                        </span>
                       </div>
                     </div>
 
-                    <div className={styles.formField}>
-                      <label>عنوان اصلی تجربه شما</label>
+                    <div
+                      className={styles.formField}
+                    >
+                      <label>
+                        عنوان اصلی تجربه شما
+                      </label>
+
                       <input
                         type="text"
                         placeholder="مثلاً: بسته بندی عالی و کیفیت بی‌نظیر"
                         value={newReview.title}
-                        onChange={(e) => setNewReview({ ...newReview, title: e.target.value })}
+                        onChange={(e) =>
+                          setNewReview({
+                            ...newReview,
+                            title: e.target.value,
+                          })
+                        }
                       />
                     </div>
 
-                    <div className={styles.formField}>
-                      <label>متن کامل نظر و تجربه شما *</label>
+                    <div
+                      className={styles.formField}
+                    >
+                      <label>
+                        متن کامل نظر و تجربه شما *
+                      </label>
+
                       <textarea
                         required
                         rows={4}
                         placeholder="جزئیات تجربه خود درباره کیفیت طلا، برخورد پشتیبانی، بسته بندی و..."
                         value={newReview.text}
-                        onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}
+                        onChange={(e) =>
+                          setNewReview({
+                            ...newReview,
+                            text: e.target.value,
+                          })
+                        }
                       />
                     </div>
 
-                    <button type="submit" className={styles.submitFormBtn}>
+                    <button
+                      type="submit"
+                      className={
+                        styles.submitFormBtn
+                      }
+                    >
                       <Send size={16} />
-                      <span>ارسال دیدگاه</span>
+
+                      <span>
+                        ارسال دیدگاه
+                      </span>
                     </button>
                   </form>
                 )}
@@ -774,22 +1254,45 @@ export const TestimonialsPage = () => {
       {/* Image Preview Zoom Modal */}
       <AnimatePresence>
         {selectedImageModal && (
-          <div className={styles.modalBackdrop} onClick={() => setSelectedImageModal(null)}>
+          <div
+            className={styles.modalBackdrop}
+            onClick={() =>
+              setSelectedImageModal(null)
+            }
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
+              initial={{
+                opacity: 0,
+                scale: 0.8,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.8,
+              }}
               className={styles.imageZoomCard}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
               <button
                 type="button"
                 className={styles.modalCloseBtn}
-                onClick={() => setSelectedImageModal(null)}
+                onClick={() =>
+                  setSelectedImageModal(null)
+                }
               >
                 <X size={20} />
               </button>
-              <img src={selectedImageModal} alt="بزرگنمایی تصویر نظر" className={styles.zoomImg} />
+
+              <img
+                src={selectedImageModal}
+                alt="بزرگنمایی تصویر نظر"
+                className={styles.zoomImg}
+              />
             </motion.div>
           </div>
         )}
