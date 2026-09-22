@@ -229,7 +229,7 @@ export const DEFAULT_CONTACT_PAGE = {
     address: {
       tagText: 'موقعیت گالری',
       title: 'آدرس گالری',
-      detail: '',
+      detail: 'فرشته روبه روی بانک سامان گالری طلای ژوئل',
       subText: 'گالری مرکزی Luxury Jewel',
       actionText: 'مسیریابی روی نقشه',
     },

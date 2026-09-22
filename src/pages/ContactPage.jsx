@@ -86,10 +86,6 @@ export const ContactPage = () => {
 
   const contact =
     settings?.contactPage || DEFAULT_CONTACT_PAGE;
-    console.log(
-  'FAQ FROM SITE SETTINGS:',
-  contact?.faq?.items
-);
 
   const quickCards = contact.quickCards || {};
 
@@ -584,9 +580,6 @@ export const ContactPage = () => {
                   settings?.contactAddress ||
                   ''}
               </p>
-
-              {/* Mini Map */}
-
 
               {/* Parking */}
               <div className={styles.cardChip}>
