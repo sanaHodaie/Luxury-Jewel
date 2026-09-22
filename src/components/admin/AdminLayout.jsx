@@ -11,14 +11,32 @@ import {
   Menu,
   X,
   Settings2,
+  BookOpen,
 } from 'lucide-react';
 import { useProducts } from '../../contexts/ProductsContext';
 import styles from './AdminLayout.module.css';
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', label: 'داشبورد', icon: LayoutDashboard },
-  { to: '/admin/products', label: 'محصولات', icon: Package },
-  { to: '/admin/settings', label: 'تنظیمات سایت', icon: Settings2 },
+  {
+    to: '/admin/dashboard',
+    label: 'داشبورد',
+    icon: LayoutDashboard,
+  },
+  {
+    to: '/admin/products',
+    label: 'محصولات',
+    icon: Package,
+  },
+  {
+    to: '/admin/brand-story',
+    label: 'داستان درباره ما',
+    icon: BookOpen,
+  },
+  {
+    to: '/admin/settings',
+    label: 'تنظیمات سایت',
+    icon: Settings2,
+  },
 ];
 
 export default function AdminLayout() {

@@ -28,6 +28,7 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminBrandStoryPage from './pages/admin/AdminBrandStoryPage';
 
 import styles from './App.module.css';
 
@@ -86,6 +87,10 @@ export default function App() {
                     <Route index element={<Navigate to="/admin/dashboard" replace />} />
                     <Route path="dashboard" element={<AdminDashboardPage />} />
                     <Route path="products" element={<AdminProductsPage />} />
+                      <Route path="brand-story" element={<AdminBrandStoryPage />} />
+    
+    
+ 
                     <Route path="settings" element={<AdminSettingsPage />} />
                   </Route>
                 </Route>

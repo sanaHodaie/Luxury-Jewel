@@ -27,7 +27,21 @@ export const BrandStoryPage = () => {
   const { settings } = useSiteSettings();
   const [activeEra, setActiveEra] = useState('all');
 
-  const timelineEvents = [
+  /*
+   * =========================================================
+   * BRAND STORY DATA
+   * =========================================================
+   */
+
+  const brandStory = settings?.brandStory || {};
+
+  /*
+   * =========================================================
+   * TIMELINE
+   * =========================================================
+   */
+
+  const defaultTimelineEvents = [
     {
       id: 1,
       year: '۱۳۷۰',
@@ -108,12 +122,43 @@ export const BrandStoryPage = () => {
     },
   ];
 
+  const timelineData =
+    Array.isArray(brandStory.timelineEvents) &&
+    brandStory.timelineEvents.length > 0
+      ? brandStory.timelineEvents
+      : defaultTimelineEvents;
+
+  /*
+   * آیکون‌ها در دیتابیس ذخیره نمی‌شوند.
+   * بنابراین همان آیکون‌های قبلی را بر اساس ترتیب نگه می‌داریم.
+   */
+  const timelineIcons = [
+    <Hammer size={18} />,
+    <Crown size={18} />,
+    <Star size={18} />,
+    <ShieldCheck size={18} />,
+    <Layers size={18} />,
+    <Compass size={18} />,
+  ];
+
+  const timelineEvents = timelineData.map((event, index) => ({
+    ...event,
+    id: event.id || index + 1,
+    icon: timelineIcons[index] || <History size={18} />,
+  }));
+
   const filteredEvents =
     activeEra === 'all'
       ? timelineEvents
       : timelineEvents.filter((ev) => ev.era === activeEra);
 
-  const eraTabs = [
+  /*
+   * =========================================================
+   * ERA TABS
+   * =========================================================
+   */
+
+  const defaultEraTabs = [
     { id: 'all', label: 'همه پیام‌های تاریخچه' },
     { id: '70s', label: 'دهه ۷۰ (سرآغاز)' },
     { id: '80s', label: 'دهه ۸۰ (شکوفایی)' },
@@ -121,30 +166,61 @@ export const BrandStoryPage = () => {
     { id: 'modern', label: '۱۴۰۰ تا امروز (عصر مدرن)' },
   ];
 
-  const coreValues = [
+  const eraTabs =
+    Array.isArray(brandStory.eraTabs) && brandStory.eraTabs.length > 0
+      ? brandStory.eraTabs
+      : defaultEraTabs;
+
+  /*
+   * =========================================================
+   * CORE VALUES
+   * =========================================================
+   */
+
+  const defaultCoreValues = [
     {
-      icon: <Gem size={26} />,
       title: 'گوهرهای شناسنامه‌دار GIA',
       desc: 'تمامی الماس‌ها و سنگ‌های قیمتی همراه با شناسنامه معتبر بین‌المللی و کد حک شده لیزری عرضه می‌شوند.',
     },
     {
-      icon: <Hammer size={26} />,
       title: 'هنر دست استادکاران',
       desc: 'بیش از ۱۵۰ ساعت ظریف‌کاری و مرصع‌کاری دست‌ساز روی هر قطعه فاخر توسط باسابقت‌ترین زرگران.',
     },
     {
-      icon: <ShieldCheck size={26} />,
       title: 'طلاکاری اخلاقی',
       desc: 'استفاده از طلای ۱۸ عیار استاندارد و سنگ‌های قیمتی استخراج شده با رعایت کامل اصول محیط زیستی.',
     },
     {
-      icon: <Award size={26} />,
       title: 'ضمانت بازخرید دائمی',
       desc: 'ارائه فاکتور رسمی، ضمانت اصالت همیشگی و خدمات تمیزکاری رایگان سالانه برای کلیه خریداران.',
     },
   ];
 
-  const craftSteps = [
+  const valuesData =
+    Array.isArray(brandStory.coreValues) &&
+    brandStory.coreValues.length > 0
+      ? brandStory.coreValues
+      : defaultCoreValues;
+
+  const valueIcons = [
+    <Gem size={26} />,
+    <Hammer size={26} />,
+    <ShieldCheck size={26} />,
+    <Award size={26} />,
+  ];
+
+  const coreValues = valuesData.map((value, index) => ({
+    ...value,
+    icon: valueIcons[index] || <Gem size={26} />,
+  }));
+
+  /*
+   * =========================================================
+   * CRAFT STEPS
+   * =========================================================
+   */
+
+  const defaultCraftSteps = [
     {
       step: '۰۱',
       title: 'الهام و طراحی اولیه سه‌بعدی',
@@ -166,6 +242,194 @@ export const BrandStoryPage = () => {
       desc: 'آبکاری با رودیوم یا پلاتین و صدور سند رسمی ضمانت اصالت.',
     },
   ];
+
+  const craftSteps =
+    Array.isArray(brandStory.craftSteps) &&
+    brandStory.craftSteps.length > 0
+      ? brandStory.craftSteps
+      : defaultCraftSteps;
+
+  /*
+   * =========================================================
+   * HERO DATA
+   * =========================================================
+   */
+
+  const hero = brandStory.hero || {};
+
+  const heroBadge =
+    hero.badge || 'اصالت، هنر و درخشش بیش از ۳ دهه';
+
+  const heroTitle =
+    hero.title || settings.aboutTitle || 'ما در تلاشیم';
+
+  const heroTitleHighlight =
+    hero.titleHighlight || 'به خلق شاهکار';
+
+  const heroSubtitle =
+    hero.subtitle ||
+    settings.aboutDescription ||
+    '';
+
+  const heroStats =
+    Array.isArray(hero.stats) && hero.stats.length > 0
+      ? hero.stats
+      : [
+          {
+            value: '۳۵+',
+            label: 'سال تجربه زرگری',
+          },
+          {
+            value: '۵۰,۰۰۰+',
+            label: 'مشتری وفادار',
+          },
+          {
+            value: '۱۰۰٪',
+            label: 'شناسنامه رسمی GIA',
+          },
+        ];
+
+  /*
+   * =========================================================
+   * VALUES HEADER
+   * =========================================================
+   */
+
+  const valuesHeader = brandStory.valuesHeader || {};
+
+  const valuesSubTag =
+    valuesHeader.subTag ||
+    'ارزش‌ها و استانداردهای ژوئل';
+
+  const valuesTitle =
+    valuesHeader.title ||
+    'چرا گالری ژوئل';
+
+  const valuesTitleHighlight =
+    valuesHeader.titleHighlight ||
+    'نماد اعتماد و فاخری';
+
+  const valuesTitleSuffix =
+    valuesHeader.titleSuffix ||
+    'است؟';
+
+  const valuesDescription =
+    valuesHeader.description ||
+    'ما زیورآلات را نه به عنوان یک دارایی معمولی، بلکه به عنوان یک میراث خانوادگی ارزشمند و اثر هنری منحصربه‌فرد می‌سازیم.';
+
+  /*
+   * =========================================================
+   * TIMELINE HEADER
+   * =========================================================
+   */
+
+  const timelineHeader = brandStory.timelineHeader || {};
+
+  const timelineBadge =
+    timelineHeader.badge ||
+    'گاه‌شمار پیام‌های تاریخی برند';
+
+  const timelineTitle =
+    timelineHeader.title ||
+    'تایم‌لاین رویدادهای کلیدی';
+
+  const timelineTitleHighlight =
+    timelineHeader.titleHighlight ||
+    'گالری ژوئل';
+
+  const timelineDescription =
+    timelineHeader.description ||
+    'ایستگاه‌های مهم تاریخی ما در قالب پیام‌های کوتاه و آموزنده';
+
+  /*
+   * =========================================================
+   * CRAFT HEADER
+   * =========================================================
+   */
+
+  const craftHeader = brandStory.craftHeader || {};
+
+  const craftSubTag =
+    craftHeader.subTag ||
+    'فرآیند خلق اثر';
+
+  const craftTitle =
+    craftHeader.title ||
+    'چگونه یک';
+
+  const craftTitleHighlight =
+    craftHeader.titleHighlight ||
+    'شاهکار طلا و گوهر';
+
+  const craftTitleSuffix =
+    craftHeader.titleSuffix ||
+    'متولد می‌شود؟';
+
+  const craftDescription =
+    craftHeader.description ||
+    'مراحل دقیق و وسواس‌گونه خلق زیورآلات سفارشی از طرح اولیه تا تحویل در جعبه مخمل فاخر';
+
+  /*
+   * =========================================================
+   * QUOTE
+   * =========================================================
+   */
+
+  const quote = brandStory.quote || {};
+
+  const quoteText =
+    quote.text ||
+    'ما طلا را نمی‌فروشیم؛ ما لبخندهای ماندگار، احساسات عمیق و نمادهای جاودانه‌ی عشق را مجسم می‌کنیم. هر زمان که قطعه‌ای از ژوئل بر دست یا گردن شما می‌نشیند، افتخار زرگری اصیل ایرانی با شما همراه است.';
+
+  const quoteAuthor =
+    quote.authorName ||
+    quote.author ||
+    'استاد عباس ژوئل';
+
+  const quoteRole =
+    quote.authorRole ||
+    quote.role ||
+    'بنیان‌گذار و استادکار ارشد گالری ژوئل';
+
+  /*
+   * =========================================================
+   * CTA
+   * =========================================================
+   */
+
+  const cta = brandStory.cta || {};
+
+  const ctaTitle =
+    cta.title ||
+    'آماده‌اید شاهکار اختصاصی خود را پیدا کنید؟';
+
+  const ctaDescription =
+    cta.description ||
+    'کالکشن‌های فاخر طلا، برلیان و گوهرسنگ‌های نایاب ما را مشاهده کنید یا همین امروز وقت مشاوره اختصاصی رزرو نمایید.';
+
+  const ctaPrimaryLabel =
+    cta.primaryLabel ||
+    cta.primaryText ||
+    'مشاهده کالکشن‌های جواهرات';
+
+  const ctaPrimaryLink =
+    cta.primaryLink ||
+    '/';
+
+  const ctaSecondaryLabel =
+    cta.secondaryLabel ||
+    cta.secondaryText ||
+    'بازدید از گالری فرشته';
+
+  const ctaSecondaryLink =
+    cta.secondaryLink ||
+    '#newsletter';
+
+  /*
+   * =========================================================
+   * PAGE
+   * =========================================================
+   */
 
   return (
     <div className={styles.pageWrapper}>
@@ -191,32 +455,37 @@ export const BrandStoryPage = () => {
           >
             <div className={styles.badgeGroup}>
               <Sparkles size={16} className={styles.sparkleIcon} />
-              <span>اصالت، هنر و درخشش بیش از ۳ دهه</span>
+              <span>{heroBadge}</span>
             </div>
 
             <h1 className={styles.heroTitle}>
-              {settings.aboutTitle} <span className={styles.goldGlowText}>به خلق شاهکار</span>
+              {heroTitle}{' '}
+              <span className={styles.goldGlowText}>
+                {heroTitleHighlight}
+              </span>
             </h1>
 
             <p className={styles.heroSubtitle}>
-              {settings.aboutDescription}
+              {heroSubtitle}
             </p>
 
             <div className={styles.heroStatsRow}>
-              <div className={styles.heroStatCard}>
-                <span className={styles.statNum}>۳۵+</span>
-                <span className={styles.statLabel}>سال تجربه زرگری</span>
-              </div>
-              <div className={styles.heroStatDivider} />
-              <div className={styles.heroStatCard}>
-                <span className={styles.statNum}>۵۰,۰۰۰+</span>
-                <span className={styles.statLabel}>مشتری وفادار</span>
-              </div>
-              <div className={styles.heroStatDivider} />
-              <div className={styles.heroStatCard}>
-                <span className={styles.statNum}>۱۰۰٪</span>
-                <span className={styles.statLabel}>شناسنامه رسمی GIA</span>
-              </div>
+              {heroStats.map((stat, index) => (
+                <React.Fragment key={stat.id || index}>
+                  <div className={styles.heroStatCard}>
+                    <span className={styles.statNum}>
+                      {stat.value || stat.number}
+                    </span>
+                    <span className={styles.statLabel}>
+                      {stat.label}
+                    </span>
+                  </div>
+
+                  {index < heroStats.length - 1 && (
+                    <div className={styles.heroStatDivider} />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -226,12 +495,20 @@ export const BrandStoryPage = () => {
       <section className={styles.valuesSection}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <span className={styles.subTag}>ارزش‌ها و استانداردهای ژوئل</span>
+            <span className={styles.subTag}>
+              {valuesSubTag}
+            </span>
+
             <h2 className={styles.sectionTitle}>
-              چرا گالری ژوئل <span className={styles.goldText}>نماد اعتماد و فاخری</span> است؟
+              {valuesTitle}{' '}
+              <span className={styles.goldText}>
+                {valuesTitleHighlight}
+              </span>{' '}
+              {valuesTitleSuffix}
             </h2>
+
             <p className={styles.sectionDesc}>
-              ما زیورآلات را نه به عنوان یک دارایی معمولی، بلکه به عنوان یک میراث خانوادگی ارزشمند و اثر هنری منحصربه‌فرد می‌سازیم.
+              {valuesDescription}
             </p>
           </div>
 
@@ -245,9 +522,17 @@ export const BrandStoryPage = () => {
                 transition={{ duration: 0.45, delay: idx * 0.1 }}
                 className={styles.valueCard}
               >
-                <div className={styles.valueIconFrame}>{val.icon}</div>
-                <h3 className={styles.valueTitle}>{val.title}</h3>
-                <p className={styles.valueDesc}>{val.desc}</p>
+                <div className={styles.valueIconFrame}>
+                  {val.icon}
+                </div>
+
+                <h3 className={styles.valueTitle}>
+                  {val.title}
+                </h3>
+
+                <p className={styles.valueDesc}>
+                  {val.desc || val.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -260,13 +545,18 @@ export const BrandStoryPage = () => {
           <div className={styles.sectionHeader}>
             <div className={styles.badgeGroupCenter}>
               <MessageSquareQuote size={16} />
-              <span>گاه‌شمار پیام‌های تاریخی برند</span>
+              <span>{timelineBadge}</span>
             </div>
+
             <h2 className={styles.sectionTitle}>
-              تایم‌لاین رویدادهای کلیدی <span className={styles.goldGlowText}>گالری ژوئل</span>
+              {timelineTitle}{' '}
+              <span className={styles.goldGlowText}>
+                {timelineTitleHighlight}
+              </span>
             </h2>
+
             <p className={styles.sectionDesc}>
-              ایستگاه‌های مهم تاریخی ما در قالب پیام‌های کوتاه و آموزنده
+              {timelineDescription}
             </p>
 
             {/* Timeline Filter Tabs */}
@@ -275,7 +565,11 @@ export const BrandStoryPage = () => {
                 <button
                   key={tab.id}
                   type="button"
-                  className={`${styles.eraTabBtn} ${activeEra === tab.id ? styles.eraTabActive : ''}`}
+                  className={`${styles.eraTabBtn} ${
+                    activeEra === tab.id
+                      ? styles.eraTabActive
+                      : ''
+                  }`}
                   onClick={() => setActiveEra(tab.id)}
                 >
                   {tab.label}
@@ -289,22 +583,45 @@ export const BrandStoryPage = () => {
             <div className={styles.chatTimelineLine} />
 
             <AnimatePresence mode="wait">
-              <motion.div key={activeEra} className={styles.chatMessageList}>
+              <motion.div
+                key={activeEra}
+                className={styles.chatMessageList}
+              >
                 {filteredEvents.map((item, index) => {
                   const isRight = index % 2 === 0;
 
                   return (
                     <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 25, x: isRight ? 20 : -20 }}
-                      whileInView={{ opacity: 1, y: 0, x: 0 }}
-                      viewport={{ once: false, amount: 0.2 }}
-                      transition={{ duration: 0.45, ease: 'easeOut' }}
-                      className={`${styles.chatMessageRow} ${isRight ? styles.msgRight : styles.msgLeft}`}
+                      key={item.id || index}
+                      initial={{
+                        opacity: 0,
+                        y: 25,
+                        x: isRight ? 20 : -20,
+                      }}
+                      whileInView={{
+                        opacity: 1,
+                        y: 0,
+                        x: 0,
+                      }}
+                      viewport={{
+                        once: false,
+                        amount: 0.2,
+                      }}
+                      transition={{
+                        duration: 0.45,
+                        ease: 'easeOut',
+                      }}
+                      className={`${styles.chatMessageRow} ${
+                        isRight
+                          ? styles.msgRight
+                          : styles.msgLeft
+                      }`}
                     >
                       {/* Timeline Central Node Icon */}
                       <div className={styles.msgAvatarNode}>
-                        <div className={styles.avatarIconInner}>{item.icon}</div>
+                        <div className={styles.avatarIconInner}>
+                          {item.icon}
+                        </div>
                       </div>
 
                       {/* Chat Message Bubble Card */}
@@ -315,29 +632,61 @@ export const BrandStoryPage = () => {
                         {/* Top Header Row of Message */}
                         <div className={styles.msgHeader}>
                           <div className={styles.yearTagGroup}>
-                            <span className={styles.msgYear}>{item.year}</span>
-                            <span className={styles.msgYearEn}>• {item.yearEn}</span>
+                            <span className={styles.msgYear}>
+                              {item.year}
+                            </span>
+
+                            <span className={styles.msgYearEn}>
+                              • {item.yearEn}
+                            </span>
                           </div>
-                          <span className={styles.msgBadge}>{item.badge}</span>
+
+                          <span className={styles.msgBadge}>
+                            {item.badge}
+                          </span>
                         </div>
 
                         {/* Message Main Title & Subtitle */}
-                        <h3 className={styles.msgTitle}>{item.title}</h3>
-                        <div className={styles.msgSubTitle}>{item.subtitle}</div>
+                        <h3 className={styles.msgTitle}>
+                          {item.title}
+                        </h3>
+
+                        <div className={styles.msgSubTitle}>
+                          {item.subtitle}
+                        </div>
 
                         {/* Message Body Content */}
-                        <p className={styles.msgBodyText}>{item.description}</p>
+                        <p className={styles.msgBodyText}>
+                          {item.description}
+                        </p>
 
                         {/* Message Highlights / Tags */}
                         <div className={styles.msgFooterTags}>
-                          {item.highlights.map((h, hIdx) => (
-                            <span key={hIdx} className={styles.tagPill}>
-                              <CheckCircle2 size={12} className={styles.pillIcon} />
-                              {h}
-                            </span>
-                          ))}
+                          {Array.isArray(item.highlights) &&
+                            item.highlights.map(
+                              (h, hIdx) => (
+                                <span
+                                  key={hIdx}
+                                  className={styles.tagPill}
+                                >
+                                  <CheckCircle2
+                                    size={12}
+                                    className={
+                                      styles.pillIcon
+                                    }
+                                  />
+                                  {h}
+                                </span>
+                              )
+                            )}
+
                           <div className={styles.seenCheck}>
-                            <CheckCheck size={14} className={styles.doubleCheckIcon} />
+                            <CheckCheck
+                              size={14}
+                              className={
+                                styles.doubleCheckIcon
+                              }
+                            />
                             <span>ثبت شده</span>
                           </div>
                         </div>
@@ -355,28 +704,55 @@ export const BrandStoryPage = () => {
       <section className={styles.craftSection}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <span className={styles.subTag}>فرآیند خلق اثر</span>
+            <span className={styles.subTag}>
+              {craftSubTag}
+            </span>
+
             <h2 className={styles.sectionTitle}>
-              چگونه یک <span className={styles.goldText}>شاهکار طلا و گوهر</span> متولد می‌شود؟
+              {craftTitle}{' '}
+              <span className={styles.goldText}>
+                {craftTitleHighlight}
+              </span>{' '}
+              {craftTitleSuffix}
             </h2>
+
             <p className={styles.sectionDesc}>
-              مراحل دقیق و وسواس‌گونه خلق زیورآلات سفارشی از طرح اولیه تا تحویل در جعبه مخمل فاخر
+              {craftDescription}
             </p>
           </div>
 
           <div className={styles.craftStepsGrid}>
             {craftSteps.map((s, idx) => (
               <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.94 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                key={s.id || idx}
+                initial={{
+                  opacity: 0,
+                  scale: 0.94,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.4,
+                  delay: idx * 0.08,
+                }}
                 className={styles.craftStepCard}
               >
-                <div className={styles.stepNumBadge}>{s.step}</div>
-                <h3 className={styles.stepTitle}>{s.title}</h3>
-                <p className={styles.stepDesc}>{s.desc}</p>
+                <div className={styles.stepNumBadge}>
+                  {s.step}
+                </div>
+
+                <h3 className={styles.stepTitle}>
+                  {s.title}
+                </h3>
+
+                <p className={styles.stepDesc}>
+                  {s.desc || s.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -392,16 +768,23 @@ export const BrandStoryPage = () => {
             viewport={{ once: true }}
             className={styles.quoteBox}
           >
-            <Feather size={36} className={styles.featherIcon} />
+            <Feather
+              size={36}
+              className={styles.featherIcon}
+            />
 
             <blockquote className={styles.quoteText}>
-              «ما طلا را نمی‌فروشیم؛ ما لبخندهای ماندگار، احساسات عمیق و نمادهای جاودانه‌ی عشق را مجسم می‌کنیم.
-              هر زمان که قطعه‌ای از ژوئل بر دست یا گردن شما می‌نشیند، افتخار زرگری اصیل ایرانی با شما همراه است.»
+              «{quoteText}»
             </blockquote>
 
             <div className={styles.authorMeta}>
-              <div className={styles.authorName}>استاد عباس ژوئل</div>
-              <div className={styles.authorRole}>بنیان‌گذار و استادکار ارشد گالری ژوئل</div>
+              <div className={styles.authorName}>
+                {quoteAuthor}
+              </div>
+
+              <div className={styles.authorRole}>
+                {quoteRole}
+              </div>
             </div>
           </motion.div>
         </div>
@@ -412,22 +795,41 @@ export const BrandStoryPage = () => {
         <div className={styles.container}>
           <div className={styles.ctaBox}>
             <div className={styles.ctaHeader}>
-              <Sparkles size={22} style={{ color: 'var(--accent)' }} />
-              <h2>آماده‌اید شاهکار اختصاصی خود را پیدا کنید؟</h2>
+              <Sparkles
+                size={22}
+                style={{ color: 'var(--accent)' }}
+              />
+
+              <h2>
+                {ctaTitle}
+              </h2>
+
               <p>
-                کالکشن‌های فاخر طلا، برلیان و گوهرسنگ‌های نایاب ما را مشاهده کنید یا همین امروز وقت مشاوره اختصاصی رزرو نمایید.
+                {ctaDescription}
               </p>
             </div>
 
             <div className={styles.ctaActions}>
-              <Link to="/" className={styles.primaryCtaBtn}>
-                <span>مشاهده کالکشن‌های جواهرات</span>
+              <Link
+                to={ctaPrimaryLink}
+                className={styles.primaryCtaBtn}
+              >
+                <span>
+                  {ctaPrimaryLabel}
+                </span>
+
                 <ArrowRight size={18} />
               </Link>
 
-              <a href="#newsletter" className={styles.secondaryCtaBtn}>
+              <a
+                href={ctaSecondaryLink}
+                className={styles.secondaryCtaBtn}
+              >
                 <MapPin size={18} />
-                <span>بازدید از گالری فرشته</span>
+
+                <span>
+                  {ctaSecondaryLabel}
+                </span>
               </a>
             </div>
           </div>
