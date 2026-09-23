@@ -15,64 +15,103 @@ const STORAGE_KEY = 'luxury_jewel_site_settings';
 ========================================================= */
 
 export const DEFAULT_BRAND_STORY = {
+  /* =======================================================
+     HERO
+  ======================================================= */
+
   hero: {
     badge: 'اصالت، هنر و درخشش بیش از ۳ دهه',
     title: 'ما در تلاشیم',
     titleHighlight: 'به خلق شاهکار',
-    description:
+    subtitle:
       'تجربه‌ای متفاوت از هنر اصیل جواهرسازی، طراحی مدرن و انتخاب نایاب‌ترین گوهرها.',
   },
 
+  /* =======================================================
+     HERO STATS
+  ======================================================= */
+
   stats: [
     {
+      id: 1,
+      value: '۳۵+',
       number: '۳۵+',
       label: 'سال تجربه زرگری',
     },
     {
+      id: 2,
+      value: '۵۰,۰۰۰+',
       number: '۵۰,۰۰۰+',
       label: 'مشتری وفادار',
     },
     {
+      id: 3,
+      value: '۱۰۰٪',
       number: '۱۰۰٪',
       label: 'شناسنامه رسمی GIA',
     },
   ],
 
-  values: {
-    tag: 'ارزش‌ها و استانداردهای ژوئل',
-    title: 'چرا گالری ژوئل نماد اعتماد و فاخری است؟',
+  /* =======================================================
+     VALUES HEADER
+     BrandStoryPage → valuesHeader
+  ======================================================= */
+
+  valuesHeader: {
+    subTag: 'ارزش‌ها و استانداردهای ژوئل',
+    title: 'چرا گالری ژوئل',
+    titleHighlight: 'نماد اعتماد و فاخری',
+    titleSuffix: 'است؟',
     description:
       'ما زیورآلات را نه به عنوان یک دارایی معمولی، بلکه به عنوان یک میراث خانوادگی ارزشمند و اثر هنری منحصربه‌فرد می‌سازیم.',
   },
 
+  /* =======================================================
+     CORE VALUES
+  ======================================================= */
+
   coreValues: [
     {
+      id: 1,
       title: 'گوهرهای شناسنامه‌دار GIA',
       desc: 'تمامی الماس‌ها و سنگ‌های قیمتی همراه با شناسنامه معتبر بین‌المللی و کد حک شده لیزری عرضه می‌شوند.',
     },
     {
+      id: 2,
       title: 'هنر دست استادکاران',
       desc: 'بیش از ۱۵۰ ساعت ظریف‌کاری و مرصع‌کاری دست‌ساز روی هر قطعه فاخر توسط باسابقه‌ترین زرگران.',
     },
     {
+      id: 3,
       title: 'طلاکاری اخلاقی',
       desc: 'استفاده از طلای ۱۸ عیار استاندارد و سنگ‌های قیمتی استخراج شده با رعایت کامل اصول محیط زیستی.',
     },
     {
+      id: 4,
       title: 'ضمانت بازخرید دائمی',
       desc: 'ارائه فاکتور رسمی، ضمانت اصالت همیشگی و خدمات تمیزکاری رایگان سالانه برای کلیه خریداران.',
     },
   ],
 
-  timeline: {
-    tag: 'گاه‌شمار پیام‌های تاریخی برند',
-    title: 'تایم‌لاین رویدادهای کلیدی گالری ژوئل',
+  /* =======================================================
+     TIMELINE HEADER
+  ======================================================= */
+
+  timelineHeader: {
+    badge: 'گاه‌شمار پیام‌های تاریخی برند',
+    title: 'تایم‌لاین رویدادهای کلیدی',
+    titleHighlight: 'گالری ژوئل',
     description:
       'ایستگاه‌های مهم تاریخی ما در قالب پیام‌های کوتاه و آموزنده',
   },
 
+  /* =======================================================
+     TIMELINE EVENTS
+  ======================================================= */
+
   timelineEvents: [
     {
+      id: 1,
       year: '۱۳۷۰',
       yearEn: '1991',
       era: '70s',
@@ -86,7 +125,9 @@ export const DEFAULT_BRAND_STORY = {
         'طلاکاری ۱۸ عیار اصیل',
       ],
     },
+
     {
+      id: 2,
       year: '۱۳۸۲',
       yearEn: '2003',
       era: '80s',
@@ -100,7 +141,9 @@ export const DEFAULT_BRAND_STORY = {
         'ورود سنگ‌های شناسنامه‌دار',
       ],
     },
+
     {
+      id: 3,
       year: '۱۳۹۰',
       yearEn: '2011',
       era: '90s',
@@ -114,7 +157,9 @@ export const DEFAULT_BRAND_STORY = {
         'طراحی اختصاصی با حضور مشتری',
       ],
     },
+
     {
+      id: 4,
       year: '۱۳۹۷',
       yearEn: '2018',
       era: '90s',
@@ -128,7 +173,9 @@ export const DEFAULT_BRAND_STORY = {
         'آنالیز لیزری گوهرسنگ‌ها',
       ],
     },
+
     {
+      id: 5,
       year: '۱۴۰۱',
       yearEn: '2022',
       era: 'modern',
@@ -142,7 +189,9 @@ export const DEFAULT_BRAND_STORY = {
         'کاهش وزن بدون افت مقاومت',
       ],
     },
+
     {
+      id: 6,
       year: '۱۴۰۵',
       yearEn: '2026',
       era: 'modern',
@@ -158,48 +207,103 @@ export const DEFAULT_BRAND_STORY = {
     },
   ],
 
-  craft: {
-    tag: 'فرآیند خلق اثر',
-    title: 'چگونه یک شاهکار طلا و گوهر متولد می‌شود؟',
+  /* =======================================================
+     ERA TABS
+  ======================================================= */
+
+  eraTabs: [
+    {
+      id: 'all',
+      label: 'همه پیام‌های تاریخچه',
+    },
+    {
+      id: '70s',
+      label: 'دهه ۷۰ (سرآغاز)',
+    },
+    {
+      id: '80s',
+      label: 'دهه ۸۰ (شکوفایی)',
+    },
+    {
+      id: '90s',
+      label: 'دهه ۹۰ (GIA و فرشته)',
+    },
+    {
+      id: 'modern',
+      label: '۱۴۰۰ تا امروز (عصر مدرن)',
+    },
+  ],
+
+  /* =======================================================
+     CRAFT HEADER
+  ======================================================= */
+
+  craftHeader: {
+    subTag: 'فرآیند خلق اثر',
+    title: 'چگونه یک',
+    titleHighlight: 'شاهکار طلا و گوهر',
+    titleSuffix: 'متولد می‌شود؟',
     description:
       'مراحل دقیق و وسواس‌گونه خلق زیورآلات سفارشی از طرح اولیه تا تحویل در جعبه مخمل فاخر',
   },
 
+  /* =======================================================
+     CRAFT STEPS
+  ======================================================= */
+
   craftSteps: [
     {
+      id: 1,
       step: '۰۱',
       title: 'الهام و طراحی اولیه سه‌بعدی',
       desc: 'مدل‌سازی دقیق نرم‌افزاری و محاسبه زوایای انعکاس نور برلیان.',
     },
     {
+      id: 2,
       step: '۰۲',
       title: 'انتخاب و درجه‌بندی گوهر',
       desc: 'ارزیابی رنگ، پاکی و تراش تحت نظارت کارشناس رسمی GIA.',
     },
     {
+      id: 3,
       step: '۰۳',
       title: 'ریخته‌گری و مرصع‌کاری',
       desc: 'نشاندن دقیق سنگ‌ها زیر میکروسکوپ صنعتی جهت استحکام کامل.',
     },
     {
+      id: 4,
       step: '۰۴',
       title: 'پرداخت و صدور فاکتور',
       desc: 'آبکاری با رودیوم یا پلاتین و صدور سند رسمی ضمانت اصالت.',
     },
   ],
 
+  /* =======================================================
+     QUOTE
+  ======================================================= */
+
   quote: {
-    text: 'ما طلا را نمی‌فروشیم؛ ما لبخندهای ماندگار، احساسات عمیق و نمادهای جاودانه‌ی عشق را مجسم می‌کنیم.',
-    author: 'استاد عباس ژوئل',
-    role: 'بنیان‌گذار و استادکار ارشد گالری ژوئل',
+    text:
+      'ما طلا را نمی‌فروشیم؛ ما لبخندهای ماندگار، احساسات عمیق و نمادهای جاودانه‌ی عشق را مجسم می‌کنیم. هر زمان که قطعه‌ای از ژوئل بر دست یا گردن شما می‌نشیند، افتخار زرگری اصیل ایرانی با شما همراه است.',
+    authorName: 'استاد عباس ژوئل',
+    authorRole: 'بنیان‌گذار و استادکار ارشد گالری ژوئل',
   },
+
+  /* =======================================================
+     CTA
+  ======================================================= */
 
   cta: {
     title: 'آماده‌اید شاهکار اختصاصی خود را پیدا کنید؟',
+
     description:
       'کالکشن‌های فاخر طلا، برلیان و گوهرسنگ‌های نایاب ما را مشاهده کنید یا همین امروز وقت مشاوره اختصاصی رزرو نمایید.',
-    primaryText: 'مشاهده کالکشن‌های جواهرات',
-    secondaryText: 'بازدید از گالری فرشته',
+
+    primaryLabel: 'مشاهده کالکشن‌های جواهرات',
+    primaryLink: '/',
+
+    secondaryLabel: 'بازدید از گالری فرشته',
+    secondaryLink: '#newsletter',
   },
 };
 
@@ -210,17 +314,24 @@ export const DEFAULT_BRAND_STORY = {
 export const DEFAULT_CONTACT_PAGE = {
   hero: {
     badge: 'ارتباط با گالری لوکس ژوئل • پاسخگویی ۲۴ ساعته',
+
     title: 'ارتباط با کارشناسان Luxury Jewel',
+
     subtitle:
       'برای دریافت مشاوره تخصصی، استعلام قیمت، سفارش ساخت اختصاصی یا رزرو وقت VIP، با کارشناسان ما در ارتباط باشید.',
+
     primaryButtonText: 'رزرو وقت VIP',
+
     secondaryButtonText: 'مشاهده موقعیت گالری',
+
     phoneButtonText: 'تماس مستقیم',
   },
 
   gallery: {
     badge: 'گالری ژوئل',
+
     title: 'تجربه‌ای متفاوت از خرید جواهرات',
+
     description:
       'در فضایی خصوصی و لوکس، مجموعه‌ای از فاخرترین طلا و جواهرات را مشاهده کنید.',
   },
@@ -236,9 +347,12 @@ export const DEFAULT_CONTACT_PAGE = {
 
     hours: {
       liveText: 'اکنون باز است',
+
       title: 'ساعات کاری',
+
       description:
         'برای مشاوره اختصاصی و بازدید از کالکشن‌ها در ساعات زیر منتظر شما هستیم.',
+
       rows: [
         {
           label: 'شنبه تا چهارشنبه',
@@ -253,31 +367,44 @@ export const DEFAULT_CONTACT_PAGE = {
           value: 'با هماهنگی قبلی',
         },
       ],
-      noteText: 'پنجشنبه‌ها تا ۲۰:۰۰ و جمعه‌ها با وقت قبلی',
+
+      noteText:
+        'پنجشنبه‌ها تا ۲۰:۰۰ و جمعه‌ها با وقت قبلی',
     },
 
     phone: {
       responseText: 'پاسخگویی سریع',
+
       title: 'تماس تلفنی',
+
       description:
         'کارشناسان ما آماده پاسخگویی و مشاوره تخصصی جواهرات هستند.',
+
       officeLabel: 'دفتر مرکزی',
+
       vipLabel: 'مشاوره VIP',
+
       trustText: 'تماس امن و محرمانه',
     },
 
     whatsapp: {
       liveText: 'آنلاین ۲۴/۷',
+
       title: 'واتساپ',
+
       description: 'پاسخگویی سریع کارشناسان',
+
       previewText: 'سلام، در خدمت شما هستیم 💎',
+
       buttonText: 'شروع گفتگو',
     },
   },
 
   mainForm: {
     badge: 'در تماس باشید',
+
     title: 'چطور می‌توانیم کمکتان کنیم؟',
+
     subtitle:
       'فرم زیر را تکمیل کنید تا کارشناسان ما در کوتاه‌ترین زمان با شما تماس بگیرند.',
 
@@ -296,6 +423,7 @@ export const DEFAULT_CONTACT_PAGE = {
       preferredChannelLabel: 'روش ترجیحی ارتباط',
 
       messageLabel: 'پیام شما',
+
       messagePlaceholder:
         'توضیحات یا درخواست خود را برای ما بنویسید...',
 
@@ -341,9 +469,12 @@ export const DEFAULT_CONTACT_PAGE = {
     ],
 
     messages: {
-      successTitle: 'پیام شما با موفقیت دریافت شد!',
+      successTitle:
+        'پیام شما با موفقیت دریافت شد!',
+
       successDescription:
         'از ارتباط شما با گالری ژوئل سپاسگزاریم. کارشناسان ما به زودی جهت پاسخگویی و مشاوره تخصصی با شما تماس می‌گیرند.',
+
       validationError:
         'لطفاً تمامی فیلدهای ضروری (نام، شماره تماس و متن پیام) را تکمیل نمایید.',
     },
@@ -419,6 +550,7 @@ export const DEFAULT_CONTACT_PAGE = {
 
     successMessage: {
       title: 'درخواست وقت VIP شما ثبت شد!',
+
       description:
         'تیم تشریفات گالری ژوئل جهت تایید نهایی وقت ملاقات با شما تماس خواهند گرفت.',
     },
@@ -487,7 +619,9 @@ export const DEFAULT_CONTACT_PAGE = {
 
     items: [
       {
-        question: 'آیا امکان رزرو وقت مشاوره حضوری وجود دارد؟',
+        question:
+          'آیا امکان رزرو وقت مشاوره حضوری وجود دارد؟',
+
         answer:
           'بله، می‌توانید از طریق بخش رزرو وقت VIP زمان مورد نظر خود را انتخاب کنید.',
       },
@@ -495,12 +629,15 @@ export const DEFAULT_CONTACT_PAGE = {
       {
         question:
           'آیا امکان سفارش ساخت جواهرات اختصاصی وجود دارد؟',
+
         answer:
           'بله، طراحی و ساخت سفارشی یکی از خدمات گالری ژوئل است و پس از مشاوره اولیه مراحل طراحی آغاز می‌شود.',
       },
 
       {
-        question: 'چطور می‌توانم سفارش خود را پیگیری کنم؟',
+        question:
+          'چطور می‌توانم سفارش خود را پیگیری کنم؟',
+
         answer:
           'برای پیگیری سفارش می‌توانید از طریق تماس تلفنی یا واتساپ با کارشناسان گالری در ارتباط باشید.',
       },
@@ -508,6 +645,7 @@ export const DEFAULT_CONTACT_PAGE = {
       {
         question:
           'آیا ارسال سفارش به شهرهای دیگر انجام می‌شود؟',
+
         answer:
           'بله، سفارش‌ها با بسته‌بندی و شرایط امنیتی مناسب به شهرهای مختلف ارسال می‌شوند.',
       },
@@ -521,6 +659,7 @@ export const DEFAULT_CONTACT_PAGE = {
 
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Luxury Jewel',
+
   brandTagline: 'زیبایی جاودانه',
 
   footerText:
@@ -544,7 +683,387 @@ export const DEFAULT_SITE_SETTINGS = {
 };
 
 /* =========================================================
-   MERGE HELPER
+   ARRAY MERGE HELPER
+========================================================= */
+
+function getArrayOrDefault(value, fallback) {
+  return Array.isArray(value) && value.length > 0
+    ? value
+    : fallback;
+}
+
+/* =========================================================
+   BRAND STORY MERGE
+========================================================= */
+
+function mergeBrandStory(savedBrandStory) {
+  const saved =
+    savedBrandStory && typeof savedBrandStory === 'object'
+      ? savedBrandStory
+      : {};
+
+  return {
+    ...DEFAULT_BRAND_STORY,
+    ...saved,
+
+    /* -----------------------------------------------------
+       HERO
+    ----------------------------------------------------- */
+
+    hero: {
+      ...DEFAULT_BRAND_STORY.hero,
+      ...(saved.hero || {}),
+
+      /*
+       * پشتیبانی از نسخه قدیمی:
+       * description → subtitle
+       */
+      subtitle:
+        saved.hero?.subtitle ??
+        saved.hero?.description ??
+        DEFAULT_BRAND_STORY.hero.subtitle,
+    },
+
+    /* -----------------------------------------------------
+       STATS
+    ----------------------------------------------------- */
+
+    stats: getArrayOrDefault(
+      saved.stats,
+      DEFAULT_BRAND_STORY.stats
+    ),
+
+    /* -----------------------------------------------------
+       VALUES HEADER
+    ----------------------------------------------------- */
+
+    valuesHeader: {
+      ...DEFAULT_BRAND_STORY.valuesHeader,
+      ...(saved.valuesHeader || {}),
+
+      /*
+       * پشتیبانی از ساختار قدیمی:
+       * values.tag
+       * values.title
+       * values.description
+       */
+
+      subTag:
+        saved.valuesHeader?.subTag ??
+        saved.values?.tag ??
+        DEFAULT_BRAND_STORY.valuesHeader.subTag,
+
+      title:
+        saved.valuesHeader?.title ??
+        (
+          saved.values?.title
+            ? saved.values.title.split(' نماد ')[0]
+            : DEFAULT_BRAND_STORY.valuesHeader.title
+        ),
+
+      description:
+        saved.valuesHeader?.description ??
+        saved.values?.description ??
+        DEFAULT_BRAND_STORY.valuesHeader.description,
+    },
+
+    /* -----------------------------------------------------
+       CORE VALUES
+    ----------------------------------------------------- */
+
+    coreValues: getArrayOrDefault(
+      saved.coreValues,
+      DEFAULT_BRAND_STORY.coreValues
+    ),
+
+    /* -----------------------------------------------------
+       TIMELINE HEADER
+    ----------------------------------------------------- */
+
+    timelineHeader: {
+      ...DEFAULT_BRAND_STORY.timelineHeader,
+      ...(saved.timelineHeader || {}),
+
+      badge:
+        saved.timelineHeader?.badge ??
+        saved.timeline?.tag ??
+        DEFAULT_BRAND_STORY.timelineHeader.badge,
+
+      title:
+        saved.timelineHeader?.title ??
+        DEFAULT_BRAND_STORY.timelineHeader.title,
+
+      titleHighlight:
+        saved.timelineHeader?.titleHighlight ??
+        DEFAULT_BRAND_STORY.timelineHeader.titleHighlight,
+
+      description:
+        saved.timelineHeader?.description ??
+        saved.timeline?.description ??
+        DEFAULT_BRAND_STORY.timelineHeader.description,
+    },
+
+    /* -----------------------------------------------------
+       TIMELINE EVENTS
+    ----------------------------------------------------- */
+
+    timelineEvents: getArrayOrDefault(
+      saved.timelineEvents,
+      DEFAULT_BRAND_STORY.timelineEvents
+    ),
+
+    /* -----------------------------------------------------
+       ERA TABS
+    ----------------------------------------------------- */
+
+    eraTabs: getArrayOrDefault(
+      saved.eraTabs,
+      DEFAULT_BRAND_STORY.eraTabs
+    ),
+
+    /* -----------------------------------------------------
+       CRAFT HEADER
+    ----------------------------------------------------- */
+
+    craftHeader: {
+      ...DEFAULT_BRAND_STORY.craftHeader,
+      ...(saved.craftHeader || {}),
+
+      subTag:
+        saved.craftHeader?.subTag ??
+        saved.craft?.tag ??
+        DEFAULT_BRAND_STORY.craftHeader.subTag,
+
+      title:
+        saved.craftHeader?.title ??
+        DEFAULT_BRAND_STORY.craftHeader.title,
+
+      titleHighlight:
+        saved.craftHeader?.titleHighlight ??
+        DEFAULT_BRAND_STORY.craftHeader.titleHighlight,
+
+      titleSuffix:
+        saved.craftHeader?.titleSuffix ??
+        DEFAULT_BRAND_STORY.craftHeader.titleSuffix,
+
+      description:
+        saved.craftHeader?.description ??
+        saved.craft?.description ??
+        DEFAULT_BRAND_STORY.craftHeader.description,
+    },
+
+    /* -----------------------------------------------------
+       CRAFT STEPS
+    ----------------------------------------------------- */
+
+    craftSteps: getArrayOrDefault(
+      saved.craftSteps,
+      DEFAULT_BRAND_STORY.craftSteps
+    ),
+
+    /* -----------------------------------------------------
+       QUOTE
+    ----------------------------------------------------- */
+
+    quote: {
+      ...DEFAULT_BRAND_STORY.quote,
+      ...(saved.quote || {}),
+
+      authorName:
+        saved.quote?.authorName ??
+        saved.quote?.author ??
+        DEFAULT_BRAND_STORY.quote.authorName,
+
+      authorRole:
+        saved.quote?.authorRole ??
+        saved.quote?.role ??
+        DEFAULT_BRAND_STORY.quote.authorRole,
+    },
+
+    /* -----------------------------------------------------
+       CTA
+    ----------------------------------------------------- */
+
+    cta: {
+      ...DEFAULT_BRAND_STORY.cta,
+      ...(saved.cta || {}),
+
+      primaryLabel:
+        saved.cta?.primaryLabel ??
+        saved.cta?.primaryText ??
+        DEFAULT_BRAND_STORY.cta.primaryLabel,
+
+      primaryLink:
+        saved.cta?.primaryLink ??
+        DEFAULT_BRAND_STORY.cta.primaryLink,
+
+      secondaryLabel:
+        saved.cta?.secondaryLabel ??
+        saved.cta?.secondaryText ??
+        DEFAULT_BRAND_STORY.cta.secondaryLabel,
+
+      secondaryLink:
+        saved.cta?.secondaryLink ??
+        DEFAULT_BRAND_STORY.cta.secondaryLink,
+    },
+  };
+}
+
+/* =========================================================
+   CONTACT PAGE MERGE
+========================================================= */
+
+function mergeContactPage(savedContactPage) {
+  const saved =
+    savedContactPage &&
+    typeof savedContactPage === 'object'
+      ? savedContactPage
+      : {};
+
+  return {
+    ...DEFAULT_CONTACT_PAGE,
+    ...saved,
+
+    /* HERO */
+
+    hero: {
+      ...DEFAULT_CONTACT_PAGE.hero,
+      ...(saved.hero || {}),
+    },
+
+    /* GALLERY */
+
+    gallery: {
+      ...DEFAULT_CONTACT_PAGE.gallery,
+      ...(saved.gallery || {}),
+    },
+
+    /* QUICK CARDS */
+
+    quickCards: {
+      ...DEFAULT_CONTACT_PAGE.quickCards,
+      ...(saved.quickCards || {}),
+
+      address: {
+        ...DEFAULT_CONTACT_PAGE.quickCards.address,
+        ...(saved.quickCards?.address || {}),
+      },
+
+      hours: {
+        ...DEFAULT_CONTACT_PAGE.quickCards.hours,
+        ...(saved.quickCards?.hours || {}),
+
+        rows: getArrayOrDefault(
+          saved.quickCards?.hours?.rows,
+          DEFAULT_CONTACT_PAGE.quickCards.hours.rows
+        ),
+      },
+
+      phone: {
+        ...DEFAULT_CONTACT_PAGE.quickCards.phone,
+        ...(saved.quickCards?.phone || {}),
+      },
+
+      whatsapp: {
+        ...DEFAULT_CONTACT_PAGE.quickCards.whatsapp,
+        ...(saved.quickCards?.whatsapp || {}),
+      },
+    },
+
+    /* MAIN FORM */
+
+    mainForm: {
+      ...DEFAULT_CONTACT_PAGE.mainForm,
+      ...(saved.mainForm || {}),
+
+      fields: {
+        ...DEFAULT_CONTACT_PAGE.mainForm.fields,
+        ...(saved.mainForm?.fields || {}),
+      },
+
+      subjects: getArrayOrDefault(
+        saved.mainForm?.subjects,
+        DEFAULT_CONTACT_PAGE.mainForm.subjects
+      ),
+
+      channels: getArrayOrDefault(
+        saved.mainForm?.channels,
+        DEFAULT_CONTACT_PAGE.mainForm.channels
+      ),
+
+      messages: {
+        ...DEFAULT_CONTACT_PAGE.mainForm.messages,
+        ...(saved.mainForm?.messages || {}),
+      },
+    },
+
+    /* VIP */
+
+    vip: {
+      ...DEFAULT_CONTACT_PAGE.vip,
+      ...(saved.vip || {}),
+
+      fields: {
+        ...DEFAULT_CONTACT_PAGE.vip.fields,
+        ...(saved.vip?.fields || {}),
+      },
+
+      timeSlots: getArrayOrDefault(
+        saved.vip?.timeSlots,
+        DEFAULT_CONTACT_PAGE.vip.timeSlots
+      ),
+
+      interests: getArrayOrDefault(
+        saved.vip?.interests,
+        DEFAULT_CONTACT_PAGE.vip.interests
+      ),
+
+      successMessage: {
+        ...DEFAULT_CONTACT_PAGE.vip.successMessage,
+        ...(saved.vip?.successMessage || {}),
+      },
+    },
+
+    /* LOCATION */
+
+    location: {
+      ...DEFAULT_CONTACT_PAGE.location,
+      ...(saved.location || {}),
+
+      accessFeatures: getArrayOrDefault(
+        saved.location?.accessFeatures,
+        DEFAULT_CONTACT_PAGE.location.accessFeatures
+      ),
+    },
+
+    /* SOCIAL */
+
+    social: {
+      ...DEFAULT_CONTACT_PAGE.social,
+      ...(saved.social || {}),
+
+      benefits: getArrayOrDefault(
+        saved.social?.benefits,
+        DEFAULT_CONTACT_PAGE.social.benefits
+      ),
+    },
+
+    /* FAQ */
+
+    faq: {
+      ...DEFAULT_CONTACT_PAGE.faq,
+      ...(saved.faq || {}),
+
+      items: getArrayOrDefault(
+        saved.faq?.items,
+        DEFAULT_CONTACT_PAGE.faq.items
+      ),
+    },
+  };
+}
+
+/* =========================================================
+   MERGE SETTINGS
 ========================================================= */
 
 function mergeSettings(saved) {
@@ -556,175 +1075,13 @@ function mergeSettings(saved) {
     ...DEFAULT_SITE_SETTINGS,
     ...saved,
 
-    /* =====================================================
-       BRAND STORY
-    ===================================================== */
+    brandStory: mergeBrandStory(
+      saved.brandStory
+    ),
 
-    brandStory: {
-      ...DEFAULT_BRAND_STORY,
-      ...(saved.brandStory || {}),
-
-      hero: {
-        ...DEFAULT_BRAND_STORY.hero,
-        ...(saved.brandStory?.hero || {}),
-      },
-
-      values: {
-        ...DEFAULT_BRAND_STORY.values,
-        ...(saved.brandStory?.values || {}),
-      },
-
-      timeline: {
-        ...DEFAULT_BRAND_STORY.timeline,
-        ...(saved.brandStory?.timeline || {}),
-      },
-
-      craft: {
-        ...DEFAULT_BRAND_STORY.craft,
-        ...(saved.brandStory?.craft || {}),
-      },
-
-      quote: {
-        ...DEFAULT_BRAND_STORY.quote,
-        ...(saved.brandStory?.quote || {}),
-      },
-
-      cta: {
-        ...DEFAULT_BRAND_STORY.cta,
-        ...(saved.brandStory?.cta || {}),
-      },
-
-      stats: Array.isArray(saved.brandStory?.stats)
-        ? saved.brandStory.stats
-        : DEFAULT_BRAND_STORY.stats,
-
-      coreValues: Array.isArray(saved.brandStory?.coreValues)
-        ? saved.brandStory.coreValues
-        : DEFAULT_BRAND_STORY.coreValues,
-
-      timelineEvents: Array.isArray(saved.brandStory?.timelineEvents)
-        ? saved.brandStory.timelineEvents
-        : DEFAULT_BRAND_STORY.timelineEvents,
-
-      craftSteps: Array.isArray(saved.brandStory?.craftSteps)
-        ? saved.brandStory.craftSteps
-        : DEFAULT_BRAND_STORY.craftSteps,
-    },
-
-    /* =====================================================
-       CONTACT PAGE
-    ===================================================== */
-
-    contactPage: {
-      ...DEFAULT_CONTACT_PAGE,
-      ...(saved.contactPage || {}),
-
-      hero: {
-        ...DEFAULT_CONTACT_PAGE.hero,
-        ...(saved.contactPage?.hero || {}),
-      },
-
-      gallery: {
-        ...DEFAULT_CONTACT_PAGE.gallery,
-        ...(saved.contactPage?.gallery || {}),
-      },
-
-      quickCards: {
-        ...DEFAULT_CONTACT_PAGE.quickCards,
-        ...(saved.contactPage?.quickCards || {}),
-
-        address: {
-          ...DEFAULT_CONTACT_PAGE.quickCards.address,
-          ...(saved.contactPage?.quickCards?.address || {}),
-        },
-
-        hours: {
-          ...DEFAULT_CONTACT_PAGE.quickCards.hours,
-          ...(saved.contactPage?.quickCards?.hours || {}),
-
-          rows: Array.isArray(
-            saved.contactPage?.quickCards?.hours?.rows
-          )
-            ? saved.contactPage.quickCards.hours.rows
-            : DEFAULT_CONTACT_PAGE.quickCards.hours.rows,
-        },
-
-        phone: {
-          ...DEFAULT_CONTACT_PAGE.quickCards.phone,
-          ...(saved.contactPage?.quickCards?.phone || {}),
-        },
-
-        whatsapp: {
-          ...DEFAULT_CONTACT_PAGE.quickCards.whatsapp,
-          ...(saved.contactPage?.quickCards?.whatsapp || {}),
-        },
-      },
-
-      mainForm: {
-        ...DEFAULT_CONTACT_PAGE.mainForm,
-        ...(saved.contactPage?.mainForm || {}),
-
-        fields: {
-          ...DEFAULT_CONTACT_PAGE.mainForm.fields,
-          ...(saved.contactPage?.mainForm?.fields || {}),
-        },
-
-        subjects: Array.isArray(saved.contactPage?.mainForm?.subjects)
-          ? saved.contactPage.mainForm.subjects
-          : DEFAULT_CONTACT_PAGE.mainForm.subjects,
-
-        channels: Array.isArray(saved.contactPage?.mainForm?.channels)
-          ? saved.contactPage.mainForm.channels
-          : DEFAULT_CONTACT_PAGE.mainForm.channels,
-      },
-
-      vip: {
-        ...DEFAULT_CONTACT_PAGE.vip,
-        ...(saved.contactPage?.vip || {}),
-
-        fields: {
-          ...DEFAULT_CONTACT_PAGE.vip.fields,
-          ...(saved.contactPage?.vip?.fields || {}),
-        },
-
-        timeSlots: Array.isArray(saved.contactPage?.vip?.timeSlots)
-          ? saved.contactPage.vip.timeSlots
-          : DEFAULT_CONTACT_PAGE.vip.timeSlots,
-
-        interests: Array.isArray(saved.contactPage?.vip?.interests)
-          ? saved.contactPage.vip.interests
-          : DEFAULT_CONTACT_PAGE.vip.interests,
-      },
-
-      location: {
-        ...DEFAULT_CONTACT_PAGE.location,
-        ...(saved.contactPage?.location || {}),
-
-        accessFeatures: Array.isArray(
-          saved.contactPage?.location?.accessFeatures
-        )
-          ? saved.contactPage.location.accessFeatures
-          : DEFAULT_CONTACT_PAGE.location.accessFeatures,
-      },
-
-      social: {
-        ...DEFAULT_CONTACT_PAGE.social,
-        ...(saved.contactPage?.social || {}),
-
-        benefits: Array.isArray(saved.contactPage?.social?.benefits)
-          ? saved.contactPage.social.benefits
-          : DEFAULT_CONTACT_PAGE.social.benefits,
-      },
-
-      faq: {
-        ...DEFAULT_CONTACT_PAGE.faq,
-        ...(saved.contactPage?.faq || {}),
-
-        items: Array.isArray(saved.contactPage?.faq?.items)
-          ? saved.contactPage.faq.items
-          : DEFAULT_CONTACT_PAGE.faq.items,
-      },
-    },
+    contactPage: mergeContactPage(
+      saved.contactPage
+    ),
   };
 }
 
@@ -733,26 +1090,50 @@ function mergeSettings(saved) {
 ========================================================= */
 
 export function SiteSettingsProvider({ children }) {
-  const [settings, setSettings] = useState(DEFAULT_SITE_SETTINGS);
+  const [settings, setSettings] = useState(
+    DEFAULT_SITE_SETTINGS
+  );
+
   const [loading, setLoading] = useState(true);
+
+  /* =======================================================
+     LOAD FROM LOCAL STORAGE
+  ======================================================= */
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(
+        STORAGE_KEY
+      );
 
       if (saved) {
         const parsed = JSON.parse(saved);
-        setSettings(mergeSettings(parsed));
+
+        setSettings(
+          mergeSettings(parsed)
+        );
       } else {
-        setSettings(DEFAULT_SITE_SETTINGS);
+        setSettings(
+          DEFAULT_SITE_SETTINGS
+        );
       }
     } catch (error) {
-      console.error('خطا در خواندن تنظیمات سایت:', error);
-      setSettings(DEFAULT_SITE_SETTINGS);
+      console.error(
+        'خطا در خواندن تنظیمات سایت:',
+        error
+      );
+
+      setSettings(
+        DEFAULT_SITE_SETTINGS
+      );
     } finally {
       setLoading(false);
     }
   }, []);
+
+  /* =======================================================
+     UPDATE SETTINGS
+  ======================================================= */
 
   const updateSettings = (updates) => {
     setSettings((prev) => {
@@ -761,16 +1142,46 @@ export function SiteSettingsProvider({ children }) {
         ...updates,
       });
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(next)
+        );
+      } catch (error) {
+        console.error(
+          'خطا در ذخیره تنظیمات سایت:',
+          error
+        );
+      }
 
       return next;
     });
   };
 
+  /* =======================================================
+     RESET SETTINGS
+  ======================================================= */
+
   const resetSettings = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setSettings(DEFAULT_SITE_SETTINGS);
+    try {
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+    } catch (error) {
+      console.error(
+        'خطا در حذف تنظیمات سایت:',
+        error
+      );
+    }
+
+    setSettings(
+      DEFAULT_SITE_SETTINGS
+    );
   };
+
+  /* =======================================================
+     CONTEXT VALUE
+  ======================================================= */
 
   const value = useMemo(
     () => ({
@@ -779,11 +1190,20 @@ export function SiteSettingsProvider({ children }) {
       updateSettings,
       resetSettings,
     }),
-    [settings, loading]
+    [
+      settings,
+      loading,
+    ]
   );
 
+  /* =======================================================
+     PROVIDER
+  ======================================================= */
+
   return (
-    <SiteSettingsContext.Provider value={value}>
+    <SiteSettingsContext.Provider
+      value={value}
+    >
       {children}
     </SiteSettingsContext.Provider>
   );
@@ -794,7 +1214,9 @@ export function SiteSettingsProvider({ children }) {
 ========================================================= */
 
 export function useSiteSettings() {
-  const context = useContext(SiteSettingsContext);
+  const context = useContext(
+    SiteSettingsContext
+  );
 
   if (!context) {
     throw new Error(

@@ -341,7 +341,7 @@ export const COLLECTION_SEED = [
     ],
     installmentPrice: '۵۶,۲۵۰,۰۰۰',
   },
-,
+
   {
     id: 'earring-1',
     name: 'گوشواره حلقه‌ای برلیان سلطنتی',

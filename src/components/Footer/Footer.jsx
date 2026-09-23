@@ -30,7 +30,6 @@ export const Footer = () => {
           {/* Column 1: Brand Essence */}
           <div className={styles.brandCol}>
             <Link to="/" className={styles.logo}>
-              <span className={styles.logoIcon}>💎</span>
               <span className={styles.logoText}>Luxury Jewel</span>
             </Link>
 
@@ -145,10 +144,7 @@ export const Footer = () => {
                 <Clock size={18} className={styles.contactIcon} />
                 <span>۱۰:۰۰ الی ۲۱:۰۰ (پذیرش حضوری)</span>
               </div>
-              <div className={styles.contactRow}>
-                <Mail size={18} className={styles.contactIcon} />
-                <span>{settings.contactEmail}</span>
-              </div>
+
             </div>
           </div>
         </div>

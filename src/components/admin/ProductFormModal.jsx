@@ -45,6 +45,7 @@ const toForm = (p) => ({
   details: p?.details || '',
   active: p?.active !== false,
   featured: Boolean(p?.featured),
+  discounted: Boolean(p?.discounted),
   customImage: Boolean(p?.customImage),
   gemType: p?.extra?.gemType || '',
   weightGold: p?.extra?.weightGold || '',
@@ -142,6 +143,7 @@ export default function ProductFormModal({ product, onClose }) {
       details: form.details.trim(),
       active: form.active,
       featured: form.featured,
+      discounted: form.discounted,
       customImage: form.customImage,
       extra: {
         ...(product?.extra || {}),
@@ -743,6 +745,15 @@ export default function ProductFormModal({ product, onClose }) {
                 <Star size={15} />
                 <span>محصول ویژه</span>
               </label>
+          <label className={styles.toggle}>
+            <input
+              type="checkbox"
+              checked={form.discounted}
+              onChange={set('discounted')}
+            />
+            <Sparkles size={15} />
+            <span>نمایش در تخفیف‌های ویژه</span>
+          </label>
             </div>
           </section>
 

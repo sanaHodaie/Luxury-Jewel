@@ -108,15 +108,19 @@ export const toCollectionShape = (p) => {
   };
 };
 
-/** Section selectors — only products that are switched on in the panel. */
 export const selectFeatured = (products) => {
   if (!Array.isArray(products)) return [];
+
   const filtered = products.filter((p) => {
     if (!p) return false;
-    return p.section === 'featured';
+    return p.featured === true;
   });
+
   const active = activeOnly(filtered);
-  return active.map(toFeaturedShape).filter(Boolean);
+
+  return active
+    .map(toFeaturedShape)
+    .filter(Boolean);
 };
 
 export const selectLuxury = (products) => {
@@ -133,7 +137,7 @@ export const selectDiscount = (products) => {
   if (!Array.isArray(products)) return [];
   const filtered = products.filter((p) => {
     if (!p) return false;
-    return p.section === 'discount';
+    return p.discounted === true;
   });
   const active = activeOnly(filtered);
   return active.map(toDiscountShape).filter(Boolean);

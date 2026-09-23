@@ -18,10 +18,13 @@ import {
   Layers,
   MapPin,
   MessageSquareQuote,
-  CheckCheck
+  CheckCheck,
 } from 'lucide-react';
 import styles from './BrandStoryPage.module.css';
-import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import {
+  useSiteSettings,
+  DEFAULT_BRAND_STORY,
+} from '../contexts/SiteSettingsContext';
 
 export const BrandStoryPage = () => {
   const { settings } = useSiteSettings();
@@ -33,7 +36,7 @@ export const BrandStoryPage = () => {
    * =========================================================
    */
 
-  const brandStory = settings?.brandStory || {};
+  const brandStory = settings?.brandStory || DEFAULT_BRAND_STORY;
 
   /*
    * =========================================================
@@ -253,27 +256,32 @@ export const BrandStoryPage = () => {
    * =========================================================
    * HERO DATA
    * =========================================================
+   *
+   * ساختار واقعی Context:
+   *
+   * brandStory.hero
+   * brandStory.stats
    */
 
-  const hero = brandStory.hero || {};
+  const hero = brandStory.hero || DEFAULT_BRAND_STORY.hero || {};
 
   const heroBadge =
     hero.badge || 'اصالت، هنر و درخشش بیش از ۳ دهه';
 
   const heroTitle =
-    hero.title || settings.aboutTitle || 'ما در تلاشیم';
+    hero.title || settings?.aboutTitle || 'ما در تلاشیم';
 
   const heroTitleHighlight =
     hero.titleHighlight || 'به خلق شاهکار';
 
   const heroSubtitle =
-    hero.subtitle ||
-    settings.aboutDescription ||
+    hero.description ||
+    settings?.aboutDescription ||
     '';
 
   const heroStats =
-    Array.isArray(hero.stats) && hero.stats.length > 0
-      ? hero.stats
+    Array.isArray(brandStory.stats) && brandStory.stats.length > 0
+      ? brandStory.stats
       : [
           {
             value: '۳۵+',
@@ -293,12 +301,17 @@ export const BrandStoryPage = () => {
    * =========================================================
    * VALUES HEADER
    * =========================================================
+   *
+   * ساختار واقعی Context:
+   *
+   * brandStory.values
    */
 
-  const valuesHeader = brandStory.valuesHeader || {};
+  const valuesHeader =
+    brandStory.values || DEFAULT_BRAND_STORY.values || {};
 
   const valuesSubTag =
-    valuesHeader.subTag ||
+    valuesHeader.tag ||
     'ارزش‌ها و استانداردهای ژوئل';
 
   const valuesTitle =
@@ -321,12 +334,19 @@ export const BrandStoryPage = () => {
    * =========================================================
    * TIMELINE HEADER
    * =========================================================
+   *
+   * ساختار واقعی Context:
+   *
+   * brandStory.timeline
    */
 
-  const timelineHeader = brandStory.timelineHeader || {};
+  const timelineHeader =
+    brandStory.timeline ||
+    DEFAULT_BRAND_STORY.timeline ||
+    {};
 
   const timelineBadge =
-    timelineHeader.badge ||
+    timelineHeader.tag ||
     'گاه‌شمار پیام‌های تاریخی برند';
 
   const timelineTitle =
@@ -345,12 +365,19 @@ export const BrandStoryPage = () => {
    * =========================================================
    * CRAFT HEADER
    * =========================================================
+   *
+   * ساختار واقعی Context:
+   *
+   * brandStory.craft
    */
 
-  const craftHeader = brandStory.craftHeader || {};
+  const craftHeader =
+    brandStory.craft ||
+    DEFAULT_BRAND_STORY.craft ||
+    {};
 
   const craftSubTag =
-    craftHeader.subTag ||
+    craftHeader.tag ||
     'فرآیند خلق اثر';
 
   const craftTitle =
@@ -375,20 +402,23 @@ export const BrandStoryPage = () => {
    * =========================================================
    */
 
-  const quote = brandStory.quote || {};
+  const quote =
+    brandStory.quote ||
+    DEFAULT_BRAND_STORY.quote ||
+    {};
 
   const quoteText =
     quote.text ||
     'ما طلا را نمی‌فروشیم؛ ما لبخندهای ماندگار، احساسات عمیق و نمادهای جاودانه‌ی عشق را مجسم می‌کنیم. هر زمان که قطعه‌ای از ژوئل بر دست یا گردن شما می‌نشیند، افتخار زرگری اصیل ایرانی با شما همراه است.';
 
   const quoteAuthor =
-    quote.authorName ||
     quote.author ||
+    quote.authorName ||
     'استاد عباس ژوئل';
 
   const quoteRole =
-    quote.authorRole ||
     quote.role ||
+    quote.authorRole ||
     'بنیان‌گذار و استادکار ارشد گالری ژوئل';
 
   /*
@@ -397,7 +427,10 @@ export const BrandStoryPage = () => {
    * =========================================================
    */
 
-  const cta = brandStory.cta || {};
+  const cta =
+    brandStory.cta ||
+    DEFAULT_BRAND_STORY.cta ||
+    {};
 
   const ctaTitle =
     cta.title ||
@@ -408,8 +441,8 @@ export const BrandStoryPage = () => {
     'کالکشن‌های فاخر طلا، برلیان و گوهرسنگ‌های نایاب ما را مشاهده کنید یا همین امروز وقت مشاوره اختصاصی رزرو نمایید.';
 
   const ctaPrimaryLabel =
-    cta.primaryLabel ||
     cta.primaryText ||
+    cta.primaryLabel ||
     'مشاهده کالکشن‌های جواهرات';
 
   const ctaPrimaryLink =
@@ -417,8 +450,8 @@ export const BrandStoryPage = () => {
     '/';
 
   const ctaSecondaryLabel =
-    cta.secondaryLabel ||
     cta.secondaryText ||
+    cta.secondaryLabel ||
     'بازدید از گالری فرشته';
 
   const ctaSecondaryLink =
@@ -443,8 +476,13 @@ export const BrandStoryPage = () => {
             <Link to="/" className={styles.breadcrumbLink}>
               خانه
             </Link>
-            <ChevronLeft size={14} className={styles.breadcrumbSeparator} />
-            <span className={styles.breadcrumbActive}>داستان برند ما</span>
+            <ChevronLeft
+              size={14}
+              className={styles.breadcrumbSeparator}
+            />
+            <span className={styles.breadcrumbActive}>
+              داستان برند ما
+            </span>
           </nav>
 
           <motion.div
@@ -454,7 +492,10 @@ export const BrandStoryPage = () => {
             className={styles.heroContent}
           >
             <div className={styles.badgeGroup}>
-              <Sparkles size={16} className={styles.sparkleIcon} />
+              <Sparkles
+                size={16}
+                className={styles.sparkleIcon}
+              />
               <span>{heroBadge}</span>
             </div>
 
@@ -476,6 +517,7 @@ export const BrandStoryPage = () => {
                     <span className={styles.statNum}>
                       {stat.value || stat.number}
                     </span>
+
                     <span className={styles.statLabel}>
                       {stat.label}
                     </span>
@@ -519,7 +561,10 @@ export const BrandStoryPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
+                transition={{
+                  duration: 0.45,
+                  delay: idx * 0.1,
+                }}
                 className={styles.valueCard}
               >
                 <div className={styles.valueIconFrame}>
@@ -800,13 +845,9 @@ export const BrandStoryPage = () => {
                 style={{ color: 'var(--accent)' }}
               />
 
-              <h2>
-                {ctaTitle}
-              </h2>
+              <h2>{ctaTitle}</h2>
 
-              <p>
-                {ctaDescription}
-              </p>
+              <p>{ctaDescription}</p>
             </div>
 
             <div className={styles.ctaActions}>
@@ -814,9 +855,7 @@ export const BrandStoryPage = () => {
                 to={ctaPrimaryLink}
                 className={styles.primaryCtaBtn}
               >
-                <span>
-                  {ctaPrimaryLabel}
-                </span>
+                <span>{ctaPrimaryLabel}</span>
 
                 <ArrowRight size={18} />
               </Link>
@@ -827,9 +866,7 @@ export const BrandStoryPage = () => {
               >
                 <MapPin size={18} />
 
-                <span>
-                  {ctaSecondaryLabel}
-                </span>
+                <span>{ctaSecondaryLabel}</span>
               </a>
             </div>
           </div>

@@ -1,3 +1,6 @@
+/* فونت شکسته و لوکس انگلیسی */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@1,600;1,700&family=Cormorant+Garamond:ital,wght@1,600&display=swap');
+
 .header {
   position: fixed;
   top: 0;
@@ -27,45 +30,55 @@
   position: relative;
 }
 
+/* --- LOGO STYLES --- */
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--text-primary);
-  font-family: 'Playfair Display', 'Vazirmatn', serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  transition: var(--transition);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   flex-shrink: 0;
   min-width: 0;
 }
 
-.logoIcon {
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: floatDiamond 3s ease-in-out infinite;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-@keyframes floatDiamond {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+.logo:hover {
+  transform: scale(1.04);
 }
 
 .logoText {
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
+  font-family:'Cormorant Garamond', cursive, serif,'Great Vibes',  'Playfair Display' ;
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  padding-top: 4px;
+  padding-bottom: 6px;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fff9e6 25%,
+    #f5e6a8 55%,
+    #d4af37 85%,
+    #aa7c11 100%
+  );
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35))
+          drop-shadow(0 0 12px rgba(212, 175, 55, 0.15));
   white-space: nowrap;
   display: inline-block;
+  transition: filter 0.35s ease;
 }
 
+.logo:hover .logoText {
+  filter: drop-shadow(0 3px 14px rgba(212, 175, 55, 0.55))
+          drop-shadow(0 0 20px rgba(255, 255, 255, 0.25));
+}
+
+/* --- DESKTOP NAV --- */
 .navLinks {
   display: flex;
   align-items: center;
@@ -88,6 +101,26 @@
   gap: 4px;
 }
 
+.navLink:hover {
+  color: var(--accent);
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
 .hasDropdownWrapper {
   position: relative;
 }
@@ -102,6 +135,7 @@
   color: var(--accent);
 }
 
+/* --- DROPDOWN --- */
 .dropdownMenu {
   position: absolute;
   top: calc(100% + 12px);
@@ -192,26 +226,7 @@
   color: var(--accent);
 }
 
-.navLink:hover {
-  color: var(--accent);
-}
-
-.navLink::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0%;
-  height: 2px;
-  background-color: var(--accent);
-  transition: width 0.3s ease;
-  border-radius: 2px;
-}
-
-.navLink:hover::after {
-  width: 100%;
-}
-
+/* --- RIGHT ACTIONS --- */
 .rightActions {
   display: flex;
   align-items: center;
@@ -307,6 +322,7 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
+/* --- MODAL --- */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -371,7 +387,6 @@
   background: var(--accent-dark, #b38f2a);
 }
 
-/* Inner Cart List Scrollbar when > 4 items */
 .cartListScrollable {
   display: flex;
   flex-direction: column;
@@ -617,23 +632,7 @@
   text-align: center;
 }
 
-@media (max-width: 768px) {
-  .qtyBtn {
-    display: none !important;
-  }
-  .qtyWrapper {
-    padding: 4px 10px;
-    background: var(--bg-secondary);
-    border-radius: 8px;
-  }
-  .cartActionsContainer {
-    flex-direction: column;
-  }
-  .invoiceBtn, .payActionBtn {
-    width: 100%;
-  }
-}
-
+/* --- MOBILE MENU --- */
 .mobileMenuBtn {
   display: none;
   background: none;
@@ -684,6 +683,7 @@
   color: var(--accent);
 }
 
+/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
   .navLinks {
     display: none;
@@ -723,7 +723,6 @@
   }
 
   .logo {
-    font-size: 16px;
     gap: 6px;
     direction: rtl;
     white-space: nowrap;
@@ -731,31 +730,26 @@
   }
 
   .logoText {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--accent);
-    background: none;
-    -webkit-text-fill-color: var(--accent);
+    font-family: 'Great Vibes', 'Cormorant Garamond', cursive, serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    background: linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #fff9e6 30%,
+      #f5e6a8 60%,
+      #d4af37 90%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
     white-space: nowrap;
     display: inline-block;
-  }
-
-  .logoIcon {
-    font-size: 18px;
-    flex-shrink: 0;
-    display: inline-block;
-  }
-
-  @media (max-width: 360px) {
-    .logo {
-      gap: 4px;
-    }
-    .logoText {
-      font-size: 14px;
-    }
-    .logoIcon {
-      font-size: 16px;
-    }
   }
 
   .rightActions {
@@ -802,5 +796,39 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 999;
+  }
+
+  .qtyBtn {
+    display: none !important;
+  }
+
+  .qtyWrapper {
+    padding: 4px 10px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+  }
+
+  .cartActionsContainer {
+    flex-direction: column;
+  }
+
+  .invoiceBtn, .payActionBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoText {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .logo {
+    gap: 4px;
+  }
+
+  .logoText {
+    font-size: 1.25rem;
   }
 }

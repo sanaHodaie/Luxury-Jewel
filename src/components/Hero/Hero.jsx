@@ -19,8 +19,8 @@ export const Hero = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <div className={styles.badge}>
-            <Sparkles size={16} style={{ color: 'var(--accent)' }} />
-            <span>✨ جدیدترین مجموعه ۲۰۲۶</span>
+           
+            <span> جدیدترین مجموعه ۲۰۲۶</span>
           </div>
 
           <h1 className={styles.title}>

@@ -199,10 +199,12 @@ export const SpecialDiscounts = () => {
                         </strong>
                       </div>
                       <div className={styles.stockTrack}>
-                        <div
-                          className={styles.stockFill}
-                          style={{ width: `${(product.stockLeft / product.totalStock) * 100}%` }}
-                        />
+                       <div
+  className={styles.stockFill}
+  style={{
+    width: `${Math.max(10, 100 - product.stockLeft * 4)}%`,
+  }}
+                      />
                       </div>
                     </div>
 

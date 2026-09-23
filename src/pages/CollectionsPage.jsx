@@ -322,7 +322,6 @@ export default function CollectionsPage() {
             transition={animVariants.fromTop.transition}
           >
             <div className={styles.heroBadge}>
-              <Sparkles size={16} />
               <span>شاهکارهای ماندگار - گالری فرشته</span>
             </div>
             <h1 className={styles.heroTitle}>

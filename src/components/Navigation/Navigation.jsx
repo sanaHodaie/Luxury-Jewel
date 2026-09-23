@@ -90,9 +90,9 @@ export const Navigation = () => {
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolledHeader : ''}`}>
         <div className={styles.navContainer}>
+    
           {/* Logo */}
           <Link to="/" className={styles.logo}>
-            <span className={styles.logoIcon}>💎</span>
             <span className={styles.logoText}>Luxury Jewel</span>
           </Link>
 

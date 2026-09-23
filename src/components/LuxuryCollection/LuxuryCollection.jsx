@@ -184,7 +184,6 @@ export const LuxuryCollection = () => {
           transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
         >
           <div className={styles.subtitleBadge}>
-            <Crown size={15} />
             <span>قطعات نایاب و فاخر</span>
           </div>
           <h2 className={styles.title}>کالکشن لوکس</h2>
@@ -193,7 +192,6 @@ export const LuxuryCollection = () => {
           </p>
         </motion.div>
 
-        {/* 🏷️ Controls Bar (دسته‌بندی، سرچ و سورت) */}
         <div className={styles.controlsBar}>
           <div className={styles.categoriesScroll}>
             {CATEGORIES.map((cat) => (
