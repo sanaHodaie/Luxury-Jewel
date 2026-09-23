@@ -1,76 +1,295 @@
+/* ============================================================
+   AdminLoginPage — Elegant White Card on Soft Violet Background
+   ============================================================ */
+
+/* =========================
+   Wrapper + Background
+========================= */
 .wrapper {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   overflow: hidden;
+  direction: rtl;
+  background: #faf9fd;
 }
 
+/* ---------- Layer 1: Base violet gradient ---------- */
+.bgBase {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    #faf9ff 0%,
+    #f3efff 35%,
+    #ebe4ff 65%,
+    #f5f0ff 100%
+  );
+  z-index: 0;
+}
+
+/* ---------- Layer 2: Big violet glow (top-right) ---------- */
+.bgGlow1 {
+  position: absolute;
+  top: -25%;
+  right: -15%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.28) 0%,
+    rgba(168, 85, 247, 0.12) 40%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 14s ease-in-out infinite;
+}
+
+/* ---------- Layer 3: Violet-pink glow (bottom-left) ---------- */
+.bgGlow2 {
+  position: absolute;
+  bottom: -30%;
+  left: -15%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 720px;
+  max-height: 720px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.24) 0%,
+    rgba(236, 72, 153, 0.1) 40%,
+    transparent 70%
+  );
+  filter: blur(70px);
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 16s ease-in-out infinite reverse;
+}
+
+/* ---------- Layer 4: Soft indigo glow (center) ---------- */
+.bgGlow3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 45vw;
+  height: 45vw;
+  max-width: 600px;
+  max-height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.14) 0%,
+    transparent 65%
+  );
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- Layer 5: Dot pattern (masked) ---------- */
+.bgPattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(139, 92, 246, 0.14) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 40%,
+    transparent 80%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 40%,
+    transparent 80%
+  );
+}
+
+/* ---------- Layer 6: Vignette (focus on card) ---------- */
+.bgVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 25%,
+    rgba(76, 29, 149, 0.06) 70%,
+    rgba(76, 29, 149, 0.12) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- Float animation ---------- */
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -25px) scale(1.08);
+  }
+}
+
+/* =========================
+   Card — White & Elegant
+========================= */
 .card {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
+  padding: 40px 32px 32px;
 
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
+  background: #ffffff;
+  border: 1px solid rgba(139, 92, 246, 0.12);
   border-radius: 24px;
-  box-shadow: var(--shadow);
 
-  padding: 44px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  box-shadow:
+    0 30px 80px rgba(76, 29, 149, 0.22),
+    0 12px 32px rgba(76, 29, 149, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+
+  overflow: hidden;
 }
 
+/* ✅ Top gradient accent line */
+.topAccent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #6366f1 0%,
+    #a855f7 50%,
+    #ec4899 100%
+  );
+  border-radius: 24px 24px 0 0;
+  z-index: 2;
+}
+
+/* =========================
+   Icon Badge
+========================= */
 .iconBadge {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--gold-accent));
-  color: #fff;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.15),
+    rgba(168, 85, 247, 0.1)
+  );
+  color: #6d28d9;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+
+  margin-bottom: 18px;
+  box-shadow:
+    0 8px 22px rgba(139, 92, 246, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  position: relative;
+  z-index: 1;
 }
 
+/* =========================
+   Title & Subtitle
+========================= */
 .title {
-  font-size: 1.4rem;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 6px;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
 }
 
 .subtitle {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-bottom: 28px;
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0 0 26px;
+  font-weight: 500;
+  line-height: 1.6;
 }
 
+/* =========================
+   Label
+========================= */
 .label {
   align-self: flex-start;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #374151;
   margin-bottom: 8px;
 }
 
+/* =========================
+   Input Row — Clean & Clear
+========================= */
 .inputRow {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid var(--glass-border);
+  gap: 10px;
+
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
   border-radius: 14px;
-  padding: 11px 14px;
-  background: var(--bg-secondary);
+  padding: 0 14px;
+  min-height: 48px;
+
+  background: #faf9fd;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.inputRow:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: #ffffff;
+}
+
+.inputRow:focus-within {
+  border-color: rgba(139, 92, 246, 0.7);
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(139, 92, 246, 0.12),
+    0 4px 12px rgba(139, 92, 246, 0.1);
+  transform: translateY(-1px);
 }
 
 .inputIcon {
-  color: var(--text-secondary);
+  color: #6d28d9;
   flex-shrink: 0;
 }
 
@@ -79,50 +298,222 @@
   border: none;
   background: transparent;
   outline: none;
+
   font-size: 0.95rem;
-  color: var(--text-primary);
+  color: #1f2937;
   font-family: inherit;
   text-align: right;
+
+  padding: 12px 0;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: #9ca3af;
 }
 
 .toggleBtn {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: #6b7280;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
+.toggleBtn:hover {
+  color: #6d28d9;
+  background: rgba(139, 92, 246, 0.1);
+}
+
+/* =========================
+   Error
+========================= */
 .error {
   width: 100%;
-  text-align: right;
-  color: #e05a5a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: #dc2626;
+
+  padding: 10px 12px;
+  border-radius: 10px;
   font-size: 0.8rem;
-  margin-top: 8px;
+  font-weight: 700;
+
+  margin-top: 12px;
+  text-align: right;
 }
 
+/* =========================
+   Submit Button
+========================= */
 .submitBtn {
   width: 100%;
   margin-top: 24px;
-  padding: 13px;
-  border-radius: 14px;
+  min-height: 48px;
+  padding: 0 24px;
+
   border: none;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #fff;
-  font-weight: 600;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1 0%,
+    #8b5cf6 50%,
+    #a855f7 100%
+  );
+  color: #ffffff;
+
+  font-family: inherit;
+  font-weight: 800;
   font-size: 0.95rem;
+  letter-spacing: 0.2px;
+
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 8px 22px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
 }
 
+.submitBtn:hover {
+  background: linear-gradient(
+    135deg,
+    #4f46e5 0%,
+    #7c3aed 50%,
+    #9333ea 100%
+  );
+  box-shadow:
+    0 12px 28px rgba(99, 102, 241, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   Back Link
+========================= */
 .backLink {
-  margin-top: 18px;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
+  margin-top: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
   text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.backLink::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+  transform-origin: right;
 }
 
 .backLink:hover {
-  color: var(--accent);
+  color: #6d28d9;
+}
+
+.backLink:hover::after {
+  transform: scaleX(1);
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 640px) {
+  .bgGlow1,
+  .bgGlow2 {
+    width: 90vw;
+    height: 90vw;
+    filter: blur(50px);
+  }
+
+  .bgGlow3 {
+    width: 80vw;
+    height: 80vw;
+  }
+
+  .bgPattern {
+    background-size: 22px 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 32px 22px 26px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .topAccent {
+    border-radius: 20px 20px 0 0;
+  }
+
+  .iconBadge {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    margin-bottom: 22px;
+  }
+
+  .inputRow {
+    min-height: 46px;
+    padding: 0 12px;
+  }
+
+  .submitBtn {
+    min-height: 46px;
+    margin-top: 20px;
+  }
+}
+
+/* =========================
+   Reduced Motion
+========================= */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .iconBadge,
+  .submitBtn,
+  .toggleBtn,
+  .backLink,
+  .bgGlow1,
+  .bgGlow2 {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
