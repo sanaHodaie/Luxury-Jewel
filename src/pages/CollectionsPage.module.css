@@ -901,7 +901,7 @@
 .listSpecItem {
   display: flex;
   align-items: center;
-  gap: 6px; /* Tight gap so no huge whitespace between label & value */
+  gap: 6px;
   font-size: 0.85rem;
 }
 
@@ -1219,7 +1219,7 @@
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 35px rgba(212, 175, 55, 0.15);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Clips scrollbar inside modal bounds perfectly */
+  overflow: hidden;
 }
 
 /* PROMINENT HIGH-CONTRAST CLOSE BUTTON */
@@ -1259,7 +1259,6 @@
   scrollbar-color: var(--accent) transparent;
 }
 
-/* Modal Image Frame with padding and rounded corners */
 .modalImgFrame {
   padding: 28px;
   background: var(--bg-secondary);
@@ -1548,14 +1547,147 @@
     grid-template-columns: 1fr;
   }
 
+  /* ==========================================
+     FIX: LIST VIEW ON MOBILE - NO OVERFLOW
+     ========================================== */
   .ringListItem {
     flex-direction: column;
     align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .listImgWrapper {
     width: 100%;
-    height: 220px;
+    height: 240px;
+    flex-shrink: 0;
+  }
+
+  .listContentBody {
+    width: 100%;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .listHeaderRow {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .listHeaderRow > div:first-child {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ringTitle {
+    font-size: 1.05rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .englishSubName {
+    font-size: 0.72rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .listBadgesRow {
+    width: 100%;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .cardBadge {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+
+  .stockUrgencyPill {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  /* Specs row - stack vertically on mobile */
+  .listSpecsRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .listSpecItem {
+    width: 100%;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+    word-break: break-word;
+  }
+
+  .specValue {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Footer row - stack price and actions */
+  .listFooterRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .priceWrapper {
+    width: 100%;
+    text-align: right;
+  }
+
+  .currentPrice {
+    font-size: 1.15rem;
+  }
+
+  /* Actions group - fix stretched heart icon */
+  .listActionsGroup {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .actionBtnList {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .listActionsGroup .quickDetailBtn {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    padding: 10px 8px;
+    font-size: 0.8rem;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  .listActionsGroup .addToCartBtn {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    padding: 10px 8px;
+    font-size: 0.8rem;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   .sizeStepsGrid {
@@ -1575,6 +1707,59 @@
 
   .modalDetails {
     padding: 24px;
+  }
+}
+
+/* Extra small screens - even tighter */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .ringListItem {
+    padding: 12px;
+    gap: 12px;
+    border-radius: 18px;
+  }
+
+  .listImgWrapper {
+    height: 200px;
+    border-radius: 16px;
+  }
+
+  .listActionsGroup {
+    flex-wrap: wrap;
+  }
+
+  .actionBtnList {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    flex-shrink: 0;
+  }
+
+  .listActionsGroup .quickDetailBtn {
+    flex: 1 1 calc(50% - 25px);
+    min-width: 0;
+    padding: 10px 8px;
+    font-size: 0.75rem;
+  }
+
+  .listActionsGroup .addToCartBtn {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 10px 8px;
+    font-size: 0.78rem;
+    order: 3;
+  }
+
+  .listSpecsRow {
+    padding: 10px;
+  }
+
+  .listSpecItem {
+    font-size: 0.75rem;
   }
 }
 
