@@ -1,6 +1,6 @@
 /* ============================================================
-   AdminLayout — Luxury White + Violet
-   Fully Responsive | RTL | Hamburger Drawer from Right
+   AdminLayout — Elegant & Minimal
+   Refined circular sidebar + Floating glass header
    ============================================================ */
 
 /* ---------- SHELL ---------- */
@@ -8,65 +8,86 @@
   display: flex;
   min-height: 100vh;
   min-height: 100dvh;
-  background: radial-gradient(circle at 10% 10%, #eee8ff 0, transparent 28%),
-              radial-gradient(circle at 90% 90%, #f2edff 0, transparent 30%),
-              #faf9fc;
-  color: var(--text-primary, #1e1b2e);
+  background: #f7f6fa;
+  color: #1e1b2e;
   direction: rtl;
+  position: relative;
 }
 
 /* ============================================================
-   SIDEBAR (دسکتاپ + Drawer موبایل — استایل مشترک)
+   SIDEBAR
    ============================================================ */
-.sidebar,
-.mobileSidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  width: 250px;
-  flex-shrink: 0;
-  padding: 1.4rem 1.1rem;
-  background: rgba(255, 255, 255, 0.68) !important;
-  backdrop-filter: blur(28px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
-  border-inline-start: 1px solid #e9e3f4 !important;
-  box-shadow: 0 0 45px rgba(101, 75, 160, 0.08) !important;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
 .sidebar {
+  width: 268px;
+  flex-shrink: 0;
+  padding: 20px 0 20px 20px;
   position: sticky;
   top: 0;
   height: 100vh;
   height: 100dvh;
+  z-index: 30;
+}
+
+.sidebarInner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.8rem 1.15rem;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #ece8f5;
+  box-shadow:
+    0 1px 2px rgba(76, 29, 149, 0.04),
+    0 12px 32px rgba(76, 29, 149, 0.06);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sidebarInner::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebarInner::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebarInner::-webkit-scrollbar-thumb {
+  background: #e5def7;
+  border-radius: 99px;
+}
+.sidebarInner::-webkit-scrollbar-thumb:hover {
+  background: #d0c2f0;
 }
 
 /* ============================================================
-   MOBILE SIDEBAR — Drawer از راست
+   MOBILE SIDEBAR
    ============================================================ */
 .mobileSidebar {
   position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  inset-inline-end: 0;
+  top: 12px;
+  bottom: 12px;
+  right: 12px;
   z-index: 1100;
-  width: min(300px, 85vw);
-  max-width: 320px;
-  box-shadow: -20px 0 50px rgba(101, 75, 160, 0.22);
-  padding-top: max(1.4rem, env(safe-area-inset-top));
-  padding-bottom: max(1.4rem, env(safe-area-inset-bottom));
+  width: min(290px, 84vw);
+  padding: 1.6rem 1.1rem;
+  background: #ffffff;
+  border-radius: 22px;
+  border: 1px solid #ece8f5;
+  box-shadow:
+    0 20px 60px rgba(76, 29, 149, 0.2),
+    0 4px 12px rgba(76, 29, 149, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-/* اسکرول‌بار نازک بنفش */
-.mobileSidebar::-webkit-scrollbar,
-.sidebar::-webkit-scrollbar {
+.mobileSidebar::-webkit-scrollbar {
   width: 4px;
 }
-.mobileSidebar::-webkit-scrollbar-thumb,
-.sidebar::-webkit-scrollbar-thumb {
-  background: #ded1fb;
+.mobileSidebar::-webkit-scrollbar-thumb {
+  background: #e5def7;
   border-radius: 99px;
 }
 
@@ -77,7 +98,7 @@
   position: fixed;
   inset: 0;
   z-index: 1090;
-  background: rgba(30, 20, 60, 0.42);
+  background: rgba(30, 20, 60, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -89,6 +110,8 @@
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  padding: 0.5rem 0.5rem 1.2rem;
+  border-bottom: 1px solid #f0ecf7;
   flex-shrink: 0;
 }
 
@@ -98,24 +121,38 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--accent, #8d63ff) 16%, transparent);
-  color: var(--accent-dark, #5e3fa5);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4c1d95, #6d28d9);
+  color: #ffffff;
   flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(76, 29, 149, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.brand:hover .brandIcon {
+  transform: rotate(-5deg) scale(1.04);
+}
+
+.brandText {
+  min-width: 0;
+  flex: 1;
 }
 
 .brandName {
   font-family: 'Playfair Display', serif;
   font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.4px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
   line-height: 1.2;
+  color: #2a1d4a;
+  margin: 0;
 }
 
 .brandSub {
-  font-size: 0.72rem;
-  color: var(--text-secondary, #8b8498);
+  font-size: 0.7rem;
+  color: #9b94ae;
   margin-top: 2px;
+  font-weight: 600;
 }
 
 /* ============================================================
@@ -124,50 +161,91 @@
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 2px;
+  flex: 1;
 }
 
 .navLink {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.72rem 0.85rem;
-  border-radius: 13px;
-  font-size: 0.87rem;
+  gap: 0.7rem;
+  padding: 0.68rem 0.8rem;
+  border-radius: 11px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-secondary, #8b8498);
+  color: #6b6580;
   text-decoration: none;
-  transition: all 0.22s ease;
-  min-height: 44px;
+  transition: background 0.2s ease, color 0.2s ease;
+  min-height: 42px;
+}
+
+.navIcon {
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.navLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .navLink:hover {
-  background: rgba(141, 99, 255, 0.06);
-  color: var(--text-primary, #1e1b2e);
+  background: #f5f1fc;
+  color: #4c1d95;
+}
+
+.navLink:hover .navIcon {
+  color: #6d28d9;
 }
 
 .navLinkActive {
-  background: linear-gradient(135deg, #f0eaff, #fff) !important;
-  color: #5e3fa5 !important;
-  border: 1px solid #ded1fb;
-  box-shadow: inset 3px 0 #8d63ff, 0 8px 25px rgba(141, 99, 255, 0.07) !important;
+  background: #f0e9ff;
+  color: #4c1d95;
+  font-weight: 800;
 }
 
-.navLinkActive svg {
-  color: #8d63ff;
+.navLinkActive::before {
+  content: '';
+  position: absolute;
+  right: -1.15rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 22px;
+  border-radius: 0 99px 99px 0;
+  background: linear-gradient(180deg, #6d28d9, #4c1d95);
 }
 
+.navLinkActive .navIcon {
+  color: #6d28d9;
+}
+
+/* ============================================================
+   COUNT PILL
+   ============================================================ */
 .countPill {
   margin-inline-start: auto;
-  min-width: 26px;
-  padding: 0.1rem 0.4rem;
+  min-width: 22px;
+  padding: 0 0.45rem;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
-  background: #f4efff;
-  color: #7352a9;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-align: center;
+  background: #f0e9ff;
+  color: #6d28d9;
+  font-size: 0.68rem;
+  font-weight: 800;
   flex-shrink: 0;
+}
+
+.navLinkActive .countPill {
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
+  color: #ffffff;
 }
 
 /* ============================================================
@@ -177,43 +255,42 @@
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding-top: 0.5rem;
+  gap: 2px;
+  padding-top: 1rem;
+  border-top: 1px solid #f0ecf7;
+  flex-shrink: 0;
 }
 
-.ghostBtn,
-.logoutBtn {
+.footerLink {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.68rem 0.85rem;
-  min-height: 44px;
-  border-radius: 12px;
-  border: 1px solid #e9e3f4;
+  gap: 0.65rem;
+  padding: 0.62rem 0.8rem;
+  min-height: 40px;
+  border-radius: 10px;
+  border: none;
   background: transparent;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   font-family: inherit;
-  color: var(--text-secondary, #8b8498);
+  color: #8b8498;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.22s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.ghostBtn:hover {
-  border-color: #8d63ff;
-  color: #5e3fa5;
-  background: rgba(141, 99, 255, 0.05);
+.footerLink:hover {
+  background: #f5f1fc;
+  color: #4c1d95;
 }
 
-.logoutBtn:hover {
-  border-color: #e05a5a;
-  color: #e05a5a;
-  background: rgba(224, 90, 90, 0.05);
+.footerLink:last-child:hover {
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 /* ============================================================
-   MAIN AREA
+   MAIN
    ============================================================ */
 .main {
   flex: 1;
@@ -223,87 +300,195 @@
 }
 
 /* ============================================================
-   TOPBAR
+   ✅ FLOATING GLASS HEADER
    ============================================================ */
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.85rem 1.3rem;
-  padding-top: max(0.85rem, env(safe-area-inset-top));
-  background: rgba(255, 255, 255, 0.72) !important;
-  border-bottom: 1px solid #e9e3f4 !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+
+/* Wrapper برای sticky + فاصله از کناره‌ها */
+.topbarWrap {
   position: sticky;
   top: 0;
   z-index: 40;
+  padding: 12px 20px 0;
+  pointer-events: none;
 }
 
+/* خود هدر — Pill شیشه‌ای */
+.topbar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 4px 20px rgba(76, 29, 149, 0.06),
+    0 1px 2px rgba(76, 29, 149, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.topbar:hover {
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 8px 28px rgba(76, 29, 149, 0.08),
+    0 1px 2px rgba(76, 29, 149, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ---------- MENU BUTTON ---------- */
 .menuBtn {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  border: 1px solid #e9e3f4;
-  background: #fff;
-  color: #5e3fa5;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(255, 255, 255, 0.7);
+  color: #4c1d95;
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
 .menuBtn:hover {
-  border-color: #8d63ff;
-  background: rgba(141, 99, 255, 0.06);
+  border-color: #d0c2f0;
+  background: #f5f1fc;
 }
 
 .menuBtn:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
+}
+
+/* ---------- BRAND ICON ---------- */
+.topbarBrandIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4c1d95, #6d28d9);
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow:
+    0 2px 8px rgba(76, 29, 149, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- TITLE GROUP ---------- */
+.topbarTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .topbarTitle {
-  font-size: clamp(0.78rem, 0.74rem + 0.2vw, 0.88rem);
-  font-weight: 600;
-  color: #3c3745 !important;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #2a1d4a;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  flex: 1;
 }
 
-.topbarTitle small {
-  color: #3eb778;
-  font-size: 9px;
-  margin-inline-start: 8px;
-  white-space: nowrap;
+.topbarDot {
+  color: #b9b3c9;
+  font-size: 1rem;
+  line-height: 1;
 }
 
-.topbarSiteLink {
+.topbarSubtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6d28d9;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- STATUS ---------- */
+.topbarStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px 4px 7px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  flex-shrink: 0;
   margin-inline-start: auto;
+}
+
+.statusDot {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  animation: pulse-status 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-status {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+  }
+}
+
+.statusText {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #047857;
+  letter-spacing: 0.2px;
+}
+
+/* ---------- SITE LINK ---------- */
+.topbarSiteLink {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.45rem 0.85rem;
-  min-height: 38px;
+  padding: 0.4rem 0.85rem;
+  height: 32px;
   border-radius: 999px;
-  border: 1px solid #e9e3f4;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-secondary, #8b8498);
+  background: linear-gradient(135deg, #4c1d95, #6d28d9);
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffffff;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   flex-shrink: 0;
   white-space: nowrap;
+  box-shadow:
+    0 2px 8px rgba(76, 29, 149, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .topbarSiteLink:hover {
-  border-color: #8d63ff;
-  color: #5e3fa5;
-  background: rgba(141, 99, 255, 0.05);
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 14px rgba(76, 29, 149, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  filter: brightness(1.05);
+}
+
+.topbarSiteLink:active {
+  transform: translateY(0);
 }
 
 /* ============================================================
@@ -311,7 +496,7 @@
    ============================================================ */
 .content {
   flex: 1;
-  padding: 1.5rem 1.4rem 3rem;
+  padding: 1.4rem 1.6rem 3rem;
   max-width: 1450px;
   width: 100%;
   margin-inline: auto;
@@ -319,75 +504,127 @@
 }
 
 /* ============================================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE
    ============================================================ */
 
-/* ---------- دسکتاپ بزرگ: 1280+ ---------- */
 @media (min-width: 1280px) {
   .sidebar {
-    width: 260px;
-    padding: 1.6rem 1.2rem;
+    width: 276px;
+    padding: 24px 0 24px 24px;
+  }
+  .sidebarInner {
+    padding: 2rem 1.25rem;
+    border-radius: 26px;
+  }
+  .topbarWrap {
+    padding: 14px 24px 0;
   }
 }
 
-/* ---------- تبلت افقی / دسکتاپ کوچک: تا 1023 ---------- */
+@media (min-width: 1600px) {
+  .content {
+    padding: 1.8rem 2rem 4rem;
+  }
+}
+
 @media (max-width: 1023px) {
   .sidebar {
     display: none;
   }
-
   .menuBtn {
     display: inline-flex;
   }
 }
 
-/* ---------- تبلت عمودی: 640 تا 1023 ---------- */
 @media (max-width: 1023px) and (min-width: 641px) {
   .content {
-    padding: 1.3rem 1.2rem 2.8rem;
+    padding: 1.2rem 1.3rem 2.8rem;
   }
-
-  .topbar {
-    padding: 0.85rem 1.1rem;
+  .topbarWrap {
+    padding: 12px 16px 0;
   }
 }
 
-/* ---------- موبایل: 640 و کمتر ---------- */
 @media (max-width: 640px) {
   .content {
-    padding: 1rem 0.85rem 2.5rem;
+    padding: 1rem 0.9rem 2.5rem;
+  }
+
+  .topbarWrap {
+    padding: 10px 12px 0;
   }
 
   .topbar {
-    padding: 0.7rem 0.85rem;
-    gap: 0.6rem;
+    height: 50px;
+    padding: 0 12px;
+    gap: 0.55rem;
+  }
+
+  .menuBtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .topbarBrandIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .topbarBrandIcon svg {
+    width: 13px;
+    height: 13px;
   }
 
   .topbarTitle {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
-  /* فقط «سایت» رو نشون بده — در موبایل فقط آیکون */
-  .topbarSiteLink span {
+  .topbarDot {
     display: none;
   }
 
+  .topbarSubtitle {
+    display: none;
+  }
+
+  .topbarStatus {
+    padding: 3px 7px 3px 6px;
+    gap: 4px;
+  }
+
+  .statusText {
+    display: none;
+  }
+
+  .statusDot {
+    width: 5px;
+    height: 5px;
+  }
+
   .topbarSiteLink {
-    padding: 0.45rem 0.6rem;
-    min-width: 38px;
+    padding: 0.35rem 0.6rem;
+    height: 28px;
+    min-width: 28px;
     justify-content: center;
+    gap: 0;
+  }
+
+  .topbarSiteLink span {
+    display: none;
   }
 }
 
-/* ---------- موبایل خیلی کوچک: 380 و کمتر ---------- */
 @media (max-width: 380px) {
   .mobileSidebar {
     width: 88vw;
+    right: 8px;
+    top: 8px;
+    bottom: 8px;
   }
 
   .navLink {
-    padding: 0.65rem 0.75rem;
-    font-size: 0.83rem;
+    padding: 0.6rem 0.7rem;
+    font-size: 0.8rem;
   }
 
   .brandName {
@@ -398,45 +635,78 @@
     width: 36px;
     height: 36px;
   }
+
+  .topbar {
+    height: 46px;
+    padding: 0 10px;
+    gap: 0.45rem;
+  }
+
+  .topbarTitle {
+    font-size: 0.72rem;
+  }
+
+  .topbarBrandIcon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .menuBtn {
+    width: 26px;
+    height: 26px;
+  }
 }
 
-/* ---------- موبایل افقی (کم‌ارتفاع) ---------- */
 @media (max-height: 500px) and (orientation: landscape) {
   .mobileSidebar {
-    width: min(320px, 60vw);
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    gap: 1rem;
+    width: min(300px, 55vw);
+    padding: 1.2rem 0.95rem;
+    gap: 1.4rem;
   }
 
   .nav {
-    gap: 0.2rem;
+    gap: 1px;
   }
 
   .navLink {
-    padding: 0.55rem 0.8rem;
-    min-height: 38px;
+    padding: 0.5rem 0.7rem;
+    min-height: 36px;
+    font-size: 0.78rem;
+  }
+
+  .brand {
+    padding: 0.4rem 0.4rem 0.9rem;
+  }
+
+  .brandIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brandName {
+    font-size: 0.92rem;
   }
 
   .sidebarFooter {
-    padding-top: 0.3rem;
+    padding-top: 0.75rem;
+  }
+
+  .footerLink {
+    min-height: 36px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.76rem;
   }
 }
-
 
 @media (prefers-reduced-motion: reduce) {
   .navLink,
-  .ghostBtn,
-  .logoutBtn,
+  .footerLink,
   .menuBtn,
-  .topbarSiteLink {
+  .topbarSiteLink,
+  .brandIcon,
+  .statusDot {
     transition: none !important;
-  }
-}
-
-
-@media (min-width: 1600px) {
-  .content {
-    padding: 2rem 2rem 4rem;
+    transform: none !important;
+    animation: none !important;
   }
 }

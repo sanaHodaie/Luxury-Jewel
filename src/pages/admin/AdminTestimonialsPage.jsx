@@ -53,6 +53,10 @@ const CATEGORY_LABELS = {
   custom: 'سفارش سفارشی',
 };
 
+/* ============ Helpers ============ */
+const toPersianDigits = (str) =>
+  String(str).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
 /* ============ Toast (Center Screen) ============ */
 function Toast({ toast, onClose }) {
   const [leaving, setLeaving] = useState(false);
@@ -214,14 +218,19 @@ export default function AdminTestimonialsPage() {
   const stats = useMemo(() => {
     const total = reviews.length;
     const verified = reviews.filter((r) => r.verified).length;
+
+    // ✅ میانگین امتیاز با اعداد فارسی
     const avgRating = total
-      ? (
-          reviews.reduce(
-            (sum, r) => sum + Number(r.rating || 0),
-            0
-          ) / total
-        ).toFixed(1)
+      ? toPersianDigits(
+          (
+            reviews.reduce(
+              (sum, r) => sum + Number(r.rating || 0),
+              0
+            ) / total
+          ).toFixed(1)
+        )
       : '۰';
+
     const totalLikes = reviews.reduce(
       (sum, r) => sum + Number(r.likes || 0),
       0
@@ -710,6 +719,7 @@ export default function AdminTestimonialsPage() {
               className={styles.modal}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* ✅ Header ثابت */}
               <div className={styles.modalHeader}>
                 <div className={styles.modalHeaderContent}>
                   <div className={styles.modalHeaderIcon}>
@@ -734,195 +744,199 @@ export default function AdminTestimonialsPage() {
                 </button>
               </div>
 
+              {/* ✅ Form با بدنه اسکرول‌شونده و فوتر ثابت */}
               <form
                 onSubmit={handleSubmit}
                 className={styles.form}
               >
-                <div className={styles.formGrid}>
+                <div className={styles.formScrollBody}>
+                  <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>نام مشتری *</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.name}
+                        onChange={(e) =>
+                          handleChange('name', e.target.value)
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>شهر</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.city}
+                        onChange={(e) =>
+                          handleChange('city', e.target.value)
+                        }
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>محصول</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.product}
+                        onChange={(e) =>
+                          handleChange('product', e.target.value)
+                        }
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>تاریخ</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.date}
+                        onChange={(e) =>
+                          handleChange('date', e.target.value)
+                        }
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>دسته‌بندی</label>
+                      <select
+                        className={styles.select}
+                        value={formData.category}
+                        onChange={(e) =>
+                          handleChange('category', e.target.value)
+                        }
+                      >
+                        <option value="online">خرید آنلاین</option>
+                        <option value="inperson">گالری فرشته</option>
+                        <option value="custom">سفارش سفارشی</option>
+                      </select>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>امتیاز</label>
+                      <select
+                        className={styles.select}
+                        value={formData.rating}
+                        onChange={(e) =>
+                          handleChange('rating', Number(e.target.value))
+                        }
+                      >
+                        <option value={5}>۵ ستاره</option>
+                        <option value={4}>۴ ستاره</option>
+                        <option value={3}>۳ ستاره</option>
+                        <option value={2}>۲ ستاره</option>
+                        <option value={1}>۱ ستاره</option>
+                      </select>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>تعداد لایک</label>
+                      <input
+                        type="number"
+                        className={styles.input}
+                        min="0"
+                        value={formData.likes}
+                        onChange={(e) =>
+                          handleChange('likes', Number(e.target.value))
+                        }
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>ایموجی پروفایل</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.avatarEmoji}
+                        onChange={(e) =>
+                          handleChange('avatarEmoji', e.target.value)
+                        }
+                        maxLength={4}
+                      />
+                    </div>
+                  </div>
+
                   <div className={styles.formGroup}>
-                    <label className={styles.label}>نام مشتری *</label>
+                    <label className={styles.label}>عنوان نظر</label>
                     <input
                       type="text"
                       className={styles.input}
-                      value={formData.name}
+                      value={formData.title}
                       onChange={(e) =>
-                        handleChange('name', e.target.value)
+                        handleChange('title', e.target.value)
+                      }
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>متن نظر *</label>
+                    <textarea
+                      className={styles.textarea}
+                      rows={5}
+                      value={formData.text}
+                      onChange={(e) =>
+                        handleChange('text', e.target.value)
                       }
                       required
                     />
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label className={styles.label}>شهر</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={formData.city}
+                    <label className={styles.label}>پاسخ مدیر گالری</label>
+                    <textarea
+                      className={styles.textarea}
+                      rows={3}
+                      value={formData.brandReply}
                       onChange={(e) =>
-                        handleChange('city', e.target.value)
+                        handleChange('brandReply', e.target.value)
                       }
                     />
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>محصول</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={formData.product}
-                      onChange={(e) =>
-                        handleChange('product', e.target.value)
-                      }
-                    />
+                  <div className={styles.switches}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={formData.verified}
+                        onChange={(e) =>
+                          handleChange('verified', e.target.checked)
+                        }
+                      />
+                      <span>خریدار تأییدشده</span>
+                    </label>
+
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={formData.hasPhoto}
+                        onChange={(e) =>
+                          handleChange('hasPhoto', e.target.checked)
+                        }
+                      />
+                      <span>دارای تصویر</span>
+                    </label>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>تاریخ</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={formData.date}
-                      onChange={(e) =>
-                        handleChange('date', e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>دسته‌بندی</label>
-                    <select
-                      className={styles.select}
-                      value={formData.category}
-                      onChange={(e) =>
-                        handleChange('category', e.target.value)
-                      }
-                    >
-                      <option value="online">خرید آنلاین</option>
-                      <option value="inperson">گالری فرشته</option>
-                      <option value="custom">سفارش سفارشی</option>
-                    </select>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>امتیاز</label>
-                    <select
-                      className={styles.select}
-                      value={formData.rating}
-                      onChange={(e) =>
-                        handleChange('rating', Number(e.target.value))
-                      }
-                    >
-                      <option value={5}>۵ ستاره</option>
-                      <option value={4}>۴ ستاره</option>
-                      <option value={3}>۳ ستاره</option>
-                      <option value={2}>۲ ستاره</option>
-                      <option value={1}>۱ ستاره</option>
-                    </select>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>تعداد لایک</label>
-                    <input
-                      type="number"
-                      className={styles.input}
-                      min="0"
-                      value={formData.likes}
-                      onChange={(e) =>
-                        handleChange('likes', Number(e.target.value))
-                      }
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>ایموجی پروفایل</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={formData.avatarEmoji}
-                      onChange={(e) =>
-                        handleChange('avatarEmoji', e.target.value)
-                      }
-                      maxLength={4}
-                    />
-                  </div>
+                  {formData.hasPhoto && (
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>آدرس تصویر</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={formData.photoUrl || ''}
+                        onChange={(e) =>
+                          handleChange('photoUrl', e.target.value)
+                        }
+                        placeholder="آدرس تصویر را وارد کنید"
+                      />
+                    </div>
+                  )}
                 </div>
 
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>عنوان نظر</label>
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={formData.title}
-                    onChange={(e) =>
-                      handleChange('title', e.target.value)
-                    }
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>متن نظر *</label>
-                  <textarea
-                    className={styles.textarea}
-                    rows={5}
-                    value={formData.text}
-                    onChange={(e) =>
-                      handleChange('text', e.target.value)
-                    }
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>پاسخ مدیر گالری</label>
-                  <textarea
-                    className={styles.textarea}
-                    rows={3}
-                    value={formData.brandReply}
-                    onChange={(e) =>
-                      handleChange('brandReply', e.target.value)
-                    }
-                  />
-                </div>
-
-                <div className={styles.switches}>
-                  <label className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={formData.verified}
-                      onChange={(e) =>
-                        handleChange('verified', e.target.checked)
-                      }
-                    />
-                    <span>خریدار تأییدشده</span>
-                  </label>
-
-                  <label className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={formData.hasPhoto}
-                      onChange={(e) =>
-                        handleChange('hasPhoto', e.target.checked)
-                      }
-                    />
-                    <span>دارای تصویر</span>
-                  </label>
-                </div>
-
-                {formData.hasPhoto && (
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>آدرس تصویر</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={formData.photoUrl || ''}
-                      onChange={(e) =>
-                        handleChange('photoUrl', e.target.value)
-                      }
-                      placeholder="آدرس تصویر را وارد کنید"
-                    />
-                  </div>
-                )}
-
+                {/* ✅ Footer ثابت */}
                 <div className={styles.modalFooter}>
                   <button
                     type="button"
