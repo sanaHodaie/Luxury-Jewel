@@ -499,50 +499,156 @@ export default function AdminBrandStoryPage() {
    * -------------------------------------------------------
    */
 
-  const progress = useMemo(() => {
-    let filled = 0;
-    let total = 0;
+const progress = useMemo(() => {
+  let filled = 0;
+  let total = 0;
 
-    const check = (value) => {
-      total += 1;
+  const check = (value) => {
+    total += 1;
 
-      if (
-        value !== undefined &&
-        value !== null &&
-        String(value).trim()
-      ) {
-        filled += 1;
+    if (
+      value !== undefined &&
+      value !== null &&
+      String(value).trim()
+    ) {
+      filled += 1;
+    }
+  };
+
+  /*
+   * =======================================================
+   * HERO
+   * =======================================================
+   */
+
+  check(data.hero?.badge);
+  check(data.hero?.title);
+  check(data.hero?.titleHighlight);
+  check(data.hero?.description);
+
+  /*
+   * =======================================================
+   * STATS
+   * =======================================================
+   */
+
+  if (Array.isArray(data.stats)) {
+    data.stats.forEach((stat) => {
+      check(stat.value ?? stat.number);
+      check(stat.label);
+    });
+  }
+
+  /*
+   * =======================================================
+   * VALUES HEADER
+   * =======================================================
+   */
+
+  check(data.valuesHeader?.subTag);
+  check(data.valuesHeader?.title);
+  check(data.valuesHeader?.titleHighlight);
+  check(data.valuesHeader?.titleSuffix);
+  check(data.valuesHeader?.description);
+
+  /*
+   * =======================================================
+   * CORE VALUES
+   * =======================================================
+   */
+
+  if (Array.isArray(data.coreValues)) {
+    data.coreValues.forEach((value) => {
+      check(value.title);
+      check(value.desc ?? value.description);
+    });
+  }
+
+  /*
+   * =======================================================
+   * TIMELINE HEADER
+   * =======================================================
+   */
+
+  check(data.timelineHeader?.badge);
+  check(data.timelineHeader?.title);
+  check(data.timelineHeader?.description);
+
+  /*
+   * =======================================================
+   * TIMELINE EVENTS
+   * =======================================================
+   */
+
+  if (Array.isArray(data.timelineEvents)) {
+    data.timelineEvents.forEach((event) => {
+      check(event.year);
+      check(event.yearEn);
+      check(event.era);
+      check(event.title);
+      check(event.subtitle);
+      check(event.description);
+      check(event.badge);
+
+      if (Array.isArray(event.highlights)) {
+        event.highlights.forEach((highlight) => {
+          check(highlight);
+        });
       }
-    };
+    });
+  }
 
-    check(data.hero?.badge);
-    check(data.hero?.title);
-    check(data.hero?.titleHighlight);
-    check(data.hero?.description);
+  /*
+   * =======================================================
+   * CRAFT HEADER
+   * =======================================================
+   */
 
-    check(data.values?.tag);
-    check(data.values?.title);
-    check(data.values?.description);
+  check(data.craftHeader?.subTag);
+  check(data.craftHeader?.title);
+  check(data.craftHeader?.titleHighlight);
+  check(data.craftHeader?.titleSuffix);
+  check(data.craftHeader?.description);
 
-    check(data.timeline?.tag);
-    check(data.timeline?.title);
-    check(data.timeline?.description);
+  /*
+   * =======================================================
+   * CRAFT STEPS
+   * =======================================================
+   */
 
-    check(data.craft?.tag);
-    check(data.craft?.title);
-    check(data.craft?.description);
+  if (Array.isArray(data.craftSteps)) {
+    data.craftSteps.forEach((step) => {
+      check(step.step);
+      check(step.title);
+      check(step.desc ?? step.description);
+    });
+  }
 
-    check(data.quote?.text);
-    check(data.quote?.author);
-    check(data.quote?.role);
+  /*
+   * =======================================================
+   * QUOTE
+   * =======================================================
+   */
 
-    check(data.cta?.title);
-    check(data.cta?.description);
+  check(data.quote?.text);
+  check(data.quote?.author ?? data.quote?.authorName);
+  check(data.quote?.role ?? data.quote?.authorRole);
 
-    return total
-      ? Math.round((filled / total) * 100)
-      : 0;
-  }, [data]);
+  /*
+   * =======================================================
+   * CTA
+   * =======================================================
+   */
+
+  check(data.cta?.title);
+  check(data.cta?.description);
+  check(data.cta?.primaryText ?? data.cta?.primaryLabel);
+  check(data.cta?.secondaryText ?? data.cta?.secondaryLabel);
+
+  return total
+    ? Math.round((filled / total) * 100)
+    : 0;
+}, [data]);
 
   /*
    * -------------------------------------------------------
@@ -863,10 +969,10 @@ export default function AdminBrandStoryPage() {
 
             <input
               className={styles.input}
-              value={data.values?.tag || ''}
+              value={data.valuesHeader?.subTag || ''}
               onChange={(e) =>
                 update(
-                  'values.tag',
+                  'valuesHeader.subTag',
                   e.target.value
                 )
               }
@@ -880,15 +986,48 @@ export default function AdminBrandStoryPage() {
 
             <input
               className={styles.input}
-              value={data.values?.title || ''}
+              value={data.valuesHeader?.title || ''}
               onChange={(e) =>
                 update(
-                  'values.title',
+                  'valuesHeader.title',
                   e.target.value
                 )
               }
             />
           </div>
+          <div className={styles.formGroup}>
+  <label className={styles.label}>
+    عنوان طلایی
+  </label>
+
+  <input
+    className={styles.input}
+    value={data.valuesHeader?.titleHighlight || ''}
+    onChange={(e) =>
+      update(
+        'valuesHeader.titleHighlight',
+        e.target.value
+      )
+    }
+  />
+</div>
+
+<div className={styles.formGroup}>
+  <label className={styles.label}>
+    بخش پایانی عنوان
+  </label>
+
+  <input
+    className={styles.input}
+    value={data.valuesHeader?.titleSuffix || ''}
+    onChange={(e) =>
+      update(
+        'valuesHeader.titleSuffix',
+        e.target.value
+      )
+    }
+  />
+</div>
 
           <div
             className={`${styles.formGroup} ${styles.formGroupFull}`}
@@ -899,15 +1038,15 @@ export default function AdminBrandStoryPage() {
 
             <textarea
               className={styles.textarea}
-              value={
-                data.values?.description || ''
-              }
-              onChange={(e) =>
-                update(
-                  'values.description',
-                  e.target.value
-                )
-              }
+            value={
+            data.valuesHeader?.description || ''
+          }
+          onChange={(e) =>
+            update(
+              'valuesHeader.description',
+              e.target.value
+            )
+}
             />
           </div>
         </div>
@@ -1048,10 +1187,10 @@ export default function AdminBrandStoryPage() {
 
             <input
               className={styles.input}
-              value={data.timeline?.tag || ''}
+              value={data.timelineHeader?.badge || ''}
               onChange={(e) =>
                 update(
-                  'timeline.tag',
+                  'timelineHeader.badge',
                   e.target.value
                 )
               }
@@ -1066,11 +1205,11 @@ export default function AdminBrandStoryPage() {
             <input
               className={styles.input}
               value={
-                data.timeline?.title || ''
+                data.timelineHeader?.title || ''
               }
               onChange={(e) =>
                 update(
-                  'timeline.title',
+                  'timelineHeader.title',
                   e.target.value
                 )
               }
@@ -1087,15 +1226,15 @@ export default function AdminBrandStoryPage() {
             <textarea
               className={styles.textarea}
               value={
-                data.timeline?.description ||
-                ''
-              }
-              onChange={(e) =>
-                update(
-                  'timeline.description',
-                  e.target.value
-                )
-              }
+                  data.timelineHeader?.description ||
+                  ''
+                }
+                onChange={(e) =>
+                  update(
+                    'timelineHeader.description',
+                    e.target.value
+                  )
+                }
             />
           </div>
         </div>
@@ -1402,65 +1541,98 @@ export default function AdminBrandStoryPage() {
           </button>
         }
       >
-        <div
-          className={styles.formGrid}
-          style={{ marginBottom: 20 }}
-        >
-          <div className={styles.formGroup}>
-            <label className={styles.label}>
-              برچسب بالا
-            </label>
+<div
+  className={styles.formGrid}
+  style={{ marginBottom: 20 }}
+>
+  <div className={styles.formGroup}>
+    <label className={styles.label}>
+      برچسب بالا
+    </label>
 
-            <input
-              className={styles.input}
-              value={data.craft?.tag || ''}
-              onChange={(e) =>
-                update(
-                  'craft.tag',
-                  e.target.value
-                )
-              }
-            />
-          </div>
+    <input
+      className={styles.input}
+      value={data.craftHeader?.subTag || ''}
+      onChange={(e) =>
+        update(
+          'craftHeader.subTag',
+          e.target.value
+        )
+      }
+    />
+  </div>
 
-          <div className={styles.formGroup}>
-            <label className={styles.label}>
-              عنوان
-            </label>
+  <div className={styles.formGroup}>
+    <label className={styles.label}>
+      عنوان
+    </label>
 
-            <input
-              className={styles.input}
-              value={data.craft?.title || ''}
-              onChange={(e) =>
-                update(
-                  'craft.title',
-                  e.target.value
-                )
-              }
-            />
-          </div>
+    <input
+      className={styles.input}
+      value={data.craftHeader?.title || ''}
+      onChange={(e) =>
+        update(
+          'craftHeader.title',
+          e.target.value
+        )
+      }
+    />
+  </div>
+  <div className={styles.formGroup}>
+  <label className={styles.label}>
+    عنوان طلایی
+  </label>
 
-          <div
-            className={`${styles.formGroup} ${styles.formGroupFull}`}
-          >
-            <label className={styles.label}>
-              توضیحات
-            </label>
+  <input
+    className={styles.input}
+    value={data.craftHeader?.titleHighlight || ''}
+    onChange={(e) =>
+      update(
+        'craftHeader.titleHighlight',
+        e.target.value
+      )
+    }
+  />
+</div>
 
-            <textarea
-              className={styles.textarea}
-              value={
-                data.craft?.description || ''
-              }
-              onChange={(e) =>
-                update(
-                  'craft.description',
-                  e.target.value
-                )
-              }
-            />
-          </div>
-        </div>
+<div className={styles.formGroup}>
+  <label className={styles.label}>
+    بخش پایانی عنوان
+  </label>
+
+  <input
+    className={styles.input}
+    value={data.craftHeader?.titleSuffix || ''}
+    onChange={(e) =>
+      update(
+        'craftHeader.titleSuffix',
+        e.target.value
+      )
+    }
+  />
+</div>
+
+  <div
+    className={`${styles.formGroup} ${styles.formGroupFull}`}
+  >
+    <label className={styles.label}>
+      توضیحات
+    </label>
+
+    <textarea
+      className={styles.textarea}
+      value={
+        data.craftHeader?.description || ''
+      }
+      onChange={(e) =>
+        update(
+          'craftHeader.description',
+          e.target.value
+        )
+      }
+    />
+  </div>
+</div>
 
         <div className={styles.itemsContainer}>
           {craftSteps.length === 0 && (

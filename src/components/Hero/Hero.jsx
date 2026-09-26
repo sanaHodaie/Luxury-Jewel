@@ -37,7 +37,7 @@ export const Hero = () => {
               <span>مشاهده محصولات</span>
               <ArrowLeft size={18} />
             </a>
-            <a href="#story" className={styles.secondaryBtn}>
+            <a href="/story" className={styles.secondaryBtn}>
               <span>داستان ما</span>
             </a>
           </div>

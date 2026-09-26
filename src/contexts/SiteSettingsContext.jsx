@@ -6,6 +6,8 @@ import React, {
   useState,
 } from 'react';
 
+import { supabase } from '../lib/supabase';
+
 const SiteSettingsContext = createContext(null);
 
 const STORAGE_KEY = 'luxury_jewel_site_settings';
@@ -714,13 +716,10 @@ function mergeBrandStory(savedBrandStory) {
       ...DEFAULT_BRAND_STORY.hero,
       ...(saved.hero || {}),
 
-      /*
-       * پشتیبانی از نسخه قدیمی:
-       * description → subtitle
-       */
+
       subtitle:
+      saved.hero?.description ??
         saved.hero?.subtitle ??
-        saved.hero?.description ??
         DEFAULT_BRAND_STORY.hero.subtitle,
     },
 
@@ -1097,66 +1096,230 @@ export function SiteSettingsProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   /* =======================================================
-     LOAD FROM LOCAL STORAGE
+     LOAD FROM SUPABASE
   ======================================================= */
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(
-        STORAGE_KEY
-      );
+    let mounted = true;
 
-      if (saved) {
-        const parsed = JSON.parse(saved);
+    const loadSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('*')
+          .eq('id', 'main')
+          .maybeSingle();
 
-        setSettings(
-          mergeSettings(parsed)
+        if (error) {
+          throw error;
+        }
+
+        if (!mounted) return;
+
+        if (data) {
+          const saved = {
+            brandName: data.brand_name,
+            brandTagline: data.brand_tagline,
+            footerText: data.footer_text,
+
+            aboutTitle: data.about_title,
+            aboutDescription: data.about_description,
+
+            contactPhone: data.contact_phone,
+            contactEmail: data.contact_email,
+            contactAddress: data.contact_address,
+            workingHours: data.working_hours,
+            whatsapp: data.whatsapp,
+            instagram: data.instagram,
+
+            brandStory: data.brand_story,
+            contactPage: data.contact_page,
+          };
+
+          setSettings(
+            mergeSettings(saved)
+          );
+
+          console.log(
+            '[SiteSettingsContext] Settings loaded from Supabase'
+          );
+
+          return;
+        }
+
+        /* ---------------------------------------------------
+           اگر رکوردی در Supabase وجود نداشت
+           از localStorage استفاده می‌کنیم.
+        --------------------------------------------------- */
+
+        const localSaved = localStorage.getItem(
+          STORAGE_KEY
         );
-      } else {
-        setSettings(
-          DEFAULT_SITE_SETTINGS
+
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+
+          setSettings(
+            mergeSettings(parsed)
+          );
+
+          console.log(
+            '[SiteSettingsContext] Settings loaded from localStorage fallback'
+          );
+        } else {
+          setSettings(
+            DEFAULT_SITE_SETTINGS
+          );
+
+          console.log(
+            '[SiteSettingsContext] Using default settings'
+          );
+        }
+      } catch (error) {
+        console.error(
+          'خطا در خواندن تنظیمات سایت از Supabase:',
+          error
         );
+
+        /* ---------------------------------------------------
+           Fallback به localStorage
+        --------------------------------------------------- */
+
+        try {
+          const localSaved = localStorage.getItem(
+            STORAGE_KEY
+          );
+
+          if (localSaved) {
+            const parsed = JSON.parse(localSaved);
+
+            setSettings(
+              mergeSettings(parsed)
+            );
+          } else {
+            setSettings(
+              DEFAULT_SITE_SETTINGS
+            );
+          }
+        } catch (localError) {
+          console.error(
+            'خطا در خواندن تنظیمات localStorage:',
+            localError
+          );
+
+          setSettings(
+            DEFAULT_SITE_SETTINGS
+          );
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error(
-        'خطا در خواندن تنظیمات سایت:',
-        error
-      );
+    };
 
-      setSettings(
-        DEFAULT_SITE_SETTINGS
-      );
-    } finally {
-      setLoading(false);
-    }
+    loadSettings();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   /* =======================================================
      UPDATE SETTINGS
   ======================================================= */
 
-  const updateSettings = (updates) => {
-    setSettings((prev) => {
-      const next = mergeSettings({
-        ...prev,
-        ...updates,
-      });
-
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(next)
-        );
-      } catch (error) {
-        console.error(
-          'خطا در ذخیره تنظیمات سایت:',
-          error
-        );
-      }
-
-      return next;
+const updateSettings = async (updates) => {
+  try {
+    const next = mergeSettings({
+      ...settings,
+      ...updates,
     });
-  };
+
+    const payload = {
+      id: 'main',
+
+      brand_name: next.brandName,
+      brand_tagline: next.brandTagline,
+      footer_text: next.footerText,
+
+      about_title: next.aboutTitle,
+      about_description: next.aboutDescription,
+
+      contact_phone: next.contactPhone,
+      contact_email: next.contactEmail,
+      contact_address: next.contactAddress,
+      working_hours: next.workingHours,
+      whatsapp: next.whatsapp,
+      instagram: next.instagram,
+
+      brand_story: next.brandStory,
+      contact_page: next.contactPage,
+
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data, error } = await supabase
+      .from('site_settings')
+      .upsert(payload, {
+        onConflict: 'id',
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    const saved = {
+      brandName: data.brand_name,
+      brandTagline: data.brand_tagline,
+      footerText: data.footer_text,
+
+      aboutTitle: data.about_title,
+      aboutDescription: data.about_description,
+
+      contactPhone: data.contact_phone,
+      contactEmail: data.contact_email,
+      contactAddress: data.contact_address,
+      workingHours: data.working_hours,
+      whatsapp: data.whatsapp,
+      instagram: data.instagram,
+
+      brandStory: data.brand_story,
+      contactPage: data.contact_page,
+    };
+
+    const merged = mergeSettings(saved);
+
+    setSettings(merged);
+
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(merged)
+      );
+    } catch (localError) {
+      console.error(
+        'خطا در ذخیره تنظیمات در localStorage:',
+        localError
+      );
+    }
+
+    console.log(
+      '[SiteSettingsContext] Settings saved to Supabase'
+    );
+
+    return merged;
+  } catch (error) {
+    console.error(
+      'خطا در ذخیره تنظیمات سایت در Supabase:',
+      error
+    );
+
+    throw error;
+  }
+};
 
   /* =======================================================
      RESET SETTINGS

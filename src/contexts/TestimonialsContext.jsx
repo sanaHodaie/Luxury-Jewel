@@ -13,9 +13,14 @@ import Ring from '../assets/images/Gemini_Generated_Image_meyj5dmeyj5dmeyj.webp'
 import coupleSet from '../assets/images/Gemini_Generated_Image_kezxe9kezxe9kezx.webp';
 import amitisitneckles from '../assets/images/Gemini_Generated_Image_3f1r173f1r173f1r.webp';
 
+import { supabase } from '../lib/supabase';
+
 const TestimonialsContext = createContext(null);
 
-const STORAGE_KEY = 'luxury_jewel_testimonials';
+/* =========================================================
+   DEFAULT TESTIMONIALS
+   فقط برای fallback / reset
+========================================================= */
 
 export const DEFAULT_TESTIMONIALS = [
   {
@@ -127,142 +132,421 @@ export const DEFAULT_TESTIMONIALS = [
   },
 ];
 
+/* =========================================================
+   تبدیل رکورد Supabase به ساختار فعلی React
+========================================================= */
+
+const mapFromDatabase = (row) => ({
+  id: row.id,
+  name: row.name,
+  city: row.city || '',
+  date: row.date || '',
+  verified: row.verified ?? false,
+  category: row.category || 'online',
+  product: row.product || '',
+  rating: row.rating ?? 5,
+  likes: row.likes ?? 0,
+  title: row.title || '',
+  text: row.text || '',
+  avatarEmoji: row.avatar_emoji || '🌟',
+  hasPhoto: row.has_photo ?? false,
+  photoUrl: row.photo_url || null,
+  brandReply: row.brand_reply || '',
+});
+
+/* =========================================================
+   تبدیل ساختار React به ساختار Supabase
+========================================================= */
+
+const mapToDatabase = (review) => ({
+  name: review.name,
+  city: review.city || '',
+  date: review.date || '',
+  verified: review.verified ?? false,
+  category: review.category || 'online',
+  product: review.product || '',
+  rating: Number(review.rating) || 5,
+  likes: Number(review.likes) || 0,
+  title: review.title || '',
+  text: review.text || '',
+  avatar_emoji: review.avatarEmoji || '🌟',
+  has_photo: review.hasPhoto ?? false,
+  photo_url: review.photoUrl || null,
+  brand_reply: review.brandReply || '',
+});
+
+/* =========================================================
+   آپلود عکس نظر مشتری
+========================================================= */
+
+const uploadTestimonialPhoto = async (file) => {
+  try {
+    if (!file) {
+      return null;
+    }
+
+    // فقط تصاویر
+    if (!file.type.startsWith('image/')) {
+      throw new Error(
+        'فایل انتخاب‌شده باید تصویر باشد.'
+      );
+    }
+
+    // محدودیت حجم: 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error(
+        'حجم تصویر نباید بیشتر از ۵ مگابایت باشد.'
+      );
+    }
+
+    // ساخت نام یکتا برای جلوگیری از تداخل فایل‌ها
+    const fileExtension =
+      file.name.split('.').pop()?.toLowerCase() ||
+      'jpg';
+
+    const fileName = `${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 10)}.${fileExtension}`;
+
+    const filePath = `customer-reviews/${fileName}`;
+
+    const { error: uploadError } =
+      await supabase.storage
+        .from('testimonial-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const {
+      data: publicUrlData,
+    } = supabase.storage
+      .from('testimonial-images')
+      .getPublicUrl(filePath);
+
+    return publicUrlData?.publicUrl || null;
+  } catch (error) {
+    console.error(
+      'خطا در آپلود تصویر نظر مشتری:',
+      error
+    );
+
+    return null;
+  }
+};
+/* =========================================================
+   PROVIDER
+========================================================= */
+
 export function TestimonialsProvider({ children }) {
-  const [reviews, setReviews] = useState(DEFAULT_TESTIMONIALS);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ---------- خواندن نظرات ذخیره‌شده ----------
+  /* =======================================================
+     خواندن نظرات از Supabase
+  ======================================================= */
+
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+    const loadReviews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('testimonials')
+          .select('*')
+          .order('created_at', {
+            ascending: false,
+          });
 
-      if (saved) {
-        const parsed = JSON.parse(saved);
-
-        if (Array.isArray(parsed)) {
-          setReviews(parsed);
-        } else {
-          setReviews(DEFAULT_TESTIMONIALS);
+        if (error) {
+          throw error;
         }
-      } else {
+
+        setReviews(
+          Array.isArray(data)
+            ? data.map(mapFromDatabase)
+            : []
+        );
+      } catch (error) {
+        console.error(
+          'خطا در خواندن نظرات مشتریان از Supabase:',
+          error
+        );
+
+        /*
+         * اگر Supabase خطا داشت، برای اینکه صفحه خالی نماند
+         * از داده‌های پیش‌فرض استفاده می‌کنیم.
+         */
         setReviews(DEFAULT_TESTIMONIALS);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(
-        'خطا در خواندن نظرات مشتریان:',
-        error
-      );
-
-      setReviews(DEFAULT_TESTIMONIALS);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // ---------- ذخیره نظرات ----------
-  const saveReviews = (nextReviews) => {
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(nextReviews)
-      );
-
-      setReviews(nextReviews);
-    } catch (error) {
-      console.error(
-        'خطا در ذخیره نظرات مشتریان:',
-        error
-      );
-    }
-  };
-
-  // ---------- افزودن نظر ----------
-  const addReview = (review) => {
-    const newReview = {
-      ...review,
-      id:
-        review?.id ||
-        Date.now(),
     };
 
-    saveReviews([
-      newReview,
-      ...reviews,
-    ]);
+    loadReviews();
+  }, []);
 
-    return newReview;
+  /* =======================================================
+     افزودن نظر
+  ======================================================= */
+
+  const addReview = async (review) => {
+    try {
+      const payload = mapToDatabase(review);
+
+      const { data, error } = await supabase
+        .from('testimonials')
+        .insert(payload)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const newReview = mapFromDatabase(data);
+
+      setReviews((currentReviews) => [
+        newReview,
+        ...currentReviews,
+      ]);
+
+      return newReview;
+    } catch (error) {
+      console.error(
+        'خطا در افزودن نظر مشتری:',
+        error
+      );
+
+      return null;
+    }
   };
 
-  // ---------- ویرایش نظر ----------
-  const updateReview = (id, updates) => {
-    const nextReviews = reviews.map((review) =>
-      review.id === id
-        ? {
-            ...review,
-            ...updates,
-          }
-        : review
-    );
+  /* =======================================================
+     ویرایش نظر
+  ======================================================= */
 
-    saveReviews(nextReviews);
+  const updateReview = async (id, updates) => {
+    try {
+      const databaseUpdates = mapToDatabase({
+        ...reviews.find(
+          (review) => review.id === id
+        ),
+        ...updates,
+      });
+
+      const { data, error } = await supabase
+        .from('testimonials')
+        .update(databaseUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedReview =
+        mapFromDatabase(data);
+
+      setReviews((currentReviews) =>
+        currentReviews.map((review) =>
+          review.id === id
+            ? updatedReview
+            : review
+        )
+      );
+
+      return updatedReview;
+    } catch (error) {
+      console.error(
+        'خطا در ویرایش نظر مشتری:',
+        error
+      );
+
+      return null;
+    }
   };
 
-  // ---------- حذف نظر ----------
-  const deleteReview = (id) => {
-    const nextReviews = reviews.filter(
-      (review) => review.id !== id
-    );
+  /* =======================================================
+     حذف نظر
+  ======================================================= */
 
-    saveReviews(nextReviews);
+  const deleteReview = async (id) => {
+    try {
+      const { error } = await supabase
+        .from('testimonials')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      setReviews((currentReviews) =>
+        currentReviews.filter(
+          (review) => review.id !== id
+        )
+      );
+
+      return true;
+    } catch (error) {
+      console.error(
+        'خطا در حذف نظر مشتری:',
+        error
+      );
+
+      return false;
+    }
   };
 
-  // ---------- تغییر وضعیت تایید ----------
-  const toggleVerified = (id) => {
-    const nextReviews = reviews.map((review) =>
-      review.id === id
-        ? {
-            ...review,
-            verified: !review.verified,
-          }
-        : review
-    );
+  /* =======================================================
+     تغییر وضعیت تایید
+  ======================================================= */
 
-    saveReviews(nextReviews);
+  const toggleVerified = async (id) => {
+    try {
+      const currentReview = reviews.find(
+        (review) => review.id === id
+      );
+
+      if (!currentReview) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('testimonials')
+        .update({
+          verified: !currentReview.verified,
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedReview =
+        mapFromDatabase(data);
+
+      setReviews((currentReviews) =>
+        currentReviews.map((review) =>
+          review.id === id
+            ? updatedReview
+            : review
+        )
+      );
+    } catch (error) {
+      console.error(
+        'خطا در تغییر وضعیت تایید نظر:',
+        error
+      );
+    }
   };
 
-  // ---------- تغییر تعداد لایک ----------
-  const updateLikes = (id, likes) => {
-    const nextReviews = reviews.map((review) =>
-      review.id === id
-        ? {
-            ...review,
-            likes,
-          }
-        : review
-    );
+  /* =======================================================
+     تغییر تعداد لایک
+  ======================================================= */
 
-    saveReviews(nextReviews);
+  const updateLikes = async (id, likes) => {
+    try {
+      const { data, error } = await supabase
+        .from('testimonials')
+        .update({
+          likes: Number(likes) || 0,
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const updatedReview =
+        mapFromDatabase(data);
+
+      setReviews((currentReviews) =>
+        currentReviews.map((review) =>
+          review.id === id
+            ? updatedReview
+            : review
+        )
+      );
+    } catch (error) {
+      console.error(
+        'خطا در تغییر تعداد لایک:',
+        error
+      );
+    }
   };
 
-  // ---------- بازگردانی نظرات اولیه ----------
-  const resetReviews = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setReviews(DEFAULT_TESTIMONIALS);
+  /* =======================================================
+     بازگردانی نظرات اولیه
+  ======================================================= */
+
+  const resetReviews = async () => {
+    try {
+      const { error: deleteError } =
+        await supabase
+          .from('testimonials')
+          .delete()
+          .not('id', 'is', null);
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      const databaseReviews =
+        DEFAULT_TESTIMONIALS.map((review) => ({
+          ...mapToDatabase(review),
+          photo_url: null,
+        }));
+
+      const { data, error: insertError } =
+        await supabase
+          .from('testimonials')
+          .insert(databaseReviews)
+          .select();
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      setReviews(
+        Array.isArray(data)
+          ? data.map(mapFromDatabase)
+          : []
+      );
+    } catch (error) {
+      console.error(
+        'خطا در بازگردانی نظرات اولیه:',
+        error
+      );
+    }
   };
 
-  const value = useMemo(
-    () => ({
-      reviews,
-      loading,
-      addReview,
-      updateReview,
-      deleteReview,
-      toggleVerified,
-      updateLikes,
-      resetReviews,
-    }),
-    [reviews, loading]
-  );
+  /* =======================================================
+     CONTEXT VALUE
+  ======================================================= */
+
+const value = useMemo(
+  () => ({
+    reviews,
+    loading,
+    addReview,
+    updateReview,
+    deleteReview,
+    toggleVerified,
+    updateLikes,
+    resetReviews,
+    uploadTestimonialPhoto,
+  }),
+  [reviews, loading]
+);
 
   return (
     <TestimonialsContext.Provider value={value}>
@@ -270,6 +554,10 @@ export function TestimonialsProvider({ children }) {
     </TestimonialsContext.Provider>
   );
 }
+
+/* =========================================================
+   HOOK
+========================================================= */
 
 export function useTestimonials() {
   const context = useContext(

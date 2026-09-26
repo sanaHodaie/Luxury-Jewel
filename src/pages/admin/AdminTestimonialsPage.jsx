@@ -920,20 +920,36 @@ export default function AdminTestimonialsPage() {
                     </label>
                   </div>
 
-                  {formData.hasPhoto && (
-                    <div className={styles.formGroup}>
-                      <label className={styles.label}>آدرس تصویر</label>
-                      <input
-                        type="text"
-                        className={styles.input}
-                        value={formData.photoUrl || ''}
-                        onChange={(e) =>
-                          handleChange('photoUrl', e.target.value)
-                        }
-                        placeholder="آدرس تصویر را وارد کنید"
-                      />
-                    </div>
-                  )}
+
+                {formData.hasPhoto && (
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>
+                      تصویر محصول مشتری
+                    </label>
+
+                    {formData.photoUrl && (
+                      <div className={styles.adminPhotoPreview}>
+                        <img
+                          src={formData.photoUrl}
+                          alt={formData.product || 'تصویر محصول مشتری'}
+                          className={styles.adminPhotoPreviewImage}
+                        />
+                      </div>
+                    )}
+
+                    <input
+                      type="text"
+                      className={styles.input}
+                      value={formData.photoUrl || ''}
+                      onChange={(e) =>
+                        handleChange('photoUrl', e.target.value)
+                      }
+                      placeholder="آدرس تصویر را وارد کنید"
+                    />
+                  </div>
+                )}
+
+
                 </div>
 
                 {/* ✅ Footer ثابت */}

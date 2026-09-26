@@ -27,9 +27,11 @@ import {
 } from '../contexts/SiteSettingsContext';
 
 export const BrandStoryPage = () => {
-  const { settings } = useSiteSettings();
+const { settings, loading } = useSiteSettings();
   const [activeEra, setActiveEra] = useState('all');
-
+if (loading) {
+  return null;
+}
   /*
    * =========================================================
    * BRAND STORY DATA
@@ -37,6 +39,7 @@ export const BrandStoryPage = () => {
    */
 
   const brandStory = settings?.brandStory || DEFAULT_BRAND_STORY;
+  console.log('BRAND STORY HERO:', brandStory.hero);
 
   /*
    * =========================================================
@@ -274,10 +277,10 @@ export const BrandStoryPage = () => {
   const heroTitleHighlight =
     hero.titleHighlight || 'به خلق شاهکار';
 
-  const heroSubtitle =
-    hero.description ||
-    settings?.aboutDescription ||
-    '';
+const heroSubtitle =
+  hero.subtitle ||
+  settings?.aboutDescription ||
+  '';
 
   const heroStats =
     Array.isArray(brandStory.stats) && brandStory.stats.length > 0
@@ -308,11 +311,13 @@ export const BrandStoryPage = () => {
    */
 
   const valuesHeader =
-    brandStory.values || DEFAULT_BRAND_STORY.values || {};
+    brandStory.valuesHeader ||
+  DEFAULT_BRAND_STORY.valuesHeader ||
+  {};
 
-  const valuesSubTag =
-    valuesHeader.tag ||
-    'ارزش‌ها و استانداردهای ژوئل';
+const valuesSubTag =
+  valuesHeader.subTag ||
+  'ارزش‌ها و استانداردهای ژوئل';
 
   const valuesTitle =
     valuesHeader.title ||
@@ -371,30 +376,30 @@ export const BrandStoryPage = () => {
    * brandStory.craft
    */
 
-  const craftHeader =
-    brandStory.craft ||
-    DEFAULT_BRAND_STORY.craft ||
-    {};
+const craftHeader =
+  brandStory.craftHeader ||
+  DEFAULT_BRAND_STORY.craftHeader ||
+  {};
 
-  const craftSubTag =
-    craftHeader.tag ||
-    'فرآیند خلق اثر';
+const craftSubTag =
+  craftHeader.subTag ||
+  'فرآیند خلق اثر';
 
-  const craftTitle =
-    craftHeader.title ||
-    'چگونه یک';
+const craftTitle =
+  craftHeader.title ||
+  'چگونه یک';
 
-  const craftTitleHighlight =
-    craftHeader.titleHighlight ||
-    'شاهکار طلا و گوهر';
+const craftTitleHighlight =
+  craftHeader.titleHighlight ||
+  'شاهکار طلا و گوهر';
 
-  const craftTitleSuffix =
-    craftHeader.titleSuffix ||
-    'متولد می‌شود؟';
+const craftTitleSuffix =
+  craftHeader.titleSuffix ||
+  'متولد می‌شود؟';
 
-  const craftDescription =
-    craftHeader.description ||
-    'مراحل دقیق و وسواس‌گونه خلق زیورآلات سفارشی از طرح اولیه تا تحویل در جعبه مخمل فاخر';
+const craftDescription =
+  craftHeader.description ||
+  'مراحل دقیق و وسواس‌گونه خلق زیورآلات سفارشی از طرح اولیه تا تحویل در جعبه مخمل فاخر';
 
   /*
    * =========================================================
@@ -860,14 +865,14 @@ export const BrandStoryPage = () => {
                 <ArrowRight size={18} />
               </Link>
 
-              <a
-                href={ctaSecondaryLink}
-                className={styles.secondaryCtaBtn}
-              >
-                <MapPin size={18} />
+<Link
+  to="/contact"
+  className={styles.secondaryCtaBtn}
+>
+  <MapPin size={18} />
 
-                <span>{ctaSecondaryLabel}</span>
-              </a>
+  <span>{ctaSecondaryLabel}</span>
+</Link>
             </div>
           </div>
         </div>

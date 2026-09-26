@@ -1002,25 +1002,38 @@
 }
 
 /* Success Message */
+/* Success Message */
+
 .successMessage {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 30px 10px;
+  padding: 40px 20px;
 }
 
 .successIcon {
+  width: 64px;
+  height: 64px;
   color: var(--accent);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .successMessage h3 {
   font-size: 1.25rem;
   font-weight: 800;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .successMessage p {
+  max-width: 380px;
   font-size: 0.88rem;
+  line-height: 1.8;
   color: var(--text-secondary);
+  margin: 0 auto;
 }
 
 /* Image Zoom Card */
@@ -1121,4 +1134,222 @@
   .modalBody {
     padding: 16px;
   }
+}
+
+
+/* REVIEW PHOTO UPLOAD */
+
+.photoUploadBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 130px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border: 1px dashed rgba(212, 175, 55, 0.45);
+  border-radius: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.photoUploadBox:hover {
+  border-color: var(--accent);
+  background: rgba(212, 175, 55, 0.06);
+  color: var(--accent);
+}
+
+.photoUploadIcon {
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+.photoUploadTitle {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.photoUploadHint {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.photoPreviewWrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--theme-glass-border);
+}
+
+.photoPreview {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.removePhotoBtn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.removePhotoBtn:hover {
+  background: var(--accent);
+  color: #000000;
+}
+
+/* REVIEW SUBMIT SUCCESS */
+
+.successMessage {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin: 0 auto 20px auto;
+}
+
+.successMessage h3 {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.successMessage p {
+  max-width: 380px;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0 auto;
+}
+
+/* =========================================================
+   REVIEW IMAGE UPLOAD
+========================================================= */
+
+.imageUploadSection {
+  margin-top: 8px;
+}
+
+.imageUploadLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.imageUploadLabel span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.imageUploadBox {
+  display: block;
+  width: 100%;
+  min-height: 150px;
+  border: 1px dashed rgba(212, 175, 55, 0.5);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.imageUploadBox:hover {
+  border-color: var(--accent);
+  background: rgba(212, 175, 55, 0.04);
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.imageUploadPlaceholder {
+  min-height: 150px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.imageUploadPlaceholder svg {
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.imageUploadPlaceholder strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.imageUploadPlaceholder span {
+  max-width: 320px;
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.imagePreviewWrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imageChangeText {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #fff;
+  background: linear-gradient(
+    transparent,
+    rgba(0, 0, 0, 0.75)
+  );
 }

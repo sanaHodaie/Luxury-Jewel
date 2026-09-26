@@ -33,11 +33,12 @@ import styles from './TestimonialsPage.module.css';
 
 export const TestimonialsPage = () => {
   // اتصال به نظرات مشترک سایت و پنل مدیریت
-  const {
-    reviews,
-    addReview,
-    updateLikes,
-  } = useTestimonials();
+const {
+  reviews,
+  addReview,
+  updateLikes,
+  uploadTestimonialPhoto,
+} = useTestimonials();
 
   // State for search and filter
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -61,6 +62,7 @@ export const TestimonialsPage = () => {
   });
 
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [reviewImage, setReviewImage] = useState(null);
 
   // State for tracking which reviews are liked by the current user
   const [likedReviews, setLikedReviews] = useState({});
@@ -89,34 +91,77 @@ export const TestimonialsPage = () => {
   };
 
   // Handle new review submission
-  const handleReviewSubmit = (e) => {
-    e.preventDefault();
 
-    if (!newReview.name || !newReview.text) return;
+const handleReviewSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!newReview.name || !newReview.text) return;
+
+  try {
+    let photoUrl = null;
+
+    // اگر عکس انتخاب شده باشد، ابتدا در Storage آپلود می‌شود
+    if (reviewImage?.file) {
+      console.log('شروع آپلود عکس...');
+
+      photoUrl = await uploadTestimonialPhoto(
+        reviewImage.file
+      );
+
+      console.log('نتیجه آپلود عکس:', photoUrl);
+
+      if (!photoUrl) {
+        console.error(
+          'آپلود عکس محصول انجام نشد.'
+        );
+        return;
+      }
+    }
 
     const createdReview = {
-      id: Date.now(),
       name: newReview.name,
       city: newReview.city || 'تهران',
       date: 'همین الان',
-      verified: true,
+      verified: false,
       category: 'online',
-      product: newReview.product || 'محصول سفارشی طلا',
+      product:
+        newReview.product ||
+        'محصول سفارشی طلا',
       rating: Number(newReview.rating),
-      likes: 1,
-      title: newReview.title || 'تجربه خرید زیورآلات فاخر',
+      likes: 0,
+      title:
+        newReview.title ||
+        'تجربه خرید زیورآلات فاخر',
       text: newReview.text,
       avatarEmoji: '🌟',
-      hasPhoto: false,
-      photoUrl: null,
-      brandReply:
-        'با تشکر از ثبت دیدگاه ارزشمندتان! نظر شما پس از بررسی به اشتراک گذاشته شد.',
+      hasPhoto: Boolean(photoUrl),
+      photoUrl: photoUrl,
+      brandReply: '',
     };
 
-    // ذخیره در TestimonialsContext
-    // و در نتیجه localStorage
-    addReview(createdReview);
+    console.log(
+      'داده‌ای که قرار است در دیتابیس ذخیره شود:',
+      createdReview
+    );
 
+    const savedReview = await addReview(
+      createdReview
+    );
+
+    console.log(
+      'نتیجه ثبت نظر:',
+      savedReview
+    );
+
+    // اگر ثبت در دیتابیس ناموفق بود
+    if (!savedReview) {
+      console.error(
+        'نظر در دیتابیس ثبت نشد.'
+      );
+      return;
+    }
+
+    // فقط در صورت موفقیت واقعی، پیام موفقیت نمایش داده شود
     setReviewSubmitted(true);
 
     setTimeout(() => {
@@ -132,8 +177,18 @@ export const TestimonialsPage = () => {
         text: '',
         city: 'تهران',
       });
+
+      setReviewImage(null);
     }, 1800);
-  };
+  } catch (error) {
+    console.error(
+      'خطا در ثبت دیدگاه:',
+      error
+    );
+  }
+};
+
+
 
   // =====================================================
   // ✅ Filter logic — فقط نظرات تأییدشده نمایش داده می‌شن
@@ -1240,6 +1295,56 @@ export const TestimonialsPage = () => {
                         }
                       />
                     </div>
+                    <div className={styles.imageUploadSection}>
+  <label className={styles.imageUploadLabel}>
+    عکس محصول
+    <span>اختیاری</span>
+  </label>
+
+  <label className={styles.imageUploadBox}>
+    <input
+      type="file"
+      accept="image/*"
+      capture="environment"
+      onChange={(e) => {
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
+        setReviewImage({
+          file,
+          preview: URL.createObjectURL(file),
+        });
+      }}
+      className={styles.hiddenFileInput}
+    />
+
+    {reviewImage ? (
+      <div className={styles.imagePreviewWrapper}>
+        <img
+          src={reviewImage.preview}
+          alt="پیش‌نمایش عکس محصول"
+          className={styles.imagePreview}
+        />
+
+        <span className={styles.imageChangeText}>
+          برای تغییر عکس کلیک کنید
+        </span>
+      </div>
+    ) : (
+      <div className={styles.imageUploadPlaceholder}>
+        <ImageIcon size={28} />
+
+        <strong>افزودن عکس محصول</strong>
+
+        <span>
+          می‌توانید عکس را از گالری انتخاب کنید
+          یا با دوربین گوشی عکس بگیرید.
+        </span>
+      </div>
+    )}
+  </label>
+</div>
 
                     <button
                       type="submit"
